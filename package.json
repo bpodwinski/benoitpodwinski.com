@@ -1,0 +1,37 @@
+{
+  "name": "benoitpodwinski.com",
+  "version": "1.0.0",
+  "description": "Benoit Podwinski - Webmaster, Designer, Sysadmin",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.11.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.1"
+  },
+  "scripts": {
+    "start": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.benoitpodwinski.com:19322/bpodwinski/benoitpodwinski.com.git"
+  },
+  "keywords": [
+    "webmaster, webdesign, freelance"
+  ],
+  "author": "Benoit Podwinski",
+  "private": true,
+  "bugs": {
+    "url": "https://git.benoitpodwinski.com/bpodwinski/benoitpodwinski.com/issues",
+    "email": "benoit.podwinski@gmail.com"
+  },
+  "homepage": "https://benoitpodwinski.com/"
+}
