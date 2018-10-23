@@ -1,4 +1,11 @@
-assets/css/build.css.map
-assets/js/build.js.map
-assets/sass/
-assets/js/src/
+.gitignore export-ignore
+.gitattributes export-ignore
+gulpfile.js export-ignore
+package.json export-ignore
+Capfile export-ignore
+REVISION export-ignore
+assets/css/build.css.map export-ignore
+assets/js/build.js.map export-ignore
+assets/sass/ export-ignore
+assets/js/src/ export-ignore
+config/ export-ignore
