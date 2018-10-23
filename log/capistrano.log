@@ -78,3 +78,82 @@
   INFO [54f32032] Running /usr/bin/env echo "Branch master (at 55faaf454fb59de1fd575a325e2c22bc40e0ce52) deployed as release 20181023080824 by bpodwinski" >> /var/www/benoitpodwinski.com/revisions.log as bpodwinski@178.33.47.36
  DEBUG [54f32032] Command: cd /var/www/benoitpodwinski.com/releases && /usr/bin/env echo "Branch master (at 55faaf454fb59de1fd575a325e2c22bc40e0ce52) deployed as release 20181023080824 by bpodwinski" >> /var/www/benoitpodwinski.com/revisions.log
   INFO [67d01dce] Finished in 0.121 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2018-10-23 10:13:56 +0200 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [4008dcd3] Running /usr/bin/env mkdir -p /tmp as bpodwinski@178.33.47.36
+ DEBUG [4008dcd3] Command: /usr/bin/env mkdir -p /tmp
+  INFO [8cee3de6] Finished in 3.479 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh 0.0%
+  INFO Uploading /tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh 100.0%
+  INFO [046098db] Running /usr/bin/env chmod 700 /tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh as bpodwinski@178.33.47.36
+ DEBUG [046098db] Command: /usr/bin/env chmod 700 /tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh
+  INFO [1638e68b] Finished in 0.119 seconds with exit status 0 (successful).
+  INFO [19917961] Running /usr/bin/env git ls-remote ssh://git@git.benoitpodwinski.com:19322/bpodwinski/benoitpodwinski.com.git HEAD as bpodwinski@178.33.47.36
+ DEBUG [19917961] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh" ; /usr/bin/env git ls-remote ssh://git@git.benoitpodwinski.com:19322/bpodwinski/benoitpodwinski.com.git HEAD )
+ DEBUG [e95c04cb] 	6a65fa28be02fdece29504eb8d85fbd46bf8e1e5	HEAD
+  INFO [e95c04cb] Finished in 0.280 seconds with exit status 0 (successful).
+  INFO [01b7a2d1] Running /usr/bin/env mkdir -p /var/www/benoitpodwinski.com/shared /var/www/benoitpodwinski.com/releases as bpodwinski@178.33.47.36
+ DEBUG [01b7a2d1] Command: /usr/bin/env mkdir -p /var/www/benoitpodwinski.com/shared /var/www/benoitpodwinski.com/releases
+  INFO [f20a369c] Finished in 0.121 seconds with exit status 0 (successful).
+ DEBUG [e9e20ba9] Running [ -f /var/www/benoitpodwinski.com/current/REVISION ] as bpodwinski@178.33.47.36
+ DEBUG [e9e20ba9] Command: [ -f /var/www/benoitpodwinski.com/current/REVISION ]
+ DEBUG [b5019d58] Finished in 0.118 seconds with exit status 0 (successful).
+ DEBUG [77b8a27a] Running /usr/bin/env cat /var/www/benoitpodwinski.com/current/REVISION 2>/dev/null as bpodwinski@178.33.47.36
+ DEBUG [77b8a27a] Command: /usr/bin/env cat /var/www/benoitpodwinski.com/current/REVISION 2>/dev/null
+ DEBUG [9bc4e4fc] 	55faaf454fb59de1fd575a325e2c22bc40e0ce52
+ DEBUG [9bc4e4fc] Finished in 0.132 seconds with exit status 0 (successful).
+ DEBUG [c1fef8c3] Running [ -f /var/www/benoitpodwinski.com/repo/HEAD ] as bpodwinski@178.33.47.36
+ DEBUG [c1fef8c3] Command: [ -f /var/www/benoitpodwinski.com/repo/HEAD ]
+ DEBUG [56b02d62] Finished in 0.119 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /var/www/benoitpodwinski.com/repo
+ DEBUG [92fa45bc] Running if test ! -d /var/www/benoitpodwinski.com/repo; then echo "Directory does not exist '/var/www/benoitpodwinski.com/repo'" 1>&2; false; fi as bpodwinski@178.33.47.36
+ DEBUG [92fa45bc] Command: if test ! -d /var/www/benoitpodwinski.com/repo; then echo "Directory does not exist '/var/www/benoitpodwinski.com/repo'" 1>&2; false; fi
+ DEBUG [e3774825] Finished in 0.120 seconds with exit status 0 (successful).
+  INFO [cd525b79] Running /usr/bin/env git remote set-url origin ssh://git@git.benoitpodwinski.com:19322/bpodwinski/benoitpodwinski.com.git as bpodwinski@178.33.47.36
+ DEBUG [cd525b79] Command: cd /var/www/benoitpodwinski.com/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh" ; /usr/bin/env git remote set-url origin ssh://git@git.benoitpodwinski.com:19322/bpodwinski/benoitpodwinski.com.git )
+  INFO [f5f5094f] Finished in 0.122 seconds with exit status 0 (successful).
+  INFO [902c449f] Running /usr/bin/env git remote update --prune as bpodwinski@178.33.47.36
+ DEBUG [902c449f] Command: cd /var/www/benoitpodwinski.com/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [d50ebebb] 	Récupération de origin
+ DEBUG [d50ebebb] 	Depuis ssh://git.benoitpodwinski.com:19322/bpodwinski/benoitpodwinski.com
+   55faaf4..6a65fa2  master     -> master
+  INFO [d50ebebb] Finished in 0.306 seconds with exit status 0 (successful).
+ DEBUG [42165eab] Running if test ! -d /var/www/benoitpodwinski.com/repo; then echo "Directory does not exist '/var/www/benoitpodwinski.com/repo'" 1>&2; false; fi as bpodwinski@178.33.47.36
+ DEBUG [42165eab] Command: if test ! -d /var/www/benoitpodwinski.com/repo; then echo "Directory does not exist '/var/www/benoitpodwinski.com/repo'" 1>&2; false; fi
+ DEBUG [2945a2d9] Finished in 0.119 seconds with exit status 0 (successful).
+  INFO [e87e7cfd] Running /usr/bin/env mkdir -p /var/www/benoitpodwinski.com/releases/20181023081400 as bpodwinski@178.33.47.36
+ DEBUG [e87e7cfd] Command: cd /var/www/benoitpodwinski.com/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh" ; /usr/bin/env mkdir -p /var/www/benoitpodwinski.com/releases/20181023081400 )
+  INFO [ac3e09c9] Finished in 0.121 seconds with exit status 0 (successful).
+  INFO [3f5c7722] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/benoitpodwinski.com/releases/20181023081400 as bpodwinski@178.33.47.36
+ DEBUG [3f5c7722] Command: cd /var/www/benoitpodwinski.com/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/benoitpodwinski.com/releases/20181023081400 )
+  INFO [068a8b65] Finished in 0.382 seconds with exit status 0 (successful).
+ DEBUG [c1fc75cd] Running if test ! -d /var/www/benoitpodwinski.com/repo; then echo "Directory does not exist '/var/www/benoitpodwinski.com/repo'" 1>&2; false; fi as bpodwinski@178.33.47.36
+ DEBUG [c1fc75cd] Command: if test ! -d /var/www/benoitpodwinski.com/repo; then echo "Directory does not exist '/var/www/benoitpodwinski.com/repo'" 1>&2; false; fi
+ DEBUG [5f2529e9] Finished in 0.118 seconds with exit status 0 (successful).
+ DEBUG [0d93165a] Running /usr/bin/env git rev-list --max-count=1 master as bpodwinski@178.33.47.36
+ DEBUG [0d93165a] Command: cd /var/www/benoitpodwinski.com/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-benoitpodwinski-production-bpodwinski.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [e82ea831] 	6a65fa28be02fdece29504eb8d85fbd46bf8e1e5
+ DEBUG [e82ea831] Finished in 0.122 seconds with exit status 0 (successful).
+ DEBUG [791c4f1f] Running if test ! -d /var/www/benoitpodwinski.com/releases/20181023081400; then echo "Directory does not exist '/var/www/benoitpodwinski.com/releases/20181023081400'" 1>&2; false; fi as bpodwinski@178.33.47.36
+ DEBUG [791c4f1f] Command: if test ! -d /var/www/benoitpodwinski.com/releases/20181023081400; then echo "Directory does not exist '/var/www/benoitpodwinski.com/releases/20181023081400'" 1>&2; false; fi
+ DEBUG [b62f55a1] Finished in 0.117 seconds with exit status 0 (successful).
+  INFO [6ecf969d] Running /usr/bin/env echo "6a65fa28be02fdece29504eb8d85fbd46bf8e1e5" > REVISION as bpodwinski@178.33.47.36
+ DEBUG [6ecf969d] Command: cd /var/www/benoitpodwinski.com/releases/20181023081400 && /usr/bin/env echo "6a65fa28be02fdece29504eb8d85fbd46bf8e1e5" > REVISION
+  INFO [c4b8547e] Finished in 0.120 seconds with exit status 0 (successful).
+  INFO [e9838916] Running /usr/bin/env ln -s /var/www/benoitpodwinski.com/releases/20181023081400 /var/www/benoitpodwinski.com/releases/current as bpodwinski@178.33.47.36
+ DEBUG [e9838916] Command: /usr/bin/env ln -s /var/www/benoitpodwinski.com/releases/20181023081400 /var/www/benoitpodwinski.com/releases/current
+  INFO [3479f40d] Finished in 0.119 seconds with exit status 0 (successful).
+  INFO [ca7c4bdb] Running /usr/bin/env mv /var/www/benoitpodwinski.com/releases/current /var/www/benoitpodwinski.com as bpodwinski@178.33.47.36
+ DEBUG [ca7c4bdb] Command: /usr/bin/env mv /var/www/benoitpodwinski.com/releases/current /var/www/benoitpodwinski.com
+  INFO [79994c51] Finished in 0.364 seconds with exit status 0 (successful).
+ DEBUG [2fe1c2a5] Running /usr/bin/env ls -x /var/www/benoitpodwinski.com/releases as bpodwinski@178.33.47.36
+ DEBUG [2fe1c2a5] Command: /usr/bin/env ls -x /var/www/benoitpodwinski.com/releases
+ DEBUG [c0a7fa0d] 	20181023080824	20181023081400
+ DEBUG [c0a7fa0d] Finished in 0.121 seconds with exit status 0 (successful).
+ DEBUG [dec54ba7] Running if test ! -d /var/www/benoitpodwinski.com/releases; then echo "Directory does not exist '/var/www/benoitpodwinski.com/releases'" 1>&2; false; fi as bpodwinski@178.33.47.36
+ DEBUG [dec54ba7] Command: if test ! -d /var/www/benoitpodwinski.com/releases; then echo "Directory does not exist '/var/www/benoitpodwinski.com/releases'" 1>&2; false; fi
+ DEBUG [1e1e3fa6] Finished in 0.122 seconds with exit status 0 (successful).
+  INFO [f9c0d27e] Running /usr/bin/env echo "Branch master (at 6a65fa28be02fdece29504eb8d85fbd46bf8e1e5) deployed as release 20181023081400 by bpodwinski" >> /var/www/benoitpodwinski.com/revisions.log as bpodwinski@178.33.47.36
+ DEBUG [f9c0d27e] Command: cd /var/www/benoitpodwinski.com/releases && /usr/bin/env echo "Branch master (at 6a65fa28be02fdece29504eb8d85fbd46bf8e1e5) deployed as release 20181023081400 by bpodwinski" >> /var/www/benoitpodwinski.com/revisions.log
+  INFO [2e413611] Finished in 0.121 seconds with exit status 0 (successful).
