@@ -10,7 +10,6 @@ var Main = function () {
         }
 
         //INIT DOCUMENT
-
         window.addEventListener('resize', onResize, false);
 
         //INIT HANDLERS

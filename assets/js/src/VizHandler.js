@@ -12,6 +12,9 @@ var VizHandler = function () {
     var BG_COLOR = 0x000000;
     var directionalLight;
 
+    var WIDTH = window.innerWidth;
+    var HEIGHT = window.innerHeight;
+
     function init() {
 
         var id = parseInt(window.location.hash.substr(1))
@@ -32,7 +35,7 @@ var VizHandler = function () {
         renderer = new THREE.WebGLRenderer({
             antialias: true
         });
-        renderer.setSize(1920, 1080);
+        renderer.setSize(WIDTH, HEIGHT);
         renderer.setClearColor(BG_COLOR);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.autoUpdate = true;
@@ -52,7 +55,7 @@ var VizHandler = function () {
         camera.position.z = 2;
         //scene.add(camera);
 
-        scene.fog = new THREE.Fog(BG_COLOR, 1, 12);
+        scene.fog = new THREE.Fog(BG_COLOR, 1, 8);
 
         //controls = new THREE.TrackballControls(camera);
         controls = new THREE.OrbitControls(camera);
@@ -85,8 +88,8 @@ var VizHandler = function () {
         directionalLight.shadow.camera.right = roz
         directionalLight.shadow.camera.top = roz
         directionalLight.shadow.camera.bottom = -roz
-        directionalLight.shadow.mapSize.width = 4096;
-        directionalLight.shadow.mapSize.height = 4096;
+        directionalLight.shadow.mapSize.width = 1024;
+        directionalLight.shadow.mapSize.height = 1024;
         directionalLight.shadow.bias = 0.0001
 
         //scene.add(new THREE.CameraHelper(directionalLight.shadow.camera))

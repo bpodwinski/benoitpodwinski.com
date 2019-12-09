@@ -7,8 +7,8 @@ var plugins = require('gulp-load-plugins')({
 // BrowserSync
 gulp.task('browserSync', function() {
   return plugins.browserSync.init({
-    host: '127.0.0.1',
-    proxy: 'benoitpodwinski.bp.local',
+    //host: '127.0.0.1',
+    proxy: 'benoitpodwinski.local',
     ghostMode: false,
     open: false,
     reloadOnRestart: true
