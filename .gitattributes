@@ -2,7 +2,7 @@
 .gitattributes export-ignore
 gulpfile.js export-ignore
 package.json export-ignore
-package.json export-ignore
+package-lock.json export-ignore
 Capfile export-ignore
 REVISION export-ignore
 # assets/css/build.css.map export-ignore
