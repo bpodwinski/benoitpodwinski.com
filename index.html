@@ -50,6 +50,7 @@
             <h1>BENOIT PODWINSKI</h1>
             <h2>Webmaster | Designer | Sysadmin</h2>
             <p>
+                <button onclick="openResume()">CV</button> |
                 <button onclick="openWork()">WORK</button> |
                 <a class="mail" href="mailto:%6a&#111;b&#64;&#98;%65n%6fit%70%6f&#100;%77%69%6esk%69%2eco&#109;">MAIL</a>
             </p>
@@ -63,10 +64,19 @@
             <div id="container"></div>
         </div>
 
+		<section id="resume" class="resume">
+            <div class="container">
+                <button onclick="closeResume()" class="fucking-btn">Fermer</button>
+                <div class="row">
+                    <embed src="cv.pdf#view=Fit" type="application/pdf" class="resume-pdf"/>
+                </div>
+            </div>
+        </section>
+
 		<section id="work" class="work">
             <div class="container">
+                <button onclick="closeWork()" class="fucking-btn">Fermer</button>
                 <div class="row">
-                    <button onclick="closeWork()">Fermer</button>
                     <div class="col-12">
                         <h5>Expériences</h5>
                         <p>Autodidacte avec des compétences variées parmi les métiers du web, une drogue plutôt qu'un travail, l'informatique est un macrocosme en perpétuelle évolution où il y aura toujours quelque chose à apprendre, de nouveaux processus de travail, bref une courbe d'apprentissage qui ne laisse aucune place à l'ennuie !</p>
@@ -132,6 +142,14 @@
         }
         function closeWork() {
             var el = document.getElementById("work");
+                el.classList.remove("active");
+        }
+        function openResume() {
+            var el = document.getElementById("resume");
+                el.classList.add("active");
+        }
+        function closeResume() {
+            var el = document.getElementById("resume");
                 el.classList.remove("active");
         }
         </script>

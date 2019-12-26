@@ -19,6 +19,25 @@ body {
     overflow: hidden;
 }
 
+button.fucking-btn {
+    transition: all .3s ease-out;
+    position: sticky;
+    z-index: 9;
+    top: 1rem;
+    left: 1rem;
+    text-transform: uppercase;
+    padding: .5rem 1.2rem;
+    background: rgba($color: #464646, $alpha: 0.85);
+    border: 0;
+    color: #fff;
+
+    &:hover {
+        background: rgba($color: #fff, $alpha: 0.35);
+        text-shadow: 0px 1px 8px rgba(255, 255, 255, 0.46);
+        box-shadow: 3px -3px 0 rgba(0, 0, 0, 1);
+    }
+}
+
 .nav-bottom {
     z-index: 9;
     position: absolute;
@@ -77,6 +96,10 @@ body {
 }
 
 @media only screen and (min-width: 980px) {
+
+    button.fucking-btn {
+        position: absolute;
+    }
 
     .blabla {
         position: absolute;

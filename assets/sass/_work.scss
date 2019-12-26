@@ -25,26 +25,6 @@
         visibility: initial;
     }
 
-    button {
-        transition: all .3s ease-out;
-        position: sticky;
-        z-index: 9;
-        right: 30px;
-        top: 30px;
-        text-transform: uppercase;
-        padding: .5rem 1.2rem;
-        margin: 0 30px 20px auto;
-        background: rgba($color: #464646, $alpha: 0.85);
-        border: 0;
-        color: #fff;
-
-        &:hover {
-            background: rgba($color: #fff, $alpha: 0.35);
-            text-shadow: 0px 1px 8px rgba(255, 255, 255, 0.46);
-            box-shadow: 3px -3px 0 rgba(0, 0, 0, 1);
-        }
-    }
-
     h5 {
         text-transform: uppercase;
         font-weight: 300;
