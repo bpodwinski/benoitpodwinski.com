@@ -29,6 +29,7 @@
         <meta name="twitter:image" content="https://benoitpodwinski.com/og_image.jpg">
 
         <link href="favicon.ico" rel="icon">
+        <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="assets/css/build.css" rel="stylesheet" type="text/css">
         <link href="//fonts.googleapis.com/css?family=Saira" rel="stylesheet"> 
         
@@ -44,11 +45,16 @@
 
         <div class="overlay"></div>
 
+        <!-- Main content -->
         <div class="blabla">
             <h1>BENOIT PODWINSKI</h1>
             <h2>Webmaster | Designer | Sysadmin</h2>
-            <p><a class="cv" href="cv.pdf">CV</a> | <a class="mail" href="mailto:%6a&#111;b&#64;&#98;%65n%6fit%70%6f&#100;%77%69%6esk%69%2eco&#109;">MAIL</a></p>
+            <p>
+                <button onclick="openWork()">WORK</button> |
+                <a class="mail" href="mailto:%6a&#111;b&#64;&#98;%65n%6fit%70%6f&#100;%77%69%6esk%69%2eco&#109;">MAIL</a>
+            </p>
         </div>
+
         <div id="viz"></div>
         <div id="controls">
             <div id="settings"></div>
@@ -56,6 +62,79 @@
         <div id="wrap">
             <div id="container"></div>
         </div>
+
+		<section id="work" class="work">
+            <div class="container">
+                <div class="row">
+                    <button onclick="closeWork()">Fermer</button>
+                    <div class="col-12">
+                        <h5>Expériences</h5>
+                        <p>Autodidacte avec des compétences variées parmi les métiers du web, une drogue plutôt qu'un travail, l'informatique est un macrocosme en perpétuelle évolution où il y aura toujours quelque chose à apprendre, de nouveaux processus de travail, bref une courbe d'apprentissage qui ne laisse aucune place à l'ennuie !</p>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="project">
+                            <div class="over">
+                                <div class="project-info"><p>DeBonsol<br><span>site e-commerce</span></p></div>
+                            </div>
+                            <img src="assets/img/project/debonsol.jpg" alt="DeBonsol">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="project">
+                            <div class="over">
+                                <div class="project-info"><p>Bieronomy<br><span>site e-commerce</span></p></div>
+                            </div>
+                            <img src="assets/img/project/bieronomy.jpg" alt="Bieronomy">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="project">
+                            <div class="over">
+                                <div class="project-info"><p>Revele.art<br><span>agence numérique</span></p></div>
+                            </div>
+                            <img src="assets/img/project/reveleart.jpg" alt="REVELE ART">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="project">
+                            <div class="over">
+                                <div class="project-info"><p>Eglise Evangélique Annecy<br><span>site internet</span></p></div>
+                            </div>
+                            <img src="assets/img/project/eglise-evangelique-annecy.jpg" alt="Eglise Evangélique Annecy">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="project">
+                            <div class="over">
+                                <div class="project-info"><p>Vegetal Shop<br><span>site e-commerce</span></p></div>
+                            </div>
+                            <img src="assets/img/project/vegetalshop.jpg" alt="Vegetal Shop">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="project">
+                            <div class="over">
+                                <div class="project-info"><p>Le Mur Vert<br><span>site internet</span></p></div>
+                            </div>
+                            <img src="assets/img/project/lemurvert.jpg" alt="Le Mur Vert">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <script>
+        function openWork() {
+            var el = document.getElementById("work");
+                el.classList.add("active");
+        }
+        function closeWork() {
+            var el = document.getElementById("work");
+                el.classList.remove("active");
+        }
+        </script>
 
         <script src="assets/js/build.js"></script>
 
