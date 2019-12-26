@@ -11,7 +11,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     transition: all 0.35s cubic-bezier(0.85, 0.135, 0.15, 0.5);
-    transform: perspective(500px) translate3d(0,10%,-25px);
+    transform: perspective(500px) translate3d(0,3%,-40px);
     visibility: hidden;
 
     .container {
