@@ -9,7 +9,7 @@ var VizHandler = function () {
     var renderToggle = true;
     var mobile
 
-    var BG_COLOR = 0x000000;
+    var BG_COLOR = 0xffffff;
     var directionalLight;
 
     var WIDTH = window.innerWidth;
@@ -50,12 +50,13 @@ var VizHandler = function () {
 
         scene = new THREE.Scene();
         //3D SCENE
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 2000);
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
+        camera.position.x = -2;
         camera.position.y = 2.5;
         camera.position.z = 2;
         //scene.add(camera);
 
-        scene.fog = new THREE.Fog(BG_COLOR, 1, 8);
+        scene.fog = new THREE.Fog(BG_COLOR, 2, 10);
 
         //controls = new THREE.TrackballControls(camera);
         controls = new THREE.OrbitControls(camera);
@@ -63,50 +64,49 @@ var VizHandler = function () {
         controls.update();
         controls.autoRotate = false;
         controls.enablePan = false;
-        controls.enableZoom = false;
-        controls.enableRotate = false
+        controls.enableZoom = true;
+        controls.enableRotate = true;
         controls.enableDamping = true;
-        controls.dampingFactor = .2;
-        controls.rotateSpeed = .5;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = .05;
         //controls.autoRotateSpeed = (Math.random() * .5 - .25) / 7;
-        //controls.minDistance = 3;
-        //controls.maxDistance = 3;
-        //controls.maxPolarAngle = Math.PI / 2 + .4;
-        //controls.minPolarAngle = Math.PI / 2 - .4;
+        controls.minDistance = 2;
+        controls.maxDistance = 4;
+        controls.maxPolarAngle = Math.PI / 2.5;
+        controls.minPolarAngle = Math.PI / 5;
 
         Assets.init();
 
-        directionalLight = new THREE.DirectionalLight(0xffffff, .5);
-        directionalLight.position.x = .8
+        directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+        directionalLight.position.x = .1
         directionalLight.position.z = -.9
-        directionalLight.position.y = .8
-        directionalLight.castShadow = true;
-        var roz = 4
+        directionalLight.position.y = .4
+        directionalLight.castShadow = true
+        var roz = 6
         directionalLight.shadow.camera.near = -roz * 2
         directionalLight.shadow.camera.far = roz * 2
         directionalLight.shadow.camera.left = -roz
         directionalLight.shadow.camera.right = roz
         directionalLight.shadow.camera.top = roz
         directionalLight.shadow.camera.bottom = -roz
-        directionalLight.shadow.mapSize.width = 1024;
-        directionalLight.shadow.mapSize.height = 1024;
+        directionalLight.shadow.mapSize.width = 1024
+        directionalLight.shadow.mapSize.height = 1024
         directionalLight.shadow.bias = 0.0001
 
-        //scene.add(new THREE.CameraHelper(directionalLight.shadow.camera))
+        scene.add(directionalLight);
+        //scene.add(new THREE.CameraHelper(directionalLight.shadow.camera));
+        //scene.add(new THREE.CameraHelper(directionalLight2.shadow.camera));
 
-        //scene.add(new THREE.AmbientLight(0x777777));
+        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
-        hemiLight = new THREE.HemisphereLight(0xffffff, 0x666666, 0.6);
+        /*hemiLight = new THREE.HemisphereLight(0xffffff, 0x666666, 0.6);
         hemiLight.color.setHSL(0.6, 1, 0.8);
         hemiLight.groundColor.setHSL(0.095, 1, 0.9);
         hemiLight.position.set(0, 10, 0);
-        //scene.add(hemiLight);
+        scene.add(hemiLight);*/
 
-        var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+        //var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
         //scene.add(helper);
-
-        //directionalLight.position.set(1, 1, .65);
-        scene.add(directionalLight);
 
         activeViz = [Mecha];
 

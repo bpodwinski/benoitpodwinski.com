@@ -22,9 +22,18 @@ var Mecha = function () {
 
         reload()
 
+        var groundBump = new THREE.TextureLoader().load("assets/img/ground_bump.jpg");
+        groundBump.wrapS = THREE.RepeatWrapping;
+        groundBump.wrapT = THREE.RepeatWrapping;
+        groundBump.repeat.set(100, 100);
+
         cubeMaterial = new THREE.MeshPhongMaterial({
-            shading: THREE.FlatShading,
-            emissive: 0x333333
+            color: 0xc9c9c9,
+            specular: 0x000000,
+            shininess: 70,
+            transparent: true,
+            bumpMap: groundBump,
+            bumpScale: 1
         })
 
         cubeMesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), cubeMaterial);

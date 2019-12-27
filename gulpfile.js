@@ -71,6 +71,6 @@ gulp.task('sass', function() {
 // Default task
 gulp.task('default', ['browserSync', 'sass', 'js'], function() {
   gulp.watch('assets/sass/**/*.scss', ['sass'])
-  gulp.watch('assets/js/src/**/*.js').on("change", plugins.browserSync.reload)
+  gulp.watch('assets/js/src/**/*.js', ['js']).on("change", plugins.browserSync.reload)
   gulp.watch('*.html').on("change", plugins.browserSync.reload);
 });

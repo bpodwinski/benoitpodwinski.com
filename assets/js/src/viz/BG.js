@@ -2,7 +2,7 @@ var BG = function () {
 
     var groupHolder;
     var material;
-    var planeMaterial
+    var planeMaterial;
     var spd = 0;
 
     var shapes = [];
@@ -43,10 +43,11 @@ var BG = function () {
                 );
 
         //groupHolder.add(skyBox);
-
+        /*
         cubeMaterial = new THREE.MeshStandardMaterial({
-            shading: THREE.FlatShading,
-            //envMap: reflectionCube,
+            //shading: THREE.FlatShading,
+            envMap: reflectionCube,
+            roughness: 0.5,
             //side: THREE.DoubleSide,
             //depthWrite:false,
             //depthTest:false,
@@ -57,7 +58,7 @@ var BG = function () {
         cubeMesh.rotation.x = -Math.PI / 2
         cubeMesh.position.y = -.25;
         cubeMesh.castShadow = true;
-        cubeMesh.receiveShadow = true;
+        cubeMesh.receiveShadow = false;
         groupHolder.add(cubeMesh);
 
         var test = new THREE.Mesh(
@@ -69,9 +70,10 @@ var BG = function () {
         test.castShadow = true;
         test.receiveShadow = true;
         //groupHolder.add(test);
+        */
 
-
-        /*planeMaterial = new THREE.MeshPhongMaterial({
+        /*
+        planeMaterial = new THREE.MeshPhongMaterial({
          envMap: Assets.textureCube(),
          reflectivity: 1,
          //opacity:.3,//.75,
@@ -117,6 +119,7 @@ var BG = function () {
          ground2.rotation.x = -Math.PI / 2
          //groupHolder.add( ground2 );
          */
+         
 
 
     }

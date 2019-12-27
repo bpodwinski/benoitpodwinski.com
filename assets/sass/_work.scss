@@ -5,7 +5,7 @@
     height: 100vh;
     opacity: 0;
     background: rgba(50,50,50,0.9);
-    background: linear-gradient(340deg, rgba(50,50,50,0.85) 10%, rgba(57,57,57,0.93) 40%, rgba(50,50,50,0.85) 90%);
+    background: linear-gradient(340deg, rgba(170, 170, 170, 0.5) 20%, rgba(190, 190, 190, 0.85) 40%, rgba(170, 170, 170, 0.5) 70%);
     backdrop-filter: blur(8px);
     pointer-events: none;
     overflow-y: scroll;
@@ -59,14 +59,14 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            background: linear-gradient(190deg, rgba(255, 255, 255, 0.0) 0%, rgba(255, 255, 255, 1) 70%);
+            background: linear-gradient(190deg, rgba(255, 255, 255, 0.0) 0%, rgba(255, 255, 255, 0.8) 70%);
             transition: all .3s ease-in-out;
 
             .project-info {
                 position: absolute;
                 bottom: 2rem;
                 left: 2rem;
-                color: #000;
+                color: #333;
                 font-size: 1.2rem;
                 line-height: 1.2rem;
 
@@ -79,7 +79,7 @@
 
         &:hover {
             margin-top: 0;
-            box-shadow: 0 1rem 3rem 0 rgba(0, 0, 0, 0.6);
+            box-shadow: 0 1rem 3rem 0 rgba(90, 90, 90, 0.5);
 
             .over {
                 opacity: 1;

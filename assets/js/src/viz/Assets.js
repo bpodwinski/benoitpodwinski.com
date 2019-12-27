@@ -31,7 +31,7 @@ var Assets = function () {
         cubeMap.flipY = false;
 
         var envMaps = [
-            {file: "/assets/img/skin.jpg", size: 1024, glow: .2},
+            {file: "/assets/img/skin.jpg", size: 1024, glow: 0.2},
         ];
 
         var loader = new THREE.ImageLoader();

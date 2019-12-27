@@ -1,0 +1,2 @@
+ATUtil={randomRange:function(n,r){return n+Math.random()*(r-n)},randomInt:function(n,r){return Math.floor(n+Math.random()*(r-n+1))},map:function(n,r,t,o,a){return ATUtil.lerp(o,a,ATUtil.norm(n,r,t))},lerp:function(n,r,t){return r+(t-r)*n},norm:function(n,r,t){return(n-r)/(t-r)},shuffle:function(n){for(var r,t,o=n.length;o;r=parseInt(Math.random()*o),t=n[--o],n[o]=n[r],n[r]=t);return n}};
+//# sourceMappingURL=atutil.js.map
