@@ -1,0 +1,16 @@
+{
+  "trailingComma": "es5",
+  "tabs": false,
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "overrides": [
+    {
+      "files": "Makefile",
+      "options": {
+        "tabs": true
+      }
+    }
+  ]
+}
