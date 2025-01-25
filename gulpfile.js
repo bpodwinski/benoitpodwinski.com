@@ -20,7 +20,7 @@ function browserSyncTask() {
 // JS task
 function jsTask() {
   return src([
-    "assets/js/src/lib/minivents.js",
+    "assets/js/src/lib/Events.js",
     "assets/js/src/lib/jquery-2.2.4.js",
     "assets/js/src/lib/Detector.js",
     "assets/js/src/lib/three.js",
