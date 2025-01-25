@@ -105,7 +105,7 @@ var Mecha = (function () {
       metalness: metalness,
       //fog: false,
       roughness: roughness,
-      shading: THREE.FlatShading,
+      flatShading: true,
       envMap: reflectionCube,
       side: THREE.DoubleSide,
       //depthWrite:false,
@@ -315,8 +315,6 @@ var Mecha = (function () {
       mesh.skeleton.bones[2].position.sub(
         centerTween.clone().multiplyScalar(1)
       );
-
-      skeletonHelpers[j].update();
     }
 
     //console.log(bonesPositionsTween[0].x)

@@ -29,6 +29,6 @@
     "bootstrap": "^5.3.3",
     "graceful-fs": "4.2.11",
     "jquery": "^3.7.1",
-    "three": "^0.82.1"
+    "three": "^0.95.0"
   }
 }

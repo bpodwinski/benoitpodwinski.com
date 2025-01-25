@@ -12,7 +12,7 @@
         "bootstrap": "^5.3.3",
         "graceful-fs": "4.2.11",
         "jquery": "^3.7.1",
-        "three": "^0.82.1"
+        "three": "^0.95.0"
       },
       "devDependencies": {
         "browser-sync": "^3.0.3",
@@ -5012,9 +5012,9 @@
       }
     },
     "node_modules/three": {
-      "version": "0.82.1",
-      "resolved": "https://registry.npmjs.org/three/-/three-0.82.1.tgz",
-      "integrity": "sha512-90A+47HKf6HhDzWwn2urTi/4rs+lppVCj5BR6YeTbyNnjDX3OrtR0g1aDorh/LW7HwRCUSh2UHTBFEAlH05XmA==",
+      "version": "0.95.0",
+      "resolved": "https://registry.npmjs.org/three/-/three-0.95.0.tgz",
+      "integrity": "sha512-vy6jMYs7CDwn47CejYHNi+++OdQue7xGIBhbLfekQ/G6MDxKRm0QB0/xWScz46/JvQAvF6pJAS5Q907l0i5iQA==",
       "license": "MIT"
     },
     "node_modules/through2": {
