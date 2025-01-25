@@ -1,11 +1,9 @@
 const { src, dest, watch, series, parallel } = require("gulp");
 const browserSync = require("browser-sync").create();
-const plumber = require("gulp-plumber");
 const concat = require("gulp-concat");
-const uglify = require("gulp-uglify");
 const sass = require("gulp-sass")(require("sass"));
-const autoprefixer = require("gulp-autoprefixer");
 const rename = require("gulp-rename");
+var sourcemaps = require("gulp-sourcemaps");
 
 // BrowserSync
 function browserSyncTask() {
@@ -23,7 +21,7 @@ function jsTask() {
     "assets/js/src/lib/Events.js",
     "node_modules/jquery/dist/jquery.js",
     "assets/js/src/lib/Detector.js",
-    "assets/js/src/lib/three.js",
+    "node_modules/three/build/three.js",
     "assets/js/src/lib/SimplexNoise.js",
     "assets/js/src/lib/atutil.js",
     "assets/js/src/lib/TweenMax.min.js",
@@ -41,7 +39,9 @@ function jsTask() {
     "assets/js/src/FXHandler.js",
     "assets/js/src/VizHandler.js",
   ])
+    .pipe(sourcemaps.init())
     .pipe(concat("build.js"))
+    .pipe(sourcemaps.write("."))
     .pipe(dest("assets/js"))
     .pipe(browserSync.stream());
 }
