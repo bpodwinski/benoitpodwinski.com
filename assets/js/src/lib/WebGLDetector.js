@@ -1,3 +1,8 @@
+/**
+ * Checks if WebGL is supported by the browser and the hardware.
+ *
+ * @returns {boolean} True if WebGL is supported, false otherwise.
+ */
 function isWebGLSupported() {
   try {
     const canvas = document.createElement("canvas");
@@ -10,6 +15,9 @@ function isWebGLSupported() {
   }
 }
 
+/**
+ * Displays an error message on the webpage if WebGL is not supported.
+ */
 function displayWebGLError() {
   if (!isWebGLSupported()) {
     const element = document.createElement("div");
