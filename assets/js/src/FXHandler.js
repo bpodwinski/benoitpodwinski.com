@@ -136,11 +136,10 @@ var FXHandler = (function () {
     renderer.shadowMap.needsUpdate = true;
 
     scene.overrideMaterial = depthMaterial;
-    renderer.render(scene, camera, depthRenderTarget, true);
+    renderer.render(scene, camera, depthRenderTarget);
     scene.overrideMaterial = null;
 
     if (composer) {
-      //renderer.clear();
       composer.render();
     }
 

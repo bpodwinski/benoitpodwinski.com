@@ -2,43 +2,33 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.ClearPass = function ( clearColor, clearAlpha ) {
+THREE.ClearPass = function (clearColor, clearAlpha) {
+  THREE.Pass.call(this);
 
-	THREE.Pass.call( this );
+  this.needsSwap = false;
 
-	this.needsSwap = false;
-
-	this.clearColor = ( clearColor !== undefined ) ? clearColor : 0x000000;
-	this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 0;
-
+  this.clearColor = clearColor !== undefined ? clearColor : 0x000000;
+  this.clearAlpha = clearAlpha !== undefined ? clearAlpha : 0;
 };
 
-THREE.ClearPass.prototype = Object.assign( Object.create( THREE.Pass.prototype ), {
+THREE.ClearPass.prototype = Object.assign(Object.create(THREE.Pass.prototype), {
+  constructor: THREE.ClearPass,
 
-	constructor: THREE.ClearPass,
+  render: function (renderer, writeBuffer, readBuffer, delta, maskActive) {
+    var oldClearColor, oldClearAlpha;
 
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
+    if (this.clearColor) {
+      oldClearColor = renderer.getClearColor().getHex();
+      oldClearAlpha = renderer.getClearAlpha();
 
-		var oldClearColor, oldClearAlpha;
+      renderer.setClearColor(this.clearColor, this.clearAlpha);
+    }
 
-		if ( this.clearColor ) {
+    renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+    renderer.clear();
 
-			oldClearColor = renderer.getClearColor().getHex();
-			oldClearAlpha = renderer.getClearAlpha();
-
-			renderer.setClearColor( this.clearColor, this.clearAlpha );
-
-		}
-
-		renderer.setRenderTarget( this.renderToScreen ? null : readBuffer );
-		renderer.clear();
-
-		if ( this.clearColor ) {
-
-			renderer.setClearColor( oldClearColor, oldClearAlpha );
-
-		}
-
-	}
-
-} );
+    if (this.clearColor) {
+      renderer.setClearColor(oldClearColor, oldClearAlpha);
+    }
+  },
+});
