@@ -1,51 +1,48 @@
-var BG = function () {
+var BG = (function () {
+  var groupHolder;
+  var material;
+  var planeMaterial;
+  var spd = 0;
 
-    var groupHolder;
-    var material;
-    var planeMaterial;
-    var spd = 0;
+  var shapes = [];
 
-    var shapes = [];
+  var cubeMesh, cubeShader;
 
-    var cubeMesh, cubeShader;
+  function init() {
+    //console.log("BG")
 
-    function init() {
+    //init event listeners
+    events.on("update", update);
+    events.on("onBeat", onBeat);
 
-        //console.log("BG")
+    groupHolder = new THREE.Object3D();
+    VizHandler.getScene().add(groupHolder);
 
-        //init event listeners
-        events.on("update", update);
-        events.on("onBeat", onBeat);
+    var cubeMapId = 23; //4//28//23//20//16//7;//9
+    //4,,23,16,9,,28,20
+    cubeMap = Assets.getCubeMap(cubeMapId);
 
+    cubeShader = THREE.ShaderLib["cube"];
+    cubeShader.uniforms["tCube"].value = cubeMap;
 
-        groupHolder = new THREE.Object3D();
-        VizHandler.getScene().add(groupHolder);
+    var skyBoxMaterial = new THREE.ShaderMaterial({
+      fragmentShader: cubeShader.fragmentShader,
+      vertexShader: cubeShader.vertexShader,
+      uniforms: cubeShader.uniforms,
+      depthWrite: true,
+      side: THREE.BackSide,
+    });
 
-        var cubeMapId = 23//4//28//23//20//16//7;//9
-        //4,,23,16,9,,28,20
-        cubeMap = Assets.getCubeMap(cubeMapId)
+    var skyBox = new THREE.Mesh(
+      new THREE.CubeGeometry(1500, 1500, 1500),
+      skyBoxMaterial
+      //new THREE.MeshBasicMaterial({color:0xFFFFFF,side: THREE.BackSide})
+    );
 
-        cubeShader = THREE.ShaderLib['cube'];
-        cubeShader.uniforms['tCube'].value = cubeMap;
-
-        var skyBoxMaterial = new THREE.ShaderMaterial({
-            fragmentShader: cubeShader.fragmentShader,
-            vertexShader: cubeShader.vertexShader,
-            uniforms: cubeShader.uniforms,
-            depthWrite: true,
-            side: THREE.BackSide
-        });
-
-        var skyBox = new THREE.Mesh(
-                new THREE.CubeGeometry(1500, 1500, 1500),
-                skyBoxMaterial
-                //new THREE.MeshBasicMaterial({color:0xFFFFFF,side: THREE.BackSide})
-                );
-
-        //groupHolder.add(skyBox);
-        /*
+    //groupHolder.add(skyBox);
+    /*
         cubeMaterial = new THREE.MeshStandardMaterial({
-            //shading: THREE.FlatShading,
+            //flatShading: true,
             envMap: reflectionCube,
             roughness: 0.5,
             //side: THREE.DoubleSide,
@@ -72,14 +69,14 @@ var BG = function () {
         //groupHolder.add(test);
         */
 
-        /*
+    /*
         planeMaterial = new THREE.MeshPhongMaterial({
          envMap: Assets.textureCube(),
          reflectivity: 1,
          //opacity:.3,//.75,
          color: 0xffffff,
          //transparent:true,
-         shading: THREE.FlatShading,
+         flatShading: true,
          //blending: THREE.AdditiveBlending,
          side: THREE.DoubleSide//BackSide
          });
@@ -119,20 +116,16 @@ var BG = function () {
          ground2.rotation.x = -Math.PI / 2
          //groupHolder.add( ground2 );
          */
-         
+  }
 
+  function update() {
+    //cubeMesh.rotation.x += spd * .001
+    //cubeMesh.scale.x = cubeMesh.scale.y = cubeMesh.scale.z = 16 - ControlsHandler.fxParams.bgProgress * 8
+    //groupHolder.rotation.z+=.001
+  }
 
-    }
-
-    function update() {
-
-        //cubeMesh.rotation.x += spd * .001
-        //cubeMesh.scale.x = cubeMesh.scale.y = cubeMesh.scale.z = 16 - ControlsHandler.fxParams.bgProgress * 8
-        //groupHolder.rotation.z+=.001
-    }
-
-    function onBeat() {
-        /*if (Math.random() < .05)
+  function onBeat() {
+    /*if (Math.random() < .05)
          spd = (Math.random() - .5)
          
          if (ControlsHandler.fxParams.wireframe) {
@@ -151,17 +144,16 @@ var BG = function () {
          cubeMesh.material.color.setRGB(.2, .2, .2);
          planeMaterial.color.setRGB(.2, .2, .2);
          }*/
-    }
+  }
 
-    function setEnvMap(cubeMap) {
-        cubeShader.uniforms['tCube'].value = cubeMap;
-    }
+  function setEnvMap(cubeMap) {
+    cubeShader.uniforms["tCube"].value = cubeMap;
+  }
 
-    return {
-        init: init,
-        update: update,
-        onBeat: onBeat,
-        setEnvMap: setEnvMap
-    };
-
-}();
+  return {
+    init: init,
+    update: update,
+    onBeat: onBeat,
+    setEnvMap: setEnvMap,
+  };
+})();
