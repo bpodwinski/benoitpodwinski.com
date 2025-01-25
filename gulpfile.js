@@ -21,7 +21,7 @@ function browserSyncTask() {
 function jsTask() {
   return src([
     "assets/js/src/lib/Events.js",
-    "assets/js/src/lib/jquery-2.2.4.js",
+    "node_modules/jquery/dist/jquery.js",
     "assets/js/src/lib/Detector.js",
     "assets/js/src/lib/three.js",
     "assets/js/src/lib/SimplexNoise.js",
