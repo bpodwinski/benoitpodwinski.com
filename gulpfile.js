@@ -18,22 +18,29 @@ function browserSyncTask() {
 // JS task
 function jsTask() {
   return src([
-    "assets/js/src/lib/Events.js",
+    // Core libraries and utilities
     "node_modules/jquery/dist/jquery.js",
-    "assets/js/src/lib/Detector.js",
     "node_modules/three/build/three.js",
+    "assets/js/src/lib/Events.js",
+    "assets/js/src/lib/WebGLDetector.js",
     "assets/js/src/lib/SimplexNoise.js",
     "assets/js/src/lib/atutil.js",
     "assets/js/src/lib/TweenMax.min.js",
+    "assets/js/src/lib/isMobile.min.js",
+
+    // Controls (depends on THREE.js)
     "assets/js/src/lib/controls/OrbitControls.js",
     "assets/js/src/lib/controls/DeviceOrientationControls.js",
     "assets/js/src/lib/controls/VRControls.js",
     "assets/js/src/lib/ViveController.js",
-    "assets/js/src/lib/isMobile.min.js",
+
+    // Visualization-specific scripts
+    "assets/js/src/viz/Assets.js", // Assets needed for other visualization components
     "assets/js/src/viz/BG.js",
     "assets/js/src/viz/Mecha.js",
     "assets/js/src/viz/Shards.js",
-    "assets/js/src/viz/Assets.js",
+
+    // Application logic
     "assets/js/src/Main.js",
     "assets/js/src/ControlsHandler.js",
     "assets/js/src/FXHandler.js",

@@ -3,14 +3,15 @@ var simplexNoise = new SimplexNoise();
 
 var Main = (function () {
   function init() {
-    if (!Detector.webgl) {
-      Detector.addGetWebGLMessage();
+    if (!isWebGLSupported()) {
+      displayWebGLError();
+      return;
     }
 
-    //INIT DOCUMENT
+    // INIT DOCUMENT
     window.addEventListener("resize", onResize, false);
 
-    //INIT HANDLERS
+    // INIT HANDLERS
     ControlsHandler.init();
     VizHandler.init();
     FXHandler.init();
