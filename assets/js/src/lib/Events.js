@@ -1,6 +1,6 @@
 class Events {
   constructor(target) {
-    this.events = new Map(); // Utilise Map pour gérer les événements
+    this.events = new Map();
     this.target = target || this;
   }
 
@@ -20,12 +20,11 @@ class Events {
    */
   off(type = null, func = null) {
     if (!type) {
-      this.events.clear(); // Supprime tous les événements
+      this.events.clear();
     } else if (this.events.has(type)) {
       if (!func) {
-        this.events.delete(type); // Supprime tous les callbacks pour un type
+        this.events.delete(type);
       } else {
-        // Supprime les callbacks spécifiques
         const listeners = this.events.get(type);
         this.events.set(
           type,
@@ -42,7 +41,6 @@ class Events {
   emit(type, ...args) {
     if (!this.events.has(type)) return this.target;
 
-    // Copie pour éviter les problèmes si des listeners sont modifiés pendant l'émission
     const listeners = [...this.events.get(type)];
     for (const { func, ctx } of listeners) {
       func.apply(ctx, args);
