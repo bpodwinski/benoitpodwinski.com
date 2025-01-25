@@ -41,9 +41,7 @@ function jsTask() {
     "assets/js/src/FXHandler.js",
     "assets/js/src/VizHandler.js",
   ])
-    .pipe(plumber())
     .pipe(concat("build.js"))
-    .pipe(uglify())
     .pipe(dest("assets/js"))
     .pipe(browserSync.stream());
 }
@@ -51,7 +49,6 @@ function jsTask() {
 // CSS task
 function sassTask() {
   return src("assets/sass/main.scss")
-    .pipe(plumber())
     .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
     .pipe(
       rename({
