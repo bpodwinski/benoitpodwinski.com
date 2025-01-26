@@ -3,7 +3,6 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { events } from "../lib/eventEmitter";
-import { TextureManager } from "./textureManager";
 
 export class FXManager {
   /**
@@ -32,7 +31,6 @@ export class FXManager {
    */
   init() {
     this.setupComposer();
-    this.setupGroup();
     this.onResize();
   }
 
@@ -54,32 +52,6 @@ export class FXManager {
       this.composer.addPass(renderPass);
       this.composer.addPass(bloomPass);
     }
-  }
-
-  /**
-   * Sets up the group of objects in the scene.
-   */
-  setupGroup() {
-    this.scene.add(this.group);
-    this.group.position.y = -1.5;
-
-    const reflectionCube = TextureManager.getCubeMap(0);
-    reflectionCube.format = THREE.RGBFormat;
-
-    const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2, 1, 1, 1);
-    const material = new THREE.MeshStandardMaterial({
-      bumpScale: 0.8,
-      color: new THREE.Color(1, 1, 1),
-      metalness: 0.0,
-      roughness: 0.5,
-      flatShading: true,
-      envMap: reflectionCube,
-      side: THREE.DoubleSide,
-    });
-
-    // Example: Create a mesh and add it to the group
-    const mesh = new THREE.Mesh(geometry, material);
-    this.group.add(mesh);
   }
 
   /**

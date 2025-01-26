@@ -14,40 +14,18 @@ const center = new THREE.Vector3();
 const centerTween = new THREE.Vector3();
 let mouseControl = false;
 let meshes = [];
-let cubeMesh;
+let groundMesh;
 
-function init() {
+function init(scene, camera, Ground) {
   events.on("update", update);
 
   groupHolder = new THREE.Object3D();
-  scene.getScene().add(groupHolder);
+  scene.add(groupHolder);
+
+  Ground.init(scene);
+  groundMesh = Ground.getGroundMesh();
 
   reload();
-
-  const groundBump = new THREE.TextureLoader().load("textures/ground_bump.jpg");
-  groundBump.wrapS = THREE.RepeatWrapping;
-  groundBump.wrapT = THREE.RepeatWrapping;
-  groundBump.repeat.set(30, 30);
-
-  const cubeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x318ec2,
-    metalness: 0.5,
-    roughness: 0.25,
-    transparent: true,
-    transmission: 1,
-    clearcoat: 0.2,
-    clearcoatRoughness: 0.5,
-    bumpMap: groundBump,
-    bumpScale: 2
-  });
-
-  cubeMesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), cubeMaterial);
-  cubeMesh.rotation.x = -Math.PI / 2;
-  cubeMesh.position.y = -0.25;
-  cubeMesh.castShadow = true;
-  cubeMesh.receiveShadow = true;
-
-  groupHolder.add(cubeMesh);
 
   document.addEventListener("mousemove", onDocumentMouseDown);
   document.addEventListener("touchmove", onDocumentTouchStart, false);
@@ -72,7 +50,8 @@ function onDocumentMouseDown(event) {
 function boom(mouse) {
   const raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(mouse, scene.getCamera());
-  const intersects = raycaster.intersectObject(cubeMesh, true);
+
+  const intersects = raycaster.intersectObject(groundMesh, true);
 
   if (intersects[0]) {
     mouseControl = true;
@@ -242,10 +221,9 @@ function update() {
       (window.innerWidth / window.innerHeight) *
         10 *
         Math.sin(i + 2 * time) *
-        Math.sin(i + 3.5 * time) *
-        1,
+        Math.sin(i + 3.5 * time),
       0,
-      15 * Math.sin(i + 1 * time) * Math.sin(i + 4.5 * time) * 1
+      15 * Math.sin(i + time) * Math.sin(i + 4.5 * time)
     );
 
     gsap.to(center, {
@@ -274,7 +252,7 @@ function update() {
     const mesh = meshes[j];
 
     if (
-      bonesPositions[j].x == 0 ||
+      bonesPositions[j].x === 0 ||
       Math.random() < 0.003 ||
       (bonesPositions[j].distanceTo(center) > 13 &&
         !gsap.isTweening(bonesPositionsTween[j]))
@@ -334,5 +312,4 @@ function update() {
 export const Mecha = {
   init,
   update,
-  reload,
 };
