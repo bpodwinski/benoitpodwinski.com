@@ -1,5 +1,6 @@
 import { events } from "./lib/Events";
 import { FXHandler } from "./fx_handler";
+import { VizHandler } from "./viz_handler.js";
 
 export const ControlsHandler = {
   t: 0,
@@ -15,19 +16,8 @@ export const ControlsHandler = {
     },
   },
 
-  audioParams: {
-    useMic: false,
-    useSample: false,
-    showDebug: true,
-    volSens: 1, //1,
-    beatHoldTime: 40,
-    beatDecayRate: 0.97,
-    bpmMode: false,
-    bpmRate: 0,
-  },
-
   fxParams: {
-    song: 0,
+    autoRotate: true,
     nuts: false,
     tilt: true,
     tv: false,
@@ -52,15 +42,8 @@ export const ControlsHandler = {
 
   vizParams: {
     fullSize: true,
-    showControls: false,
+    showControls: true,
     fakeKinect: false,
-    // useBars: false,
-    // useGoldShapes: true,
-    // useNebula:true,
-    // useNeonShapes:true,
-    // useStripes:true,
-    // useTunnel:true,
-    // useWaveform:true,
   },
 
   init() {
@@ -101,6 +84,12 @@ export const ControlsHandler = {
       if (this.mainParams.time > 1) this.mainParams.time = 1;
       if (this.mainParams.time < 0) this.mainParams.time = 0;
     }
+
+    const controls = VizHandler.getControls();
+    if (controls) {
+      controls.autoRotate = this.fxParams.autoRotate;
+    }
+    console.log("AutoRotate:", this.fxParams.autoRotate);
 
     var clone = {};
 

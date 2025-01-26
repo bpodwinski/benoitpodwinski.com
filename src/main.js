@@ -51,3 +51,11 @@ $(window).on("load", function () {
 $(function () {
   setTimeout(() => Main.init(), 100);
 });
+
+$(document).on("click", "#toggleRotate", () => {
+  ControlsHandler.fxParams.autoRotate = !ControlsHandler.fxParams.autoRotate;
+  console.log(
+    "Rotation automatique activée :",
+    ControlsHandler.fxParams.autoRotate
+  );
+});
