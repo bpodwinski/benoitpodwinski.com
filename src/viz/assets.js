@@ -35,7 +35,7 @@ function getCubeMap(i = 0) {
   cubeMap.flipY = false;
 
   // Définition des textures disponibles
-  const envMaps = [{ file: "/assets/img/skin.jpg", size: 1024, glow: 0.2 }];
+  const envMaps = [{ file: "/assets/img/skin.jpg", size: 1024, glow: 0.5 }];
 
   // Vérifie si l'index est valide
   if (i < 0 || i >= envMaps.length) {
@@ -49,27 +49,33 @@ function getCubeMap(i = 0) {
 
   // Chargeur d'images pour créer les faces du cube
   const loader = new THREE.ImageLoader();
-  loader.load(file, (image) => {
-    const getSide = (x, y) => {
-      const canvas = document.createElement("canvas");
-      canvas.width = size;
-      canvas.height = size;
+  loader.load(
+    file,
+    (image) => {
+      console.log("Texture chargée avec succès :", file);
+      const getSide = (x, y) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
 
-      const context = canvas.getContext("2d");
-      context.drawImage(image, -x * size, -y * size);
+        const context = canvas.getContext("2d");
+        context.drawImage(image, -x * size, -y * size);
 
-      return canvas;
-    };
+        return canvas;
+      };
 
-    // Associe les faces de la texture cube
-    cubeMap.image[0] = getSide(2, 1); // px
-    cubeMap.image[1] = getSide(0, 1); // nx
-    cubeMap.image[2] = getSide(1, 0); // py
-    cubeMap.image[3] = getSide(1, 2); // ny
-    cubeMap.image[4] = getSide(1, 1); // pz
-    cubeMap.image[5] = getSide(3, 1); // nz
-    cubeMap.needsUpdate = true; // Indique que la texture doit être mise à jour
-  });
+      cubeMap.image[0] = getSide(2, 1); // px
+      cubeMap.image[1] = getSide(0, 1); // nx
+      cubeMap.image[2] = getSide(1, 0); // py
+      cubeMap.image[3] = getSide(1, 2); // ny
+      cubeMap.image[4] = getSide(1, 1); // pz
+      cubeMap.image[5] = getSide(3, 1); // nz
+      cubeMap.needsUpdate = true;
+    },
+    (error) => {
+      console.error("Erreur lors du chargement de la texture :", file, error);
+    }
+  );
 
   // Stocke la cube map dans le cache
   cubeMaps[i] = cubeMap;

@@ -13,7 +13,6 @@ var BG = (function () {
 
     //init event listeners
     events.on("update", update);
-    events.on("onBeat", onBeat);
 
     groupHolder = new THREE.Object3D();
     VizHandler.getScene().add(groupHolder);
@@ -124,28 +123,6 @@ var BG = (function () {
     //groupHolder.rotation.z+=.001
   }
 
-  function onBeat() {
-    /*if (Math.random() < .05)
-         spd = (Math.random() - .5)
-         
-         if (ControlsHandler.fxParams.wireframe) {
-         cubeMesh.material.wireframe = true;
-         planeMaterial.wireframe = true;
-         } else {
-         cubeMesh.material.wireframe = false;
-         planeMaterial.wireframe = false;
-         }
-         
-         
-         var basic = [ControlsHandler.fxParams.colorProgress * .75, ControlsHandler.fxParams.colorProgress * .75, (1 - ControlsHandler.fxParams.colorProgress) * .5]
-         cubeMesh.material.color.setRGB(basic[0] + Math.random() / 2, basic[1] + Math.random() / 2, basic[2] + Math.random() / 2);
-         planeMaterial.color.setRGB(basic[0] + Math.random() / 2, basic[1] + Math.random() / 2, basic[2] + Math.random() / 2);
-         if (ControlsHandler.fxParams.black) {
-         cubeMesh.material.color.setRGB(.2, .2, .2);
-         planeMaterial.color.setRGB(.2, .2, .2);
-         }*/
-  }
-
   function setEnvMap(cubeMap) {
     cubeShader.uniforms["tCube"].value = cubeMap;
   }
@@ -153,7 +130,6 @@ var BG = (function () {
   return {
     init: init,
     update: update,
-    onBeat: onBeat,
     setEnvMap: setEnvMap,
   };
 })();
