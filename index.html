@@ -41,10 +41,11 @@
 
   <div class="overlay"></div>
 
-  <!-- Main content -->
   <div class="blabla">
+
     <h1>BENOIT PODWINSKI</h1>
     <h2>Webmaster | Développeur | Sysadmin</h2>
+
     <p>
       <a href="cv.pdf" target="_blank" rel="noopener">CV</a>
       |
@@ -55,17 +56,6 @@
       <button onclick="activeLink('work')">Work</button> |
       <a class="mail" href="mailto:%6a&#111;b&#64;&#98;%65n%6fit%70%6f&#100;%77%69%6esk%69%2eco&#109;">Mail</a>
     </p>
-  </div>
-
-  <div id="viz"></div>
-
-  <div id="controls" style="display: none;">
-    <button id="toggleRotate">Toggle Rotation</button>
-  </div>
-
-
-  <div id="wrap">
-    <div id="container"></div>
   </div>
 
   <section id="work" class="work">
@@ -202,7 +192,6 @@
       <a href="https://debonsol.com/" target="_blank" class="fucking-btn">www.debonsol.com</a>
     </div>
   </div>
-
   <div id="project-bieronomy" class="project-content">
     <div class="header-content">
       <button onclick="closeLink('project-bieronomy')" class="fucking-btn">
@@ -233,7 +222,6 @@
       <a href="https://bieronomy.com/" target="_blank" class="fucking-btn">www.bieronomy.com</a>
     </div>
   </div>
-
   <div id="project-revele" class="project-content">
     <div class="header-content">
       <button onclick="closeLink('project-revele')" class="fucking-btn">
@@ -259,7 +247,6 @@
       <a href="https://revele.art/" target="_blank" class="fucking-btn">www.revele.art</a>
     </div>
   </div>
-
   <div id="project-eglise-annecy" class="project-content">
     <div class="header-content">
       <button onclick="closeLink('project-eglise-annecy')" class="fucking-btn">
@@ -282,7 +269,6 @@
       <a href="https://eglise-annecy.fr/" target="_blank" class="fucking-btn">www.eglise-annecy.fr</a>
     </div>
   </div>
-
   <div id="project-vegetal-shop" class="project-content">
     <div class="header-content">
       <button onclick="closeLink('project-vegetal-shop')" class="fucking-btn">
@@ -312,7 +298,6 @@
       <a href="https://vegetal.shop/" target="_blank" class="fucking-btn">www.vegetal.shop</a>
     </div>
   </div>
-
   <div id="project-lemur-vert" class="project-content">
     <div class="header-content">
       <button onclick="closeLink('project-lemur-vert')" class="fucking-btn">
@@ -339,7 +324,6 @@
       <a href="https://lemurvert.com/" target="_blank" class="fucking-btn">lemurvert.com</a>
     </div>
   </div>
-
   <div id="project-usinealumiere" class="project-content">
     <div class="header-content">
       <button onclick="closeLink('project-usinealumiere')" class="fucking-btn">
@@ -366,6 +350,18 @@
     </div>
   </div>
 
+  <div id="scene-container">
+    <div id="viz"></div>
+
+    <div id="controls" style="display: none;">
+      <button id="toggleRotate">Toggle Rotation</button>
+    </div>
+
+    <div id="wrap">
+      <div id="container"></div>
+    </div>
+  </div>
+
   <script type="module" src="/src/index.js"></script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -379,6 +375,7 @@
 
     gtag("config", "UA-107265827-1");
   </script>
+
 </body>
 
 </html>

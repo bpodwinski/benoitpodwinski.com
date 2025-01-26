@@ -7,6 +7,17 @@ import { Mecha } from "./mecha";
 import { gsap } from "gsap";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+export class SceneManager {
+  constructor(bgColor = 0xffffff) {
+    this.scene = new THREE.Scene();
+    this.scene.fog = new THREE.Fog(bgColor, 2, 10);
+  }
+
+  getScene() {
+    return this.scene;
+  }
+}
+
 export const scene = {
   rendertime: 0,
   camera: null,
@@ -34,8 +45,10 @@ export const scene = {
     events.on("update", this.update.bind(this));
 
     // Création du conteneur pour la scène
-    const container = document.createElement("div");
-    document.body.appendChild(container);
+    const container = document.getElementById("scene-container");
+    if (!container) {
+      throw new Error("Container with ID 'scene-container' not found");
+    }
 
     // Initialisation du renderer
     this.renderer = new THREE.WebGLRenderer({
