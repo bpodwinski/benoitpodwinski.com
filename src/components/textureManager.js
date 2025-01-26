@@ -52,7 +52,6 @@ function getCubeMap(i = 0) {
   loader.load(
     file,
     (image) => {
-      console.log("Texture chargée avec succès :", file);
       const getSide = (x, y) => {
         const canvas = document.createElement("canvas");
         canvas.width = size;
@@ -73,7 +72,7 @@ function getCubeMap(i = 0) {
       cubeMap.needsUpdate = true;
     },
     (error) => {
-      console.error("Erreur lors du chargement de la texture :", file, error);
+      console.error("Error loading texture:", file, error);
     }
   );
 
