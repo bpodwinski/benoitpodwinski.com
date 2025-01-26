@@ -24,8 +24,7 @@ var FXHandler = (function () {
     controller2,
     material,
     geom,
-    bubbles = [];
-  var material,
+    bubbles = [],
     geoms = [];
   var group = new THREE.Group();
 
@@ -72,32 +71,27 @@ var FXHandler = (function () {
          directionalLight.shadow.bias = 0//.001
          VizHandler.getRenderer().shadowMap.autoUpdate = true;*/
 
-    var reflectionCube = Assets.getCubeMap(12);
-    reflectionCube.format = THREE.RGBFormat;
+    var reflectionCube1 = Assets.getCubeMap(12);
+    reflectionCube1.format = THREE.RGBFormat;
     geom = new THREE.BoxGeometry(0.2, 0.2, 0.2, 1, 1, 1);
 
     var shininess = 50,
       specular = 0xffffff,
       bumpScale = 0.055,
       shading = THREE.SmoothShading;
-    var reflectionCube = Assets.getCubeMap(31);
-    reflectionCube.format = THREE.RGBFormat;
+    var reflectionCube2 = Assets.getCubeMap(31);
+    reflectionCube2.format = THREE.RGBFormat;
     var roughness = 0.4;
     var metalness = 0.9;
     var diffuseColor = new THREE.Color(1, 1, 1);
     material = new THREE.MeshStandardMaterial({
-      //skinning: true,
       bumpScale: bumpScale,
       color: diffuseColor,
       metalness: metalness,
-      //fog: false,
       roughness: roughness,
       flatShading: true,
-      envMap: reflectionCube,
+      envMap: reflectionCube2,
       side: THREE.DoubleSide,
-      //depthWrite:false,
-      //depthTest:false,
-      //blendEquation:THREE.MinEquation
     });
 
     onResize();
@@ -131,13 +125,10 @@ var FXHandler = (function () {
   function update(t) {
     if (vr) return;
 
-    renderer.render(scene, camera);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.needsUpdate = true;
 
-    scene.overrideMaterial = depthMaterial;
     renderer.render(scene, camera, depthRenderTarget);
-    scene.overrideMaterial = null;
 
     if (composer) {
       composer.render();

@@ -23,10 +23,10 @@ function jsTask() {
     "node_modules/three/build/three.js",
     "assets/js/src/lib/Events.js",
     "assets/js/src/lib/WebGLDetector.js",
-    "assets/js/src/lib/SimplexNoise.js",
+    //"assets/js/src/lib/SimplexNoise.js",
     "assets/js/src/lib/atutil.js",
     "assets/js/src/lib/TweenMax.min.js",
-    "assets/js/src/lib/isMobile.min.js",
+    //"assets/js/src/lib/isMobile.min.js",
 
     // Controls (depends on THREE.js)
     "assets/js/src/lib/controls/OrbitControls.js",

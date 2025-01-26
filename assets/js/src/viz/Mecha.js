@@ -28,10 +28,10 @@ var Mecha = (function () {
     groundBump.wrapT = THREE.RepeatWrapping;
     groundBump.repeat.set(100, 100);
 
-    cubeMaterial = new THREE.MeshPhongMaterial({
+    const cubeMaterial = new THREE.MeshStandardMaterial({
       color: 0xc9c9c9,
-      specular: 0x000000,
-      shininess: 70,
+      metalness: 0.2,
+      roughness: 0.6,
       transparent: true,
       bumpMap: groundBump,
       bumpScale: 1,
@@ -149,8 +149,43 @@ var Mecha = (function () {
     }
   }
 
+  // function createGeometry(sizing) {
+  //   var geometry = new THREE.CylinderGeometry(
+  //     0, // radiusTop
+  //     3, // radiusBottom
+  //     sizing.height, // height
+  //     7, // radiusSegments
+  //     sizing.segmentCount * 3, // heightSegments
+  //     true // openEnded
+  //   );
+
+  //   for (var i = 0; i < geometry.vertices.length; i++) {
+  //     var vertex = geometry.vertices[i];
+  //     var y = vertex.y + sizing.halfHeight;
+
+  //     var skinIndex = Math.floor(y / sizing.segmentHeight);
+  //     var skinWeight = (y % sizing.segmentHeight) / sizing.segmentHeight;
+
+  //     vertex.x -= (0.5 - Math.random()) * 2;
+  //     vertex.z -= (0.5 - Math.random()) * 2;
+  //     if (vertex.y == -sizing.segmentHeight) {
+  //       vertex.x = vertex.z = 0;
+  //     }
+
+  //     geometry.skinIndices.push(
+  //       new THREE.Vector4(skinIndex, skinIndex + 1, 0, 0)
+  //     );
+  //     geometry.skinWeights.push(
+  //       new THREE.Vector4(1 - skinWeight, skinWeight, 0, 0)
+  //     );
+  //   }
+
+  //   return geometry;
+  // }
+
   function createGeometry(sizing) {
-    var geometry = new THREE.CylinderGeometry(
+    // Crée une géométrie cylindrique en utilisant BufferGeometry
+    const geometry = new THREE.CylinderGeometry(
       0, // radiusTop
       3, // radiusBottom
       sizing.height, // height
@@ -159,26 +194,51 @@ var Mecha = (function () {
       true // openEnded
     );
 
-    for (var i = 0; i < geometry.vertices.length; i++) {
-      var vertex = geometry.vertices[i];
-      var y = vertex.y + sizing.halfHeight;
+    // Récupère les attributs des positions
+    const positionAttribute = geometry.attributes.position;
+    const vertexCount = positionAttribute.count;
 
-      var skinIndex = Math.floor(y / sizing.segmentHeight);
-      var skinWeight = (y % sizing.segmentHeight) / sizing.segmentHeight;
+    // Crée des tableaux pour skinIndices et skinWeights
+    const skinIndices = [];
+    const skinWeights = [];
 
+    for (let i = 0; i < vertexCount; i++) {
+      const vertex = new THREE.Vector3(
+        positionAttribute.getX(i),
+        positionAttribute.getY(i),
+        positionAttribute.getZ(i)
+      );
+
+      const y = vertex.y + sizing.halfHeight;
+
+      const skinIndex = Math.floor(y / sizing.segmentHeight);
+      const skinWeight = (y % sizing.segmentHeight) / sizing.segmentHeight;
+
+      // Modifie les positions
       vertex.x -= (0.5 - Math.random()) * 2;
       vertex.z -= (0.5 - Math.random()) * 2;
-      if (vertex.y == -sizing.segmentHeight) {
+
+      if (vertex.y === -sizing.segmentHeight) {
         vertex.x = vertex.z = 0;
       }
 
-      geometry.skinIndices.push(
-        new THREE.Vector4(skinIndex, skinIndex + 1, 0, 0)
-      );
-      geometry.skinWeights.push(
-        new THREE.Vector4(1 - skinWeight, skinWeight, 0, 0)
-      );
+      // Met à jour la position de l'attribut
+      positionAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
+
+      // Ajoute les indices et poids de la peau
+      skinIndices.push(skinIndex, skinIndex + 1, 0, 0);
+      skinWeights.push(1 - skinWeight, skinWeight, 0, 0);
     }
+
+    // Ajoute les nouveaux attributs à la géométrie
+    geometry.setAttribute(
+      "skinIndex",
+      new THREE.Uint16BufferAttribute(skinIndices, 4)
+    );
+    geometry.setAttribute(
+      "skinWeight",
+      new THREE.Float32BufferAttribute(skinWeights, 4)
+    );
 
     return geometry;
   }
@@ -206,7 +266,7 @@ var Mecha = (function () {
     var skeleton = new THREE.Skeleton(bones);
     mesh.castShadow = true;
     mesh.frustumCulled = false;
-    //mesh.receiveShadow = true;
+    mesh.receiveShadow = true;
 
     mesh.add(bones[0]);
     mesh.bind(skeleton);
