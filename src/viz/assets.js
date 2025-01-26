@@ -35,7 +35,7 @@ function getCubeMap(i = 0) {
   cubeMap.flipY = false;
 
   // Définition des textures disponibles
-  const envMaps = [{ file: "/assets/img/skin.jpg", size: 1024, glow: 0.5 }];
+  const envMaps = [{ file: "textures/skin.jpg", size: 512, glow: 0.5 }];
 
   // Vérifie si l'index est valide
   if (i < 0 || i >= envMaps.length) {

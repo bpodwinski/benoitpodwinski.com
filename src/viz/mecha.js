@@ -24,9 +24,7 @@ function init() {
 
   reload();
 
-  const groundBump = new THREE.TextureLoader().load(
-    "assets/img/ground_bump.jpg"
-  );
+  const groundBump = new THREE.TextureLoader().load("textures/ground_bump.jpg");
   groundBump.wrapS = THREE.RepeatWrapping;
   groundBump.wrapT = THREE.RepeatWrapping;
   groundBump.repeat.set(15, 15);
