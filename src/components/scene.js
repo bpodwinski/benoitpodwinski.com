@@ -8,14 +8,15 @@ import { gsap } from "gsap";
 import { CameraManager } from "./CameraManager";
 import { ControlManager } from "./ControlManager";
 import { LightManager } from "./LightManager";
+import { RendererManager } from "./RendererManager";
 
 export const scene = {
   rendertime: 0,
   cameraManager: null,
   controlManager: null,
   lightManager: null,
+  rendererManager: null,
   scene: null,
-  renderer: null,
   fullscreen: false,
   cubeCameraRead: null,
   cubeCameraWrite: null,
@@ -39,14 +40,8 @@ export const scene = {
       throw new Error("Container with ID 'scene-container' not found");
     }
 
-    this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
-    });
-    this.renderer.setSize(this.WIDTH, this.HEIGHT);
-    this.renderer.setClearColor(this.BG_COLOR);
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.autoUpdate = true;
-    container.appendChild(this.renderer.domElement);
+    this.rendererManager = new RendererManager(this.WIDTH, this.HEIGHT, this.BG_COLOR);
+    this.rendererManager.appendToContainer(container);
 
     this.scene = new THREE.Scene();
 
@@ -55,7 +50,7 @@ export const scene = {
 
     this.scene.fog = new THREE.Fog(this.BG_COLOR, 2, 10);
 
-    this.controlManager = new ControlManager(camera, this.renderer.domElement);
+    this.controlManager = new ControlManager(camera, this.rendererManager.getRenderer().domElement);
 
     this.lightManager = new LightManager();
     this.lightManager.init(this.scene);
@@ -75,8 +70,9 @@ export const scene = {
   },
 
   updateShadow() {
-    this.renderer.shadowMap.needsUpdate = true;
+    this.rendererManager.getRenderer().shadowMap.needsUpdate = true;
   },
+
   animate() {
     requestAnimationFrame(this.animate.bind(this));
     events.emit("update");
@@ -95,7 +91,7 @@ export const scene = {
       this.stats.update();
     }
 
-    this.renderer.render(this.scene, this.cameraManager.getCamera());
+    this.rendererManager.render(this.scene, this.cameraManager.getCamera());
   },
 
   onResize() {
@@ -103,22 +99,22 @@ export const scene = {
     this.HEIGHT = window.innerHeight;
 
     this.cameraManager.updateAspectRatio(this.WIDTH, this.HEIGHT);
-    this.renderer.setSize(this.WIDTH, this.HEIGHT);
+    this.rendererManager.updateSize(this.WIDTH, this.HEIGHT);
   },
 
   getCamera() {
     return this.cameraManager.getCamera();
   },
 
-  getScene() {
-    return this.scene;
-  },
-
   getRenderer() {
-    return this.renderer;
+    return this.rendererManager.getRenderer();
   },
 
   getControls() {
     return this.controlManager?.getControls();
+  },
+
+  getScene() {
+    return this.scene;
   }
 };
