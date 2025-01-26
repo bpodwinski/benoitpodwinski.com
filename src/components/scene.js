@@ -8,6 +8,7 @@ import { CameraManager } from "./CameraManager";
 import { ControlManager } from "./ControlManager";
 import { LightManager } from "./LightManager";
 import { RendererManager } from "./RendererManager";
+import { FXManager } from "./FXManager";
 
 export const scene = {
   renderTime: 0,
@@ -15,6 +16,7 @@ export const scene = {
   controlManager: null,
   lightManager: null,
   rendererManager: null,
+  fxManager: null,
   scene: null,
   stats: null,
   mobile: false,
@@ -62,6 +64,9 @@ export const scene = {
 
     // Initialize textures
     TextureManager.init();
+
+    // Initialize FX
+    this.fxManager = new FXManager(this.scene, this.rendererManager.getRenderer(), this.cameraManager.getCamera());
 
     // Add visualizations
     const activeViz = [Mecha];

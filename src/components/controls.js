@@ -1,5 +1,5 @@
 import { events } from "../lib/eventEmitter";
-import { fx } from "./fx";
+import { FXManager } from "./FXManager";
 import { scene } from "./scene";
 
 export const controls = {
@@ -72,8 +72,8 @@ export const controls = {
   manualChange() {
     this.mainParams.auto = false;
 
-    if (fx && typeof fx.toggle === "function") {
-      fx.toggle();
+    if (FXManager && typeof FXManager.toggle === "function") {
+      FXManager.toggle();
     }
   },
 
@@ -176,6 +176,6 @@ export const controls = {
       }
     }
 
-    if (changed) fx.toggle();
+    if (changed) FXManager.toggle();
   },
 };

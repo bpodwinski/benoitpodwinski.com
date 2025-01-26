@@ -2,7 +2,6 @@ import { EventEmitter } from "./lib/eventEmitter";
 import { isWebGLSupported, displayWebGLError } from "./lib/webGLUtils";
 import { controls } from "./components/controls";
 import { scene } from "./components/scene";
-import { fx } from "./components/fx";
 
 const events = new EventEmitter();
 
@@ -17,7 +16,6 @@ const App = {
 
     controls.init();
     scene.init();
-    fx.init();
 
     this.onResize();
 
@@ -38,7 +36,6 @@ const App = {
 
   onResize() {
     scene.onResize();
-    fx.onResize();
   },
 };
 

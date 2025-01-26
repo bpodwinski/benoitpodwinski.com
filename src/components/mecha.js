@@ -27,22 +27,26 @@ function init() {
   const groundBump = new THREE.TextureLoader().load("textures/ground_bump.jpg");
   groundBump.wrapS = THREE.RepeatWrapping;
   groundBump.wrapT = THREE.RepeatWrapping;
-  groundBump.repeat.set(15, 15);
+  groundBump.repeat.set(30, 30);
 
-  const cubeMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    metalness: 0.3,
-    roughness: 0.1,
+  const cubeMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x318ec2,
+    metalness: 0.5,
+    roughness: 0.25,
     transparent: true,
+    transmission: 1,
+    clearcoat: 0.2,
+    clearcoatRoughness: 0.5,
     bumpMap: groundBump,
-    bumpScale: 1,
+    bumpScale: 2
   });
 
-  cubeMesh = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), cubeMaterial);
+  cubeMesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), cubeMaterial);
   cubeMesh.rotation.x = -Math.PI / 2;
   cubeMesh.position.y = -0.25;
   cubeMesh.castShadow = true;
   cubeMesh.receiveShadow = true;
+
   groupHolder.add(cubeMesh);
 
   document.addEventListener("mousemove", onDocumentMouseDown);
@@ -93,14 +97,18 @@ function reload() {
     dae = null;
   }
 
-  material = new THREE.MeshStandardMaterial({
-    bumpScale: 0.5,
+  material = new THREE.MeshPhysicalMaterial({
+    bumpScale: 0.1,
     color: 0xffffff,
     metalness: 0.9,
-    roughness: 0.5,
+    roughness: 0.1,
     flatShading: true,
     envMap: TextureManager.getCubeMap(0),
     side: THREE.DoubleSide,
+    clearcoat: 0.3,
+    clearcoatRoughness: 0.2,
+    transmission: 0.2,
+    reflectivity: 0.5,
   });
 
   initBones();
