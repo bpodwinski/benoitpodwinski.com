@@ -2,13 +2,14 @@ import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 import { events } from "../lib/eventEmitter";
 import { TextureManager } from "./textureManager";
-import { Mecha } from "./mecha";
+import { Mecha } from "./Mecha";
 import { gsap } from "gsap";
 import { CameraManager } from "./CameraManager";
 import { ControlManager } from "./ControlManager";
 import { LightManager } from "./LightManager";
 import { RendererManager } from "./RendererManager";
 import { FXManager } from "./FXManager";
+import { Ground } from "./Ground";
 
 export const scene = {
   renderTime: 0,
@@ -17,6 +18,7 @@ export const scene = {
   lightManager: null,
   rendererManager: null,
   fxManager: null,
+  Ground: null,
   scene: null,
   stats: null,
   mobile: false,
@@ -68,10 +70,13 @@ export const scene = {
     // Initialize FX
     this.fxManager = new FXManager(this.scene, this.rendererManager.getRenderer(), this.cameraManager.getCamera());
 
+    this.Ground = new Ground();
+    this.Ground.init(this.scene);
+
     // Add visualizations
     const activeViz = [Mecha];
     for (const viz of activeViz) {
-      viz.init(this.scene, camera);
+      viz.init(this.scene, camera, this.Ground);
     }
 
     this.animate();
@@ -134,9 +139,5 @@ export const scene = {
 
   getControls() {
     return this.controlManager?.getControls();
-  },
-
-  getScene() {
-    return this.scene;
   },
 };
