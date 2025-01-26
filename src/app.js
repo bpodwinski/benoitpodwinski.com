@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { EventEmitter } from "./lib/eventEmitter";
 import { isWebGLSupported, displayWebGLError } from "./lib/webGLUtils";
 import { controls } from "./components/controls";
@@ -23,7 +22,10 @@ const App = {
     this.onResize();
 
     if (controls.vizParams.showControls) {
-      $("#controls").show();
+      const controlsElement = document.getElementById("controls");
+      if (controlsElement) {
+        controlsElement.style.display = "block";
+      }
     }
 
     this.update();
