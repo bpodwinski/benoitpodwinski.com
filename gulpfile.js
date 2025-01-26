@@ -20,7 +20,6 @@ function jsTask() {
   return src([
     // Core libraries and utilities
     "node_modules/jquery/dist/jquery.js",
-    "node_modules/three/build/three.js",
     "assets/js/src/lib/Events.js",
     "assets/js/src/lib/WebGLDetector.js",
     //"assets/js/src/lib/SimplexNoise.js",
