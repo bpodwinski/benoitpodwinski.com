@@ -1,11 +1,9 @@
 {
   "name": "benoitpodwinski.local",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "",
   "main": "gulpfile.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "directories": {},
   "scripts": {
     "dev": "vite",
     "build": "vite build",
