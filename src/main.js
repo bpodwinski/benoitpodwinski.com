@@ -14,10 +14,10 @@ export const Main = {
       return;
     }
 
-    // INIT DOCUMENT
+    // Gestion des redimensionnements
     window.addEventListener("resize", this.onResize.bind(this), false);
 
-    // INIT HANDLERS
+    // Initialisation des gestionnaires
     ControlsHandler.init();
     VizHandler.init();
     FXHandler.init();

@@ -1,5 +1,5 @@
-import { events } from "./lib/Events.js";
-import { FXHandler } from "./fx_handler.js";
+import { events } from "./lib/Events";
+import { FXHandler } from "./fx_handler";
 
 export const ControlsHandler = {
   t: 0,
@@ -12,12 +12,6 @@ export const ControlsHandler = {
         Element.ALLOW_KEYBOARD_INPUT
       );
       Main.toggleControls();
-    },
-    generate_one: function () {
-      Asteroid.generate(0, 0);
-    },
-    generate_grid: function () {
-      Asteroid.generate(8, 8);
     },
   },
 
@@ -75,9 +69,11 @@ export const ControlsHandler = {
 
   show(trigger, percStart, percFinish, value) {
     var changedValue = true;
+
     if (typeof value === "number") {
       changedValue = value;
     }
+
     if (
       this.mainParams.time > percStart &&
       this.mainParams.time <= percFinish
@@ -92,7 +88,10 @@ export const ControlsHandler = {
 
   manualChange() {
     this.mainParams.auto = false;
-    FXHandler.toggle();
+
+    if (FXHandler && typeof FXHandler.toggle === "function") {
+      FXHandler.toggle();
+    }
   },
 
   update() {
@@ -104,11 +103,13 @@ export const ControlsHandler = {
     }
 
     var clone = {};
+
     for (var attr in this.fxParams) {
       if (this.fxParams.hasOwnProperty(attr)) {
         clone[attr] = this.fxParams[attr];
       }
     }
+
     if (this.mainParams.auto) {
       for (var attr in fxParams) {
         if (this.fxParams.hasOwnProperty(attr)) {
@@ -120,7 +121,6 @@ export const ControlsHandler = {
         Math.sin(3.5 + mainParams.time * 6) / 2 + 0.5;
       this.fxParams.colorProgress = this.mainParams.time;
       this.fxParams.spreadProgress = this.mainParams.time;
-      //this.fxParams.bgProgress=mainParams.time
 
       show("black", 0.07, 0.25);
       show("bgProgress", 0.0, 0.5, 0);
@@ -169,14 +169,6 @@ export const ControlsHandler = {
 
       show("kaleidoscopeJump", 0.75, 1);
     }
-
-    /*show('nuts',.5,1)
-         show('tv',.5,1)
-         show('wireframe',.16,.20)
-         show('wireframe',.33,.38)
-         show('dots',.9,1)
-         show('black',.3,.7)*/
-
     var changed = false;
 
     for (var attr in this.fxParams) {
@@ -195,8 +187,7 @@ export const ControlsHandler = {
         console.log(attr, this.fxParams[attr]);
       }
     }
-    //if(changed)console.log(fxParams.nuts, changed)
-    //if(changed)alert('hi')
+
     if (changed) FXHandler.toggle();
   },
 };

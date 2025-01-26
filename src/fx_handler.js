@@ -1,4 +1,10 @@
 import * as THREE from "three";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
+
 import { VizHandler } from "./viz_handler.js";
 import { events } from "./lib/Events.js";
 import { Shards } from "./viz/shards.js";
@@ -30,17 +36,13 @@ export const FXHandler = {
   renderer: null,
   camera: null,
   controls: null,
-  vrControls: null,
-  vr: false,
   controller2: null,
   material: null,
   geom: null,
-  bubbles: [],
   geoms: [],
   group: new THREE.Group(),
 
   init() {
-    this.controls = VizHandler.getControls();
     this.scene = VizHandler.getScene();
     this.renderer = VizHandler.getRenderer();
     this.camera = VizHandler.getCamera();
@@ -52,13 +54,22 @@ export const FXHandler = {
   },
 
   setup() {
-    this.controls.autoRotate = false;
-    this.controls.enabled = false;
+    if (!this.composer) {
+      const renderPass = new RenderPass(this.scene, this.camera);
+      const bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        0.2, // Strength
+        0.4, // Radius
+        0.8 // Threshold
+      );
+
+      this.composer = new EffectComposer(this.renderer);
+      this.composer.addPass(renderPass);
+      this.composer.addPass(bloomPass);
+    }
 
     this.scene.add(this.group);
     this.group.position.y = -1.5;
-
-    this.vr = true;
 
     Shards.init();
 
@@ -71,7 +82,7 @@ export const FXHandler = {
     reflectionCube2.format = THREE.RGBFormat;
 
     this.material = new THREE.MeshStandardMaterial({
-      bumpScale: 0.5,
+      bumpScale: 0.8,
       color: new THREE.Color(1, 1, 1),
       metalness: 0.9,
       roughness: 0.5,
@@ -82,10 +93,6 @@ export const FXHandler = {
 
     this.onResize();
     this.mobile = false;
-  },
-
-  removeBubble(bubble) {
-    this.scene.remove(bubble);
   },
 
   toggle() {
@@ -104,15 +111,10 @@ export const FXHandler = {
   },
 
   update() {
-    if (this.vr) return;
-
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.needsUpdate = true;
-
-    this.renderer.render(this.scene, this.camera, this.depthRenderTarget);
-
     if (this.composer) {
       this.composer.render();
+    } else {
+      this.renderer.render(this.scene, this.camera);
     }
   },
 };

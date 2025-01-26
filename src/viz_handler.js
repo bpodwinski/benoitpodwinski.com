@@ -27,7 +27,7 @@ export const VizHandler = {
     this.stats = new Stats();
     document.body.appendChild(this.stats.dom);
 
-    const id = parseInt(window.location.hash.substr(1));
+    const id = parseInt(window.location.hash.slice(1));
     if (!id) ControlsHandler.fxParams.song = id;
 
     // Écouteur d'événements
@@ -52,12 +52,12 @@ export const VizHandler = {
 
     // Initialisation de la caméra
     this.camera = new THREE.PerspectiveCamera(
-      45,
+      40,
       this.WIDTH / this.HEIGHT,
       0.1,
       1000
     );
-    this.camera.position.set(-2, 2.5, 2);
+    this.camera.position.set(5, 5, 5);
 
     // Ajout de brouillard
     this.scene.fog = new THREE.Fog(this.BG_COLOR, 2, 10);
@@ -66,17 +66,17 @@ export const VizHandler = {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.target.set(0, 0, 0);
     this.controls.update();
-    this.controls.autoRotate = false;
+    this.controls.autoRotate = true;
     this.controls.enablePan = false;
     this.controls.enableZoom = true;
     this.controls.enableRotate = true;
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
     this.controls.rotateSpeed = 0.05;
-    this.controls.minDistance = 2;
-    this.controls.maxDistance = 4;
-    this.controls.maxPolarAngle = Math.PI / 2.5;
-    this.controls.minPolarAngle = Math.PI / 5;
+    this.controls.minDistance = 1;
+    this.controls.maxDistance = 5;
+    this.controls.maxPolarAngle = Math.PI;
+    this.controls.minPolarAngle = 0;
 
     // Chargement des assets
     Assets.init();
@@ -122,7 +122,7 @@ export const VizHandler = {
       viz.reload();
     }
 
-    this.controls.autoRotateSpeed = Math.random() * 0.5 - 0.25;
+    this.controls.autoRotateSpeed = 2;
 
     gsap.delayedCall(5, this.remake.bind(this));
   },
@@ -132,7 +132,7 @@ export const VizHandler = {
       return;
     }
 
-    this.controls.enabled = false;
+    this.controls.enabled = true;
     this.controls = new THREE.DeviceOrientationControls(this.camera, true);
     this.controls.connect();
     this.controls.update();
