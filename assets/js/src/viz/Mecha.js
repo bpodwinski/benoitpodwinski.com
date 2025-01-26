@@ -99,7 +99,6 @@ var Mecha = (function () {
     var metalness = 1;
     var diffuseColor = new THREE.Color(1, 1, 1);
     material = new THREE.MeshStandardMaterial({
-      skinning: true,
       bumpScale: bumpScale,
       color: 0xffffff,
       metalness: metalness,
@@ -149,6 +148,7 @@ var Mecha = (function () {
     }
   }
 
+  // Before Threejs r125
   // function createGeometry(sizing) {
   //   var geometry = new THREE.CylinderGeometry(
   //     0, // radiusTop
@@ -244,14 +244,14 @@ var Mecha = (function () {
   }
 
   function createBones(sizing) {
-    bones = [];
+    const bones = [];
+    const rootBone = new THREE.Bone();
+    rootBone.position.y = -sizing.halfHeight;
+    bones.push(rootBone);
 
-    var prevBone = new THREE.Bone();
-    bones.push(prevBone);
-    prevBone.position.y = -sizing.halfHeight;
-
-    for (var i = 0; i < sizing.segmentCount; i++) {
-      var bone = new THREE.Bone();
+    let prevBone = rootBone;
+    for (let i = 0; i < sizing.segmentCount; i++) {
+      const bone = new THREE.Bone();
       bone.position.y = sizing.segmentHeight;
       bones.push(bone);
       prevBone.add(bone);
@@ -262,21 +262,16 @@ var Mecha = (function () {
   }
 
   function createMesh(geometry, bones) {
-    var mesh = new THREE.SkinnedMesh(geometry, material);
-    var skeleton = new THREE.Skeleton(bones);
-    mesh.castShadow = true;
-    mesh.frustumCulled = false;
-    mesh.receiveShadow = true;
+    const skeleton = new THREE.Skeleton(bones);
+    const skinnedMesh = new THREE.SkinnedMesh(geometry, material);
 
-    mesh.add(bones[0]);
-    mesh.bind(skeleton);
+    skinnedMesh.add(bones[0]);
+    skinnedMesh.bind(skeleton);
 
-    var skeletonHelper = new THREE.SkeletonHelper(mesh);
-    skeletonHelper.material.linewidth = 2;
-    //groupHolder.add(skeletonHelper);
-    skeletonHelpers.push(skeletonHelper);
+    skinnedMesh.castShadow = true;
+    skinnedMesh.receiveShadow = true;
 
-    return mesh;
+    return skinnedMesh;
   }
 
   function update() {
