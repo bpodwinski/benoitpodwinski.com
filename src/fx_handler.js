@@ -2,8 +2,6 @@ import * as THREE from "three";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
 
 import { VizHandler } from "./viz_handler.js";
 import { events } from "./lib/Events.js";
@@ -35,8 +33,6 @@ export const FXHandler = {
   scene: null,
   renderer: null,
   camera: null,
-  controls: null,
-  controller2: null,
   material: null,
   geom: null,
   geoms: [],
@@ -56,6 +52,8 @@ export const FXHandler = {
   setup() {
     if (!this.composer) {
       const renderPass = new RenderPass(this.scene, this.camera);
+
+      // Bloom pass (unreal bloom effect)
       const bloomPass = new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
         0.2, // Strength
