@@ -47,7 +47,6 @@ export const FXHandler = {
 
     // Attach event handlers
     events.on("update", this.update.bind(this));
-    events.on("onBeat", this.onBeat.bind(this));
 
     this.setup();
   },
@@ -68,23 +67,14 @@ export const FXHandler = {
 
     this.geom = new THREE.BoxGeometry(0.2, 0.2, 0.2, 1, 1, 1);
 
-    const shininess = 50,
-      specular = 0xffffff,
-      bumpScale = 0.055,
-      shading = THREE.SmoothShading;
-
     const reflectionCube2 = Assets.getCubeMap(0);
     reflectionCube2.format = THREE.RGBFormat;
 
-    const roughness = 0.4;
-    const metalness = 0.9;
-    const diffuseColor = new THREE.Color(1, 1, 1);
-
     this.material = new THREE.MeshStandardMaterial({
-      bumpScale: bumpScale,
-      color: diffuseColor,
-      metalness: metalness,
-      roughness: roughness,
+      bumpScale: 0.5,
+      color: new THREE.Color(1, 1, 1),
+      metalness: 0.9,
+      roughness: 0.5,
       flatShading: true,
       envMap: reflectionCube2,
       side: THREE.DoubleSide,
@@ -96,14 +86,6 @@ export const FXHandler = {
 
   removeBubble(bubble) {
     this.scene.remove(bubble);
-  },
-
-  onBeat() {
-    setTimeout(this.onBeatEnd.bind(this), 300);
-  },
-
-  onBeatEnd() {
-    // Logique de fin de "beat"
   },
 
   toggle() {

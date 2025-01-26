@@ -25,7 +25,6 @@ export const Shards = (() => {
 
   function init() {
     events.on("update", update);
-    events.on("onBeat", onBeat);
 
     const reflectionCube = Assets.getCubeMap(0);
     reflectionCube.format = THREE.RGBFormat;
@@ -124,10 +123,6 @@ export const Shards = (() => {
     // Mettre à jour l'état si nécessaire
   }
 
-  function onBeat() {
-    // Exécuter des actions spécifiques lors d'un événement "onBeat"
-  }
-
   function generate() {
     // Ajouter la logique de génération ici
   }
@@ -135,7 +130,6 @@ export const Shards = (() => {
   return {
     init,
     update,
-    onBeat,
     generate,
     reload,
   };

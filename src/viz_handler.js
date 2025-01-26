@@ -82,8 +82,8 @@ export const VizHandler = {
     Assets.init();
 
     // Initialisation de l'éclairage
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
-    this.directionalLight.position.set(0.1, 0.4, -0.9);
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    this.directionalLight.position.set(1, 1, 0.5);
     this.directionalLight.castShadow = true;
     const roz = 6;
     this.directionalLight.shadow.camera.near = -roz * 2;
@@ -92,13 +92,13 @@ export const VizHandler = {
     this.directionalLight.shadow.camera.right = roz;
     this.directionalLight.shadow.camera.top = roz;
     this.directionalLight.shadow.camera.bottom = -roz;
-    this.directionalLight.shadow.mapSize.width = 1024;
-    this.directionalLight.shadow.mapSize.height = 1024;
-    this.directionalLight.shadow.bias = 0.0001;
+    this.directionalLight.shadow.mapSize.width = 2048;
+    this.directionalLight.shadow.mapSize.height = 2048;
+    this.directionalLight.shadow.bias = 0.1;
     this.scene.add(this.directionalLight);
 
     // Ajout d'une lumière ambiante
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    this.scene.add(new THREE.AmbientLight(0xffffff, 1));
 
     // Initialisation des visualisations actives
     const activeViz = [Mecha];
