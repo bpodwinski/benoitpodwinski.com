@@ -1,5 +1,5 @@
 var events = new Events();
-var simplexNoise = new SimplexNoise();
+//var simplexNoise = new SimplexNoise();
 
 var Main = (function () {
   function init() {

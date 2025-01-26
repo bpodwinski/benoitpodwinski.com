@@ -8,8 +8,6 @@ var VizHandler = (function () {
     controls,
     fullscreen = false;
   var cubeCameraRead, cubeCameraWrite;
-  var debugCube;
-  var renderToggle = true;
   var mobile;
 
   var BG_COLOR = 0xffffff;
@@ -23,7 +21,7 @@ var VizHandler = (function () {
     if (!id) id = 1;
     ControlsHandler.fxParams.song = id;
 
-    //EVENT HANDLERS
+    // EVENT HANDLERS
     events.on("update", update);
 
     // var container = document.getElementById('viz')
@@ -180,28 +178,12 @@ var VizHandler = (function () {
   }
 
   function onResize() {
-    var renderW = 1920;
-    var renderH = 1080;
+    WIDTH = window.innerWidth;
+    HEIGHT = window.innerHeight;
 
-    if (ControlsHandler.vizParams.fullSize) {
-      var renderW = window.innerWidth;
-      var renderH = window.innerHeight;
-
-      if (ControlsHandler.vizParams.showControls) {
-        renderW -= 250;
-      }
-      $("#viz").css({ position: "relative", top: 0 });
-    } else {
-      //vertically center viz output
-      $("#viz").css({
-        position: "relative",
-        top: window.innerHeight / 2 - FIXED_SIZE_H / 2,
-      });
-    }
-
-    camera.aspect = renderW / renderH;
+    camera.aspect = WIDTH / HEIGHT;
     camera.updateProjectionMatrix();
-    renderer.setSize(renderW, renderH);
+    renderer.setSize(WIDTH, HEIGHT);
   }
 
   return {

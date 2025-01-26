@@ -85,12 +85,22 @@ THREE.Mirror = function (renderer, camera, options) {
       10,
       0xffff80
     );
-    var planeGeometry = new THREE.Geometry();
-    planeGeometry.vertices.push(new THREE.Vector3(-10, -10, 0));
-    planeGeometry.vertices.push(new THREE.Vector3(10, -10, 0));
-    planeGeometry.vertices.push(new THREE.Vector3(10, 10, 0));
-    planeGeometry.vertices.push(new THREE.Vector3(-10, 10, 0));
-    planeGeometry.vertices.push(planeGeometry.vertices[0]);
+
+    // Create a BufferGeometry for the plane
+    var planeGeometry = new THREE.BufferGeometry();
+
+    // Define the vertices for the plane
+    var vertices = new Float32Array([
+      -10, -10, 0, 10, -10, 0, 10, 10, 0, -10, 10, 0, -10, -10, 0,
+    ]);
+
+    // Set the position attribute with the vertices
+    planeGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(vertices, 3)
+    );
+
+    // Create the line using the BufferGeometry and LineBasicMaterial
     var plane = new THREE.Line(
       planeGeometry,
       new THREE.LineBasicMaterial({ color: 0xffff80 })
