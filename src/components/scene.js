@@ -6,6 +6,7 @@ import { TextureManager } from "./textureManager";
 import { Mecha } from "./mecha";
 import { gsap } from "gsap";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { CameraManager } from "./CameraManager";
 
 export class SceneManager {
   constructor(bgColor = 0xffffff) {
@@ -20,7 +21,7 @@ export class SceneManager {
 
 export const scene = {
   rendertime: 0,
-  camera: null,
+  cameraManager: null,
   scene: null,
   renderer: null,
   controls: null,
@@ -64,19 +65,14 @@ export const scene = {
     this.scene = new THREE.Scene();
 
     // Initialisation de la caméra
-    this.camera = new THREE.PerspectiveCamera(
-      40,
-      this.WIDTH / this.HEIGHT,
-      0.1,
-      1000
-    );
-    this.camera.position.set(5, 5, 5);
+    this.cameraManager = new CameraManager(this.WIDTH, this.HEIGHT);
+    const camera = this.cameraManager.getCamera();
 
     // Ajout de brouillard
     this.scene.fog = new THREE.Fog(this.BG_COLOR, 2, 10);
 
     // Initialisation des contrôles
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new OrbitControls(camera, this.renderer.domElement);
     this.controls.target.set(0, 0, 0);
     this.controls.update();
     this.controls.autoRotate = true;
@@ -166,28 +162,28 @@ export const scene = {
     this.controls.update();
 
     if (this.mobile) {
-      this.camera.position.set(0, 0, 0);
-      this.camera.translateZ(1.8);
+      const camera = this.cameraManager.getCamera();
+      camera.position.set(0, 0, 0);
+      camera.translateZ(1.8);
     }
 
     if (this.stats) {
       this.stats.update();
     }
 
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.scene, this.cameraManager.getCamera());
   },
 
   onResize() {
     this.WIDTH = window.innerWidth;
     this.HEIGHT = window.innerHeight;
 
-    this.camera.aspect = this.WIDTH / this.HEIGHT;
-    this.camera.updateProjectionMatrix();
+    this.cameraManager.updateAspectRatio(this.WIDTH, this.HEIGHT);
     this.renderer.setSize(this.WIDTH, this.HEIGHT);
   },
 
   getCamera() {
-    return this.camera;
+    return this.cameraManager.getCamera();
   },
 
   getScene() {
