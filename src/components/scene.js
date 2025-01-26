@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
-import { controls } from "./controls";
 import { events } from "../lib/eventEmitter";
 import { TextureManager } from "./textureManager";
 import { Mecha } from "./mecha";
@@ -11,27 +10,27 @@ import { LightManager } from "./LightManager";
 import { RendererManager } from "./RendererManager";
 
 export const scene = {
-  rendertime: 0,
+  renderTime: 0,
   cameraManager: null,
   controlManager: null,
   lightManager: null,
   rendererManager: null,
   scene: null,
-  fullscreen: false,
-  cubeCameraRead: null,
-  cubeCameraWrite: null,
+  stats: null,
   mobile: false,
 
-  BG_COLOR: 0xffffff,
-  WIDTH: window.innerWidth,
-  HEIGHT: window.innerHeight,
+  CONFIG: {
+    BG_COLOR: 0xffffff,
+    WIDTH: window.innerWidth,
+    HEIGHT: window.innerHeight,
+    FOG_NEAR: 2,
+    FOG_FAR: 10,
+  },
 
   init() {
+    // Initialize stats
     this.stats = new Stats();
     document.body.appendChild(this.stats.dom);
-
-    const id = parseInt(window.location.hash.slice(1));
-    if (!id) controls.fxParams.song = id;
 
     events.on("update", this.update.bind(this));
 
@@ -40,33 +39,42 @@ export const scene = {
       throw new Error("Container with ID 'scene-container' not found");
     }
 
-    this.rendererManager = new RendererManager(this.WIDTH, this.HEIGHT, this.BG_COLOR);
+    // Initialize renderer
+    this.rendererManager = new RendererManager(
+        this.CONFIG.WIDTH,
+        this.CONFIG.HEIGHT,
+        this.CONFIG.BG_COLOR
+    );
     this.rendererManager.appendToContainer(container);
 
+    // Initialize scene
     this.scene = new THREE.Scene();
+    this.scene.fog = new THREE.Fog(this.CONFIG.BG_COLOR, this.CONFIG.FOG_NEAR, this.CONFIG.FOG_FAR);
 
-    this.cameraManager = new CameraManager(this.WIDTH, this.HEIGHT);
+    // Initialize camera and controls
+    this.cameraManager = new CameraManager(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
     const camera = this.cameraManager.getCamera();
-
-    this.scene.fog = new THREE.Fog(this.BG_COLOR, 2, 10);
-
     this.controlManager = new ControlManager(camera, this.rendererManager.getRenderer().domElement);
 
+    // Initialize lights
     this.lightManager = new LightManager();
     this.lightManager.init(this.scene);
 
+    // Initialize textures
     TextureManager.init();
 
-    this.scene.add(new THREE.AmbientLight(0xffffff, 1));
-
+    // Add visualizations
     const activeViz = [Mecha];
     for (const viz of activeViz) {
-      viz.init();
+      viz.init(this.scene, camera);
     }
 
     this.animate();
 
     gsap.delayedCall(0.1, this.updateShadow.bind(this));
+
+    // Handle window resize
+    window.addEventListener("resize", this.onResize.bind(this));
   },
 
   updateShadow() {
@@ -95,11 +103,20 @@ export const scene = {
   },
 
   onResize() {
-    this.WIDTH = window.innerWidth;
-    this.HEIGHT = window.innerHeight;
+    this.CONFIG.WIDTH = window.innerWidth;
+    this.CONFIG.HEIGHT = window.innerHeight;
 
-    this.cameraManager.updateAspectRatio(this.WIDTH, this.HEIGHT);
-    this.rendererManager.updateSize(this.WIDTH, this.HEIGHT);
+    this.cameraManager.updateAspectRatio(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
+    this.rendererManager.updateSize(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
+  },
+
+  dispose() {
+    this.rendererManager.dispose();
+    this.cameraManager.dispose();
+    this.controlManager.dispose();
+    this.lightManager.dispose();
+    events.off("update", this.update);
+    window.removeEventListener("resize", this.onResize.bind(this));
   },
 
   getCamera() {
@@ -116,5 +133,5 @@ export const scene = {
 
   getScene() {
     return this.scene;
-  }
+  },
 };
