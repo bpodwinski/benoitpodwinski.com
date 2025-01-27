@@ -86,6 +86,7 @@ function reload(scene) {
     bumpScale: 4,
     envMap: scene.environment,
     envMapIntensity: 1,
+    side: THREE.DoubleSide,
   });
 
   initBones();
