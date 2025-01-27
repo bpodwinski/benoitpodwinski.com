@@ -34,6 +34,7 @@ export class MainScene {
 
     init() {
         const scene = this.sceneManager.getScene();
+        const lightManager = new LightManager();
 
         // Initialize stats
         this.stats = new Stats();
@@ -62,13 +63,33 @@ export class MainScene {
         );
 
         // Camera and controls
-        this.cameraManager = new CameraManager(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
+        this.cameraManager = new CameraManager({
+            width: this.CONFIG.WIDTH,
+            height: this.CONFIG.HEIGHT,
+            position: [-2.5, 0.2, 8],
+            scene: scene
+        });
         const camera = this.cameraManager.getCamera();
+
         this.controlManager = new ControlManager(camera, this.rendererManager.getRenderer().domElement);
 
         // Lights
-        this.lightManager = new LightManager();
-        this.lightManager.init(scene);
+        lightManager.addLight(scene, {
+            type: "DirectionalLight",
+            color: 0xffffff,
+            intensity: 0.3,
+            position: [0, 2, -20],
+            shadow: {
+                mapSize: 2048,
+            },
+        });
+
+        lightManager.addLight(scene, {
+            type: "PointLight",
+            color: 0x63cbc9,
+            intensity: 20,
+            position: [0.3, 1.5, 0],
+        });
 
         // Effects
         this.fxManager = new FxManager(scene, this.rendererManager.getRenderer(), camera);
