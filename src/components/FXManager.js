@@ -1,7 +1,10 @@
 import * as THREE from "three";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { events } from "../lib/eventEmitter";
 
 export class FXManager {
@@ -15,9 +18,7 @@ export class FXManager {
     this.scene = scene;
     this.renderer = renderer;
     this.camera = camera;
-
     this.composer = null;
-    this.group = new THREE.Group();
 
     // Initialize event listeners
     events.on("update", this.update.bind(this));
@@ -41,16 +42,28 @@ export class FXManager {
     if (!this.composer) {
       const renderPass = new RenderPass(this.scene, this.camera);
 
+      // Glitch pass
+      const glitchPass = new GlitchPass();
+      glitchPass.goWild = false;
+
+      // Bloom pass
       const bloomPass = new UnrealBloomPass(
           new THREE.Vector2(window.innerWidth, window.innerHeight),
-          0.2, // Strength
-          0.4, // Radius
-          0.8 // Threshold
+          0.1,
+          0.6,
+          0.9
       );
+
+      // Bokeh pass
+      const bokehPass = new BokehPass(this.scene, this.camera, {
+        aperture: 0.000003
+      });
 
       this.composer = new EffectComposer(this.renderer);
       this.composer.addPass(renderPass);
+      //this.composer.addPass(bokehPass);
       this.composer.addPass(bloomPass);
+      //this.composer.addPass(glitchPass);
     }
   }
 

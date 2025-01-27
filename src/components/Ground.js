@@ -12,7 +12,7 @@ export class Ground {
      */
     init(scene) {
 
-        const groundSize = 15;
+        const groundSize = 20;
 
         // Load alpha texture
         const gradientTexture = new THREE.TextureLoader().load("textures/ground_alpha.png");

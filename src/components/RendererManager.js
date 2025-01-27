@@ -7,10 +7,12 @@ export class RendererManager {
      * @param {number} height - The height of the rendering canvas.
      * @param {number} bgColor - The background color of the renderer.
      */
-    constructor(width, height, bgColor = 0xffffff) {
+    constructor(width, height, bgColor = 0x000000) {
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
+            powerPreference: "high-performance",
         });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(width, height);
         this.renderer.setClearColor(bgColor);
         this.renderer.shadowMap.enabled = true;
