@@ -5,11 +5,11 @@ export class CameraManager {
    * Initializes the camera.
    * @param {number} width - The width of the rendering (aspect ratio).
    * @param {number} height - The height of the rendering (aspect ratio).
-   * @param {number} fov - The field of view (default: 40).
+   * @param {number} fov - The field of view (default: 25).
    * @param {number} near - The near clipping plane distance.
    * @param {number} far - The far clipping plane distance.
    */
-  constructor(width, height, fov = 30, near = 0.1, far = 2000) {
+  constructor(width, height, fov = 25, near = 0.1, far = 50) {
     /**
      * The perspective camera instance.
      * @type {THREE.PerspectiveCamera}
