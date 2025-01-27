@@ -18,12 +18,12 @@ export class ControlManager {
             enableZoom: true,
             enableRotate: true,
             enableDamping: true,
-            dampingFactor: 0.1,
+            dampingFactor: 0.02,
             rotateSpeed: 0.3,
-            minDistance: 1,
+            minDistance: 2,
             maxDistance: 4,
-            minPolarAngle: 0,
-            maxPolarAngle: Math.PI,
+            minPolarAngle: 1,
+            maxPolarAngle: Math.PI / 1.95,
         };
 
         const config = { ...defaultOptions, ...options };
