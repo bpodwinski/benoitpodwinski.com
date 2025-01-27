@@ -8,13 +8,14 @@ export class ControlManager {
      * @param {Object} [options={}] - Optional configuration for the controls.
      */
     constructor(camera, domElement, options = {}) {
+        this.camera = camera;
         this.controls = new OrbitControls(camera, domElement);
 
         // Apply default and custom options
         const defaultOptions = {
             target: { x: 0, y: 0, z: 0 },
             autoRotate: false,
-            enablePan: false,
+            enablePan: true,
             enableZoom: true,
             enableRotate: true,
             enableDamping: true,
@@ -42,6 +43,7 @@ export class ControlManager {
         this.controls.maxPolarAngle = config.maxPolarAngle;
 
         this.controls.update();
+        this.keyboardControls();
     }
 
     /**
@@ -57,5 +59,21 @@ export class ControlManager {
      */
     update() {
         this.controls.update();
+    }
+
+    keyboardControls() {
+        const moveSpeed = 0.1;
+
+        window.addEventListener("keydown", (event) => {
+            switch (event.key) {
+                case "q": // Gauche
+                    this.camera.position.x -= moveSpeed;
+                    break;
+                case "d": // Droite
+                    this.camera.position.x += moveSpeed;
+                    break;
+            }
+            this.controls.update();
+        });
     }
 }
