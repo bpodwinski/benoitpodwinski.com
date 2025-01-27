@@ -1,23 +1,17 @@
 import { events } from "../lib/eventEmitter";
 import { FXManager } from "./FXManager";
-import { scene } from "./scene";
+import { sceneManager } from "./SceneManager";
 
 export const controls = {
   t: 0,
 
   mainParams: {
-    time: 0.0001,
+    time: 0.1,
     auto: false,
-    fullscreen: function () {
-      document.documentElement.webkitRequestFullscreen(
-        Element.ALLOW_KEYBOARD_INPUT
-      );
-      Main.toggleControls();
-    },
   },
 
   fxParams: {
-    autoRotate: true,
+    autoRotate: false,
     nuts: false,
     tilt: true,
     tv: false,
@@ -85,7 +79,7 @@ export const controls = {
       if (this.mainParams.time < 0) this.mainParams.time = 0;
     }
 
-    const controls = scene.getControls();
+    const controls = sceneManager.getControls();
     if (controls) {
       controls.autoRotate = this.fxParams.autoRotate;
     }

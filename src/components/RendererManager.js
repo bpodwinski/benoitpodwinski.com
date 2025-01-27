@@ -38,13 +38,13 @@ export class RendererManager {
     }
 
     /**
-     * Renders the scene using the provided camera.
-     * @param {THREE.Scene} scene - The scene to render.
+     * Renders the sceneManager using the provided camera.
+     * @param {THREE.Scene} scene - The sceneManager to render.
      * @param {THREE.Camera} camera - The camera used for rendering.
      */
     render(scene, camera) {
         if (!scene || !camera) {
-            throw new Error("A valid scene and camera are required for rendering.");
+            throw new Error("A valid sceneManager and camera are required for rendering.");
         }
         this.renderer.render(scene, camera);
     }

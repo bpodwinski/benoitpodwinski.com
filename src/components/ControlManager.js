@@ -13,7 +13,7 @@ export class ControlManager {
         // Apply default and custom options
         const defaultOptions = {
             target: { x: 0, y: 0, z: 0 },
-            autoRotate: true,
+            autoRotate: false,
             enablePan: false,
             enableZoom: true,
             enableRotate: true,

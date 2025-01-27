@@ -6,8 +6,8 @@ import { events } from "../lib/eventEmitter";
 
 export class FXManager {
   /**
-   * Initializes the FXManager with the provided scene, renderer, and camera.
-   * @param {THREE.Scene} scene - The scene instance.
+   * Initializes the FXManager with the provided sceneManager, renderer, and camera.
+   * @param {THREE.Scene} scene - The sceneManager instance.
    * @param {THREE.WebGLRenderer} renderer - The renderer instance.
    * @param {THREE.Camera} camera - The camera instance.
    */

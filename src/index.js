@@ -14,14 +14,14 @@ window.addEventListener("load", () => {
     preloader.style.transition = "opacity 1s";
     setTimeout(() => {
       preloader.style.display = "none";
-    }, 300);
+    }, 1000);
   }
 });
 
-document.addEventListener("click", (event) => {
+/*document.addEventListener("click", (event) => {
   if (event.target.id === "toggleRotate") {
     import("./components/controls.js").then(({ controls }) => {
       controls.fxParams.autoRotate = !controls.fxParams.autoRotate;
     });
   }
-});
+});*/
