@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import {sceneManager} from "./SceneManager";
 
 export class Ground {
     constructor() {
@@ -8,7 +7,7 @@ export class Ground {
 
     /**
      * Initializes the ground plane with the specified parameters.
-     * @param {THREE.Scene} scene - The Three.js sceneManager to which the ground will be added.
+     * @param {THREE.Scene} scene - The Three.js scene to which the ground will be added.
      */
     init(scene) {
 
@@ -36,7 +35,7 @@ export class Ground {
             clearcoatRoughness: 1,
             bumpMap: groundBump,
             bumpScale: 2,
-            envMap: sceneManager.scene.environment,
+            envMap: scene.environment,
             envMapIntensity: 1,
         });
 

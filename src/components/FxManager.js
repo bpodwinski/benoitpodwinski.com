@@ -1,15 +1,14 @@
 import * as THREE from "three";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
-import { events } from "../lib/eventEmitter";
+import { events } from "../lib/EventEmitter";
 
-export class FXManager {
+export class FxManager {
   /**
-   * Initializes the FXManager with the provided sceneManager, renderer, and camera.
+   * Initializes the FxManager with the provided sceneManager, renderer, and camera.
    * @param {THREE.Scene} scene - The sceneManager instance.
    * @param {THREE.WebGLRenderer} renderer - The renderer instance.
    * @param {THREE.Camera} camera - The camera instance.
