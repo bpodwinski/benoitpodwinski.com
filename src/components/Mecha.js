@@ -2,12 +2,11 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import { sceneManager } from "./SceneManager";
 import { events } from "../lib/eventEmitter";
-import { TextureManager } from "./textureManager";
 
 let groupHolder;
 let material;
 let dae = null;
-const bonesCount = 10;
+const bonesCount = 8;
 const bonesPositions = [];
 const bonesPositionsTween = [];
 const center = new THREE.Vector3();
@@ -156,8 +155,8 @@ function createGeometry(sizing) {
     const skinWeight = (y % sizing.segmentHeight) / sizing.segmentHeight;
 
     // Ajoute une légère déformation aléatoire
-    vertex.x -= (0.5 - Math.random()) * 2;
-    vertex.z -= (0.5 - Math.random()) * 2;
+    //vertex.x -= (0.5 - Math.random()) * 2;
+    //vertex.z -= (0.5 - Math.random()) * 2;
 
     // Réinitialise le vertex de base pour éviter des artefacts
     if (vertex.y === -sizing.segmentHeight) {

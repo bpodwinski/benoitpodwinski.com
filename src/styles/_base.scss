@@ -15,7 +15,7 @@ body {
   font-size: 1.2rem;
   padding: 0;
   margin: 0;
-  color: white;
+  color: #ffffff;
   overflow: hidden;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
@@ -35,7 +35,7 @@ body {
   padding: 0.5rem 1.2rem;
   background: rgba($color: #323232, $alpha: 0.4);
   border: 0;
-  color: #fff !important;
+  color: #ffffff !important;
   text-decoration: none !important;
 
   &:hover {
@@ -55,14 +55,15 @@ body {
   width: 960px;
 }
 
-.blabla {
+.content-title {
   position: absolute;
   right: 0;
   left: 0;
-  bottom: 8%;
-  text-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+  bottom: 20px;
+  margin: 0 1rem;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
   text-align: center;
-  line-height: 1;
+  pointer-events: none;
   user-select: none;
 
   h1 {
@@ -71,7 +72,6 @@ body {
     font-weight: normal;
     letter-spacing: 0.4rem;
     margin: 0;
-    pointer-events: none;
   }
 
   h2 {
@@ -79,42 +79,43 @@ body {
     font-weight: 300;
     letter-spacing: 0.45rem;
     margin: 0 5px 0 0;
-    pointer-events: none;
   }
+}
 
-  p {
+.content-informations {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 20px;
+  margin: 0 1rem;
+  text-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
+  text-align: center;
+
+  button,
+  a {
     text-transform: uppercase;
-    text-justify: inter-word;
-    letter-spacing: 0.2rem;
-    margin: 1.5rem 0 0;
-    color: #fff;
+    transition: all 0.2s ease-out;
+    background: transparent;
+    border: 0;
+    margin: 0 0.25rem;
     text-decoration: none;
+    letter-spacing: 0.1rem;
+    color: #fff;
+    padding: 0;
 
-    button,
-    a {
-      text-transform: uppercase;
-      transition: all 0.3s ease-out;
-      background: transparent;
-      border: 0;
-      text-decoration: none;
-      letter-spacing: 0.2rem;
-      color: #fff;
-      padding: 0;
-
-      &:hover {
-        text-shadow: 0 1px 8px rgba(255, 255, 255, 0.48);
-      }
+    &:hover {
+      text-shadow: 0 0 10px rgba(255, 255, 255, 1);
     }
   }
 }
 
 @media only screen and (min-width: 980px) {
-  .blabla {
+  .content-title {
     position: absolute;
-    right: 30px;
-    bottom: 40px;
+    right: 20px;
+    bottom: 20px;
     text-align: right;
-    line-height: 1;
+    margin: 0;
 
     h1 {
       font-size: 4rem;
@@ -124,14 +125,17 @@ body {
 
     h2 {
       font-size: 2rem;
-      letter-spacing: 0.45rem;
-      margin: 0 0.45rem 0 0;
+      letter-spacing: 0.5rem;
+      margin: 0 0.5rem 0 0;
     }
+  }
 
-    p {
-      font-size: 1.2rem;
-      margin: 1.2rem 0.8rem 0 0;
-    }
+  .content-informations {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    text-align: right;
+    margin: 0;
   }
 }
 
@@ -141,7 +145,7 @@ body {
    position: absolute;
    width: 100%;
    height: 100%;
-   background-image: url("/textures/lcd.png");
+   background-image: url("/public/textures/lcd.png");
    opacity: 0;
    pointer-events: none;
  }
