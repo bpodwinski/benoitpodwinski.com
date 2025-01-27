@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { sceneManager } from "./SceneManager";
-import { events } from "../lib/eventEmitter";
+import { events } from "../lib/EventEmitter";
 
 let groupHolder;
 let material;
@@ -16,7 +15,7 @@ let meshes = [];
 let groundMesh;
 
 function init(scene, camera, Ground) {
-  events.on("update", update);
+  events.on("update", () => update(camera));
 
   groupHolder = new THREE.Object3D();
   scene.add(groupHolder);
@@ -24,31 +23,31 @@ function init(scene, camera, Ground) {
   Ground.init(scene);
   groundMesh = Ground.getGroundMesh();
 
-  reload();
+  reload(scene);
 
-  document.addEventListener("mousemove", onDocumentMouseDown);
-  document.addEventListener("touchmove", onDocumentTouchStart, false);
+  document.addEventListener("touchstart", (event) => onDocumentTouchStart(event, camera));
+  document.addEventListener("mousedown", (event) => onDocumentMouseDown(event, camera));
 }
 
-function onDocumentTouchStart(event) {
+function onDocumentTouchStart(event, camera) {
   if (event.touches.length === 1) {
     const mouse = new THREE.Vector2();
     mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1;
-    boom(mouse);
+    boom(mouse, camera);
   }
 }
 
-function onDocumentMouseDown(event) {
+function onDocumentMouseDown(event, camera) {
   const mouse = new THREE.Vector2();
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  boom(mouse);
+  boom(mouse, camera);
 }
 
-function boom(mouse) {
-  const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, sceneManager.getCamera());
+function boom(mouse, camera) {
+  const raycaster = new THREE.Raycaster(undefined, undefined, 0, undefined);
+  raycaster.setFromCamera(mouse, camera);
 
   const intersects = raycaster.intersectObject(groundMesh, true);
 
@@ -68,7 +67,7 @@ function boom(mouse) {
   }
 }
 
-function reload() {
+function reload(scene) {
   if (dae) {
     groupHolder.remove(dae);
     dae.geometry.dispose();
@@ -85,7 +84,7 @@ function reload() {
     clearcoat: 0.4,
     clearcoatRoughness: 0.5,
     bumpScale: 4,
-    envMap: sceneManager.scene.environment,
+    envMap: scene.environment,
     envMapIntensity: 1,
   });
 
