@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { scene } from "./scene";
+import { sceneManager } from "./SceneManager";
 import { events } from "../lib/eventEmitter";
 import { TextureManager } from "./textureManager";
 
@@ -49,7 +49,7 @@ function onDocumentMouseDown(event) {
 
 function boom(mouse) {
   const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, scene.getCamera());
+  raycaster.setFromCamera(mouse, sceneManager.getCamera());
 
   const intersects = raycaster.intersectObject(groundMesh, true);
 
@@ -77,17 +77,17 @@ function reload() {
   }
 
   material = new THREE.MeshPhysicalMaterial({
-    bumpScale: 0.1,
-    color: 0xffffff,
-    metalness: 0.9,
+    color: 0x318ec2,
+    metalness: 1,
     roughness: 0.1,
     flatShading: true,
-    envMap: TextureManager.getCubeMap(0),
-    side: THREE.DoubleSide,
-    clearcoat: 0.3,
-    clearcoatRoughness: 0.2,
-    transmission: 0.2,
-    reflectivity: 0.5,
+    transparent: false,
+    transmission: 1,
+    clearcoat: 0.4,
+    clearcoatRoughness: 0.5,
+    bumpScale: 4,
+    envMap: sceneManager.scene.environment,
+    envMapIntensity: 1,
   });
 
   initBones();
@@ -123,44 +123,48 @@ function initBones() {
 }
 
 function createGeometry(sizing) {
+  // Crée une géométrie de cylindre
   const geometry = new THREE.CylinderGeometry(
-    0, // radiusTop
-    3, // radiusBottom
-    sizing.height, // height
-    7, // radiusSegments
-    sizing.segmentCount * 3, // heightSegments
-    true // openEnded
+      0, // radiusTop
+      3, // radiusBottom
+      sizing.height, // height
+      7, // radiusSegments
+      sizing.segmentCount * 3, // heightSegments
+      true // openEnded
   );
 
   // Récupère les attributs des positions
   const positionAttribute = geometry.attributes.position;
   const vertexCount = positionAttribute.count;
 
-  // Crée des tableaux pour skinIndices et skinWeights
+  // Prépare les tableaux pour les indices et poids de la peau
   const skinIndices = [];
   const skinWeights = [];
 
   for (let i = 0; i < vertexCount; i++) {
+    // Récupère les coordonnées du vertex
     const vertex = new THREE.Vector3(
-      positionAttribute.getX(i),
-      positionAttribute.getY(i),
-      positionAttribute.getZ(i)
+        positionAttribute.getX(i),
+        positionAttribute.getY(i),
+        positionAttribute.getZ(i)
     );
 
     const y = vertex.y + sizing.halfHeight;
 
+    // Calcule les indices et poids de la peau
     const skinIndex = Math.floor(y / sizing.segmentHeight);
     const skinWeight = (y % sizing.segmentHeight) / sizing.segmentHeight;
 
-    // Modifie les positions
+    // Ajoute une légère déformation aléatoire
     vertex.x -= (0.5 - Math.random()) * 2;
     vertex.z -= (0.5 - Math.random()) * 2;
 
+    // Réinitialise le vertex de base pour éviter des artefacts
     if (vertex.y === -sizing.segmentHeight) {
       vertex.x = vertex.z = 0;
     }
 
-    // Met à jour la position de l'attribut
+    // Met à jour les positions dans la géométrie
     positionAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
 
     // Ajoute les indices et poids de la peau
@@ -168,14 +172,14 @@ function createGeometry(sizing) {
     skinWeights.push(1 - skinWeight, skinWeight, 0, 0);
   }
 
-  // Ajoute les nouveaux attributs à la géométrie
+  // Ajoute les nouveaux attributs de la géométrie
   geometry.setAttribute(
-    "skinIndex",
-    new THREE.Uint16BufferAttribute(skinIndices, 4)
+      "skinIndex",
+      new THREE.Uint16BufferAttribute(skinIndices, 4)
   );
   geometry.setAttribute(
-    "skinWeight",
-    new THREE.Float32BufferAttribute(skinWeights, 4)
+      "skinWeight",
+      new THREE.Float32BufferAttribute(skinWeights, 4)
   );
 
   return geometry;
@@ -284,27 +288,28 @@ function update() {
       });
     }
 
+    // Bones 1
     mesh.skeleton.bones[0].position.copy(centerTween);
     mesh.skeleton.bones[0].position.add(
       centerTween.clone().multiplyScalar(0.5)
     );
 
+    // Bones 2
     mesh.skeleton.bones[1].position.set(
       bonesPositionsTween[j].x / 2,
       5 + bonesPositionsTween[j].y / 2,
       bonesPositionsTween[j].z / 2
     );
-
     mesh.skeleton.bones[1].position.sub(
       centerTween.clone().multiplyScalar(0.5)
     );
 
+    // Bones 3
     mesh.skeleton.bones[2].position.set(
       bonesPositionsTween[j].x,
       -10 + bonesPositionsTween[j].y,
       bonesPositionsTween[j].z
     );
-
     mesh.skeleton.bones[2].position.sub(centerTween.clone().multiplyScalar(1));
   }
 }

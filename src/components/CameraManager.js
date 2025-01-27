@@ -9,13 +9,13 @@ export class CameraManager {
    * @param {number} near - The near clipping plane distance.
    * @param {number} far - The far clipping plane distance.
    */
-  constructor(width, height, fov = 40, near = 0.1, far = 1000) {
+  constructor(width, height, fov = 30, near = 0.1, far = 2000) {
     /**
      * The perspective camera instance.
      * @type {THREE.PerspectiveCamera}
      */
     this.camera = new THREE.PerspectiveCamera(fov, width / height, near, far);
-    this.camera.position.set(5, 5, 5);
+    this.camera.position.set(-2.3, 1, 8);
   }
 
   /**

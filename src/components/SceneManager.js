@@ -10,8 +10,10 @@ import { LightManager } from "./LightManager";
 import { RendererManager } from "./RendererManager";
 import { FXManager } from "./FXManager";
 import { Ground } from "./Ground";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import { PMREMGenerator } from "three";
 
-export const scene = {
+export const sceneManager = {
   renderTime: 0,
   cameraManager: null,
   controlManager: null,
@@ -24,23 +26,23 @@ export const scene = {
   mobile: false,
 
   CONFIG: {
-    BG_COLOR: 0xffffff,
+    BG_COLOR: 0x000000,
     WIDTH: window.innerWidth,
     HEIGHT: window.innerHeight,
-    FOG_NEAR: 2,
-    FOG_FAR: 10,
+    FOG_NEAR: 99,
+    FOG_FAR: 100,
   },
 
   init() {
     // Initialize stats
-    this.stats = new Stats();
-    document.body.appendChild(this.stats.dom);
+    //this.stats = new Stats();
+    //document.body.appendChild(this.stats.dom);
 
     events.on("update", this.update.bind(this));
 
     const container = document.getElementById("scene-container");
     if (!container) {
-      throw new Error("Container with ID 'scene-container' not found");
+      throw new Error("Container with ID 'sceneManager-container' not found");
     }
 
     // Initialize renderer
@@ -51,9 +53,12 @@ export const scene = {
     );
     this.rendererManager.appendToContainer(container);
 
-    // Initialize scene
+    // Initialize sceneManager
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.Fog(this.CONFIG.BG_COLOR, this.CONFIG.FOG_NEAR, this.CONFIG.FOG_FAR);
+
+    // Load HDRI
+    this.loadHDRI("textures/hdri_2048.hdr");
 
     // Initialize camera and controls
     this.cameraManager = new CameraManager(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
@@ -140,4 +145,27 @@ export const scene = {
   getControls() {
     return this.controlManager?.getControls();
   },
+
+  loadHDRI(path) {
+    const loader = new RGBELoader();
+    const pmremGenerator = new PMREMGenerator(this.rendererManager.getRenderer());
+    pmremGenerator.compileEquirectangularShader();
+
+    loader.load(
+        path,
+        (texture) => {
+          const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+
+          this.scene.environment = envMap;
+          this.scene.background = envMap;
+
+          texture.dispose();
+          pmremGenerator.dispose();
+        },
+        undefined,
+        (error) => {
+          console.error("Error loading HDRI:", error);
+        }
+    );
+  }
 };
