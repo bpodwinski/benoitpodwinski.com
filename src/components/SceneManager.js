@@ -58,7 +58,7 @@ export const sceneManager = {
     this.scene.fog = new THREE.Fog(this.CONFIG.BG_COLOR, this.CONFIG.FOG_NEAR, this.CONFIG.FOG_FAR);
 
     // Load HDRI
-    this.loadHDRI("textures/hdri_2048.hdr");
+    this.loadHDRI("textures/hdri_1024.hdr");
 
     // Initialize camera and controls
     this.cameraManager = new CameraManager(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
