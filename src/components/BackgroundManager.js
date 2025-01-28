@@ -63,7 +63,7 @@ export class BackgroundManager {
         const cubeTextureLoader = new THREE.CubeTextureLoader();
         this.envMap = cubeTextureLoader.load(paths);
 
-        this.envMap.encoding = THREE.sRGBEncoding;
+        this.envMap.encoding = THREE.SRGBColorSpace;
 
         scene.environment = this.envMap;
         scene.background = this.envMap;

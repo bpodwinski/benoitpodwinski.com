@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { DEBUG_MODE } from "../config/settings";
+import {distance} from "three/tsl";
 
 export class LightManager {
     constructor() {
@@ -67,6 +68,18 @@ export class LightManager {
             case "PointLight":
                 light = new THREE.PointLight(color, intensity);
                 light.position.set(...position);
+
+                if (shadow) {
+                    light.castShadow = true;
+                    light.shadow.camera.near = shadow.near || 0.1;
+                    light.shadow.camera.far = shadow.far || 100;
+                    light.shadow.camera.left = shadow.left || -10;
+                    light.shadow.camera.right = shadow.right || 10;
+                    light.shadow.camera.top = shadow.top || 10;
+                    light.shadow.camera.bottom = shadow.bottom || -10;
+                    light.shadow.mapSize.width = shadow.mapSize || 2048;
+                    light.shadow.mapSize.height = shadow.mapSize || 2048;
+                }
                 break;
 
             default:

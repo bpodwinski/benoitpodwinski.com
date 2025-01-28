@@ -15,6 +15,7 @@ const App = {
       return;
     }
 
+
     // Initialiser le LoadingManager
     this.loadingManager = new THREE.LoadingManager(
         // Callback quand tout est chargé
