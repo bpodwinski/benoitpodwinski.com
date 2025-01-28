@@ -46,7 +46,7 @@ const App = {
   loadAssets() {
     // Exemple de chargement d'une texture
     const textureLoader = new THREE.TextureLoader(this.loadingManager);
-    textureLoader.load("textures/e46m3gtr.png");
+    textureLoader.load("textures/ground_alpha.png");
 
     // Tu peux ajouter d'autres loaders ici si besoin
   },
