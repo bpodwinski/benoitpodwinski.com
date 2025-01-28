@@ -47,7 +47,7 @@ const App = {
   loadAssets() {
     // Exemple de chargement d'une texture
     const textureLoader = new THREE.TextureLoader(this.loadingManager);
-    textureLoader.load("textures/ground_alpha.png");
+    textureLoader.load("textures/ground/ground_alpha.png");
 
     // Tu peux ajouter d'autres loaders ici si besoin
   },
@@ -67,7 +67,7 @@ const App = {
     loadingElement.style.alignItems = "center";
     loadingElement.style.justifyContent = "center";
     loadingElement.style.zIndex = "1000";
-    loadingElement.innerHTML = '<p id="loading-progress">Loading... 0%</p>';
+    //loadingElement.innerHTML = '<p id="loading-progress">Loading... 0%</p>';
     document.body.appendChild(loadingElement);
   },
 

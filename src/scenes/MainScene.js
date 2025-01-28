@@ -82,7 +82,8 @@ export class MainScene {
         this.cameraManager = new CameraManager({
             width: this.CONFIG.WIDTH,
             height: this.CONFIG.HEIGHT,
-            position: [-1, 0, -0.4],
+            fov: 35,
+            position: [-1.5, 0, -0.4],
             scene: scene
         });
         const camera = this.cameraManager.getCamera();
@@ -93,10 +94,10 @@ export class MainScene {
         lightManager.addLight(scene, {
             type: "DirectionalLight",
             color: 0xffffff,
-            intensity: 15,
-            position: [5, 2, 0],
+            intensity: 5,
+            position: [5, 1.5, 0],
             shadow: {
-                mapSize: 2048,
+                mapSize: 1024,
             },
         });
 
@@ -106,7 +107,7 @@ export class MainScene {
             intensity: 15,
             position: [5, 5, 4.1],
             shadow: {
-                mapSize: 2048,
+                mapSize: 1024,
             },
         });
 
@@ -114,7 +115,7 @@ export class MainScene {
         this.fxManager = new FxManager(scene, this.rendererManager.getRenderer(), camera);
 
         // Add objects
-        const ground = new Ground();
+        const ground = new Ground(this.rendererManager.getRenderer());
         const objects = [Mecha];
         for (let object of objects) {
             object.init(scene, camera, ground);

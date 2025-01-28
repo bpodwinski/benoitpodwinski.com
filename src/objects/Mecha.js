@@ -126,7 +126,7 @@ function createGeometry(sizing) {
       0, // radiusTop
       3, // radiusBottom
       sizing.height, // height
-      7, // radiusSegments
+      8, // radiusSegments
       sizing.segmentCount * 3, // heightSegments
       true // openEnded
   );

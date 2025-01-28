@@ -9,7 +9,7 @@ export class CameraManager {
    * @param {number} config.height - The height of the rendering (aspect ratio).
    * @param {number} [config.fov=30] - The field of view.
    * @param {number} [config.near=0.1] - The near clipping plane distance.
-   * @param {number} [config.far=100] - The far clipping plane distance.
+   * @param {number} [config.far=50] - The far clipping plane distance.
    * @param {Array<number>} [config.position=[0, 1, 0]] - The position of the camera in [x, y, z].
    * @param {THREE.Scene} [config.scene=null] - The scene where the camera is used.
    */
@@ -18,7 +18,7 @@ export class CameraManager {
                 height,
                 fov = 30,
                 near = 0.01,
-                far = 100,
+                far = 50,
                 position = [0, 1, 0],
                 scene = null,
               }) {

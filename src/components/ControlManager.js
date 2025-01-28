@@ -18,7 +18,7 @@ export class ControlManager {
         const defaultOptions = {
             target: { x: 0, y: 0, z: 0 },
             autoRotate: false,
-            enablePan: true,
+            enablePan: false,
             enableZoom: true,
             enableRotate: true,
             enableDamping: true,
@@ -31,12 +31,12 @@ export class ControlManager {
             minPolarAngle: 1,
             maxPolarAngle: Math.PI / 2,
             bounds: {
-                minX: -4,
+                minX: -2,
                 maxX: 4,
                 minY: 0,
-                maxY: 4,
-                minZ: -4,
-                maxZ: 4,
+                maxY: 1,
+                minZ: -1.5,
+                maxZ: 1.5,
             },
         };
 

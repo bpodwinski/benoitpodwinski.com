@@ -10,7 +10,7 @@ export class RendererManager {
     constructor(width, height, bgColor = 0x000000) {
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
-            powerPreference: "high-performance",
+            alpha: true,
         });
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(width, height);
