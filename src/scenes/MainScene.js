@@ -56,17 +56,33 @@ export class MainScene {
 
         // Background setup
         this.backgroundManager = new BackgroundManager();
-        this.backgroundManager.setHDRIBackground(
+
+        // HDRI
+        // this.backgroundManager.setHDRIBackground(
+        //     scene,
+        //     this.rendererManager.getRenderer(),
+        //     "textures/hdri_1024.hdr"
+        // );
+
+        // Cubemap
+        const paths = [
+            "textures/px.png", // Positive X
+            "textures/nx.png", // Negative X
+            "textures/py.png", // Positive Y
+            "textures/ny.png", // Negative Y
+            "textures/pz.png", // Positive Z
+            "textures/nz.png", // Negative Z
+        ];
+        this.backgroundManager.setCubeMapBackground(
             scene,
-            this.rendererManager.getRenderer(),
-            "textures/hdri_1024.hdr"
+            paths
         );
 
         // Camera and controls
         this.cameraManager = new CameraManager({
             width: this.CONFIG.WIDTH,
             height: this.CONFIG.HEIGHT,
-            position: [-2.5, 0.2, 8],
+            position: [-1, 0, -0.4],
             scene: scene
         });
         const camera = this.cameraManager.getCamera();
@@ -77,18 +93,21 @@ export class MainScene {
         lightManager.addLight(scene, {
             type: "DirectionalLight",
             color: 0xffffff,
-            intensity: 0.3,
-            position: [0, 2, -20],
+            intensity: 15,
+            position: [5, 2, 0],
             shadow: {
                 mapSize: 2048,
             },
         });
 
         lightManager.addLight(scene, {
-            type: "PointLight",
-            color: 0x63cbc9,
-            intensity: 20,
-            position: [0.3, 1.5, 0],
+            type: "DirectionalLight",
+            color: 0xfff4e3,
+            intensity: 15,
+            position: [5, 5, 4.1],
+            shadow: {
+                mapSize: 2048,
+            },
         });
 
         // Effects

@@ -17,7 +17,7 @@ export class CameraManager {
                 width,
                 height,
                 fov = 30,
-                near = 0.1,
+                near = 0.01,
                 far = 100,
                 position = [0, 1, 0],
                 scene = null,

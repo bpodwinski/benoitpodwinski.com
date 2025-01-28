@@ -75,17 +75,16 @@ function reload(scene) {
   }
 
   material = new THREE.MeshPhysicalMaterial({
-    color: 0x318ec2,
-    metalness: 1,
-    roughness: 0.1,
+    color: 0x90fcd5,
+    metalness: 0.5,
+    roughness: 0,
     flatShading: true,
-    transparent: false,
+    transparent: true,
     transmission: 1,
-    clearcoat: 0.4,
-    clearcoatRoughness: 0.5,
-    bumpScale: 4,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.4,
     envMap: scene.environment,
-    envMapIntensity: 1,
+    envMapIntensity: 2,
     side: THREE.DoubleSide,
   });
 

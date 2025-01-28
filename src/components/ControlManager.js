@@ -12,6 +12,8 @@ export class ControlManager {
         this.camera = camera;
         this.controls = new OrbitControls(camera, domElement);
 
+        const angleInRadians = THREE.MathUtils.degToRad(30);
+
         // Apply default and custom options
         const defaultOptions = {
             target: { x: 0, y: 0, z: 0 },
@@ -20,17 +22,19 @@ export class ControlManager {
             enableZoom: true,
             enableRotate: true,
             enableDamping: true,
-            dampingFactor: 0.02,
+            dampingFactor: 0.15,
             rotateSpeed: 0.1,
             minDistance: 2,
             maxDistance: 4,
+            minAzimuthAngle: -2 - angleInRadians,
+            maxAzimuthAngle: -2 + angleInRadians,
             minPolarAngle: 1,
             maxPolarAngle: Math.PI / 2,
             bounds: {
                 minX: -4,
                 maxX: 4,
                 minY: 0,
-                maxY: 2,
+                maxY: 4,
                 minZ: -4,
                 maxZ: 4,
             },
@@ -48,6 +52,8 @@ export class ControlManager {
         this.controls.rotateSpeed = this.config.rotateSpeed;
         this.controls.minDistance = this.config.minDistance;
         this.controls.maxDistance = this.config.maxDistance;
+        this.controls.minAzimuthAngle = this.config.minAzimuthAngle;
+        this.controls.maxAzimuthAngle = this.config.maxAzimuthAngle;
         this.controls.minPolarAngle = this.config.minPolarAngle;
         this.controls.maxPolarAngle = this.config.maxPolarAngle;
 
