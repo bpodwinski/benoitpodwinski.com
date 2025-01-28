@@ -59,7 +59,7 @@ export class MainScene {
         this.backgroundManager.setHDRIBackground(
             scene,
             this.rendererManager.getRenderer(),
-            "textures/hdri_2048.hdr"
+            "textures/hdri_1024.hdr"
         );
 
         // Camera and controls
