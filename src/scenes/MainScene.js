@@ -159,7 +159,7 @@ export class MainScene {
         this.CONFIG.WIDTH = window.innerWidth;
         this.CONFIG.HEIGHT = window.innerHeight;
 
-        this.cameraManager.updateAspectRatio(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
+        this.cameraManager.updateSize(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
         this.rendererManager.updateSize(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
     }
 
