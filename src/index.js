@@ -11,10 +11,10 @@ window.addEventListener("load", () => {
   if (status) status.style.display = "none";
   if (preloader) {
     preloader.style.opacity = "0";
-    preloader.style.transition = "opacity 1s";
+    preloader.style.transition = "opacity 3s";
     setTimeout(() => {
       preloader.style.display = "none";
-    }, 1000);
+    }, 200);
   }
 });
 

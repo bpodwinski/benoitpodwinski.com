@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
   root: ".",
@@ -11,4 +12,14 @@ export default defineConfig({
     assetsDir: "assets",
     sourcemap: true,
   },
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/three/examples/jsm/libs/basis/*',
+          dest: 'assets/libs/basis',
+        },
+      ],
+    }),
+  ],
 });

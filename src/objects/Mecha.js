@@ -21,7 +21,10 @@ function init(scene, camera, Ground) {
   scene.add(groupHolder);
 
   Ground.init(scene);
-  groundMesh = Ground.getGroundMesh();
+  events.on("groundReady", (mesh) => {
+    groundMesh = mesh;
+    console.log("Ground mesh is ready:", groundMesh);
+  });
 
   reload(scene);
 
@@ -46,6 +49,11 @@ function onDocumentMouseDown(event, camera) {
 }
 
 function boom(mouse, camera) {
+  if (!groundMesh) {
+    console.warn("Ground mesh is not initialized");
+    return;
+  }
+
   const raycaster = new THREE.Raycaster(undefined, undefined, 0, undefined);
   raycaster.setFromCamera(mouse, camera);
 
@@ -75,8 +83,8 @@ function reload(scene) {
   }
 
   material = new THREE.MeshPhysicalMaterial({
-    color: 0x90fcd5,
-    metalness: 0.5,
+    color: 0x66fff2,
+    metalness: 0.6,
     roughness: 0,
     flatShading: true,
     transparent: true,
@@ -84,7 +92,7 @@ function reload(scene) {
     clearcoat: 0.6,
     clearcoatRoughness: 0.4,
     envMap: scene.environment,
-    envMapIntensity: 2,
+    envMapIntensity: 10,
     side: THREE.DoubleSide,
   });
 

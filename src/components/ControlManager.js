@@ -12,17 +12,17 @@ export class ControlManager {
         this.camera = camera;
         this.controls = new OrbitControls(camera, domElement);
 
-        const angleInRadians = THREE.MathUtils.degToRad(30);
+        const angleInRadians = THREE.MathUtils.degToRad(15);
 
         // Apply default and custom options
         const defaultOptions = {
             target: { x: 0, y: 0, z: 0 },
             autoRotate: false,
             enablePan: false,
-            enableZoom: true,
+            enableZoom: false,
             enableRotate: true,
             enableDamping: true,
-            dampingFactor: 0.15,
+            dampingFactor: 0.1,
             rotateSpeed: 0.1,
             minDistance: 2,
             maxDistance: 4,

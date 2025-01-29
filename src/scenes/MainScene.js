@@ -37,8 +37,8 @@ export class MainScene {
         const lightManager = new LightManager();
 
         // Initialize stats
-        this.stats = new Stats();
-        document.body.appendChild(this.stats.dom);
+        //this.stats = new Stats();
+        //document.body.appendChild(this.stats.dom);
 
         events.on("update", this.update.bind(this));
 
@@ -95,20 +95,27 @@ export class MainScene {
             type: "DirectionalLight",
             color: 0xffffff,
             intensity: 5,
-            position: [5, 1.5, 0],
+            position: [5, 2, 0],
             shadow: {
-                mapSize: 1024,
+                mapSize: 2048,
             },
         });
 
         lightManager.addLight(scene, {
             type: "DirectionalLight",
             color: 0xfff4e3,
-            intensity: 15,
-            position: [5, 5, 4.1],
+            intensity: 5,
+            position: [5, 3, 4.1],
             shadow: {
-                mapSize: 1024,
+                mapSize: 2048,
             },
+        });
+
+        lightManager.addLight(scene, {
+            type: "PointLight",
+            color: 0xa9fcf5,
+            intensity: 3,
+            position: [0, -2, 0],
         });
 
         // Effects
@@ -116,6 +123,8 @@ export class MainScene {
 
         // Add objects
         const ground = new Ground(this.rendererManager.getRenderer());
+        ground.init(scene);
+
         const objects = [Mecha];
         for (let object of objects) {
             object.init(scene, camera, ground);

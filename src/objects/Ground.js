@@ -1,9 +1,11 @@
 import * as THREE from "three";
-import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
+import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
+import { events } from "../lib/EventEmitter";
 
 export class Ground {
-    constructor() {
+    constructor(renderer) {
         this.groundMesh = null;
+        this.renderer = renderer;
     }
 
     /**
@@ -11,56 +13,86 @@ export class Ground {
      * @param {THREE.Scene} scene - The Three.js scene to which the ground will be added.
      */
     init(scene) {
-
         const groundSize = 2.5
-
-        // Load texture
-        const alphaMap = new THREE.TextureLoader().load("textures/ground/ground_alpha.png");
-        const bumpMap = new THREE.TextureLoader().load("textures/ground/ground_bump.jpg");
-        const normalMap = new THREE.TextureLoader().load("textures/ground/ground_normal.jpg");
-        const displacementMap = new THREE.TextureLoader().load("textures/ground/ground_displacement.jpg");
         const scale = groundSize * 1.5;
 
-        bumpMap.wrapS = THREE.RepeatWrapping;
-        bumpMap.wrapT = THREE.RepeatWrapping;
-        bumpMap.repeat.set(scale, scale);
+        // Load texture
+        const ktxLoader = new KTX2Loader();
+        ktxLoader.setTranscoderPath('assets/libs/basis/');
+        ktxLoader.detectSupport(this.renderer);
 
-        normalMap.wrapS = THREE.RepeatWrapping;
-        normalMap.wrapT = THREE.RepeatWrapping;
-        normalMap.repeat.set(scale, scale);
+        // Variables pour stocker les textures chargées
+        let alphaMap, bumpMap, normalMap, displacementMap;
 
-        displacementMap.wrapS = THREE.RepeatWrapping;
-        displacementMap.wrapT = THREE.RepeatWrapping;
-        displacementMap.repeat.set(scale, scale);
+        // Fonction de vérification et création du matériau
+        const createGroundMaterial = () => {
+            if (alphaMap && bumpMap && normalMap && displacementMap) {
+                // Configurer les textures
+                bumpMap.wrapS = bumpMap.wrapT = THREE.RepeatWrapping;
+                bumpMap.repeat.set(scale, scale);
 
-        // Create material
-        const groundMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0x000000,
-            flatShading: false,
-            transparent: true,
-            transmission: 1,
-            clearcoat: 0,
-            clearcoatRoughness: 1,
-            metalness: 1,
-            roughness: 0.08,
-            alphaMap: alphaMap,
-            bumpMap: bumpMap,
-            bumpScale: 0.1,
-            normalMap: normalMap,
-            normalScale: new THREE.Vector2(0.07, 0.07),
-            displacementMap: displacementMap,
-            displacementScale: 0.05,
-            envMap: scene.environment,
-            envMapIntensity: 100,
+                normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+                normalMap.repeat.set(scale, scale);
+
+                displacementMap.wrapS = displacementMap.wrapT = THREE.RepeatWrapping;
+                displacementMap.repeat.set(scale, scale);
+
+                // Créer le matériau
+                const groundMaterial = new THREE.MeshPhysicalMaterial({
+                    color: 0x000000,
+                    flatShading: false,
+                    transparent: true,
+                    transmission: 1,
+                    clearcoat: 0,
+                    clearcoatRoughness: 1,
+                    metalness: 1,
+                    roughness: 0.08,
+                    alphaMap: alphaMap,
+                    bumpMap: bumpMap,
+                    bumpScale: 0.1,
+                    normalMap: normalMap,
+                    normalScale: new THREE.Vector2(0.08, 0.08),
+                    displacementMap: displacementMap,
+                    displacementScale: 0.02,
+                    envMap: scene.environment,
+                    envMapIntensity: 100,
+                });
+
+                // Créer et configurer le mesh du sol
+                this.groundMesh = new THREE.Mesh(
+                    new THREE.PlaneGeometry(groundSize, groundSize, 100, 100),
+                    groundMaterial
+                );
+                this.groundMesh.rotation.x = -Math.PI / 2;
+                this.groundMesh.position.y = -0.26;
+                this.groundMesh.castShadow = false;
+                this.groundMesh.receiveShadow = true;
+                scene.add(this.groundMesh);
+
+                events.emit("groundReady", this.groundMesh);
+            }
+        };
+
+        // Charger les textures avec callbacks
+        ktxLoader.load("textures/ground/ground_alpha.ktx2", (texture) => {
+            alphaMap = texture;
+            createGroundMaterial();
         });
 
-        this.groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(groundSize, groundSize, 100, 100), groundMaterial);
-        this.groundMesh.rotation.x = -Math.PI / 2;
-        this.groundMesh.position.y = -0.26;
-        this.groundMesh.castShadow = false;
-        this.groundMesh.receiveShadow = true;
+        ktxLoader.load("textures/ground/ground_bump.ktx2", (texture) => {
+            bumpMap = texture;
+            createGroundMaterial();
+        });
 
-        scene.add(this.groundMesh);
+        ktxLoader.load("textures/ground/ground_normal.ktx2", (texture) => {
+            normalMap = texture;
+            createGroundMaterial();
+        });
+
+        ktxLoader.load("textures/ground/ground_displacement.ktx2", (texture) => {
+            displacementMap = texture;
+            createGroundMaterial();
+        });
     }
 
     /**
@@ -68,6 +100,10 @@ export class Ground {
      * @returns {THREE.Mesh} - The ground mesh.
      */
     getGroundMesh() {
+        if (!this.groundMesh) {
+            console.warn("Ground mesh is not initialized yet");
+            return null;
+        }
         return this.groundMesh;
     }
 }
