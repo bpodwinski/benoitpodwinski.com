@@ -18,7 +18,6 @@ export class MainScene {
         this.rendererManager = null;
         this.cameraManager = null;
         this.controlManager = null;
-        this.lightManager = null;
         this.fxManager = null;
         this.backgroundManager = null;
         this.stats = null;
@@ -34,7 +33,7 @@ export class MainScene {
 
     init() {
         const scene = this.sceneManager.getScene();
-        const lightManager = new LightManager();
+        const light = new LightManager(scene);
 
         // Initialize stats
         //this.stats = new Stats();
@@ -91,7 +90,7 @@ export class MainScene {
         this.controlManager = new ControlManager(camera, this.rendererManager.getRenderer().domElement);
 
         // Lights
-        lightManager.addLight(scene, {
+        light.addLight({
             type: "DirectionalLight",
             color: 0xffffff,
             intensity: 5,
@@ -101,7 +100,7 @@ export class MainScene {
             },
         });
 
-        lightManager.addLight(scene, {
+        light.addLight({
             type: "DirectionalLight",
             color: 0xfff4e3,
             intensity: 5,
@@ -111,7 +110,7 @@ export class MainScene {
             },
         });
 
-        lightManager.addLight(scene, {
+        light.addLight({
             type: "PointLight",
             color: 0xa9fcf5,
             intensity: 3,

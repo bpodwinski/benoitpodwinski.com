@@ -100,7 +100,7 @@ export class CameraManager {
      */
     updateSize(width, height) {
         this.camera.aspect = width / height;
-        this.camera.updateMatrix();
+        this.camera.updateProjectionMatrix();
         this.log("Camera size updated:", { width, height });
     }
 

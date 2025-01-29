@@ -1,9 +1,63 @@
 import * as THREE from "three";
+import { DEBUG_MODE } from "../config/settings";
 
 export class SceneManager {
-  constructor() {
+  /**
+   * Manages the Three.js scene setup, including fog, background, and environment settings.
+   * It provides utilities for setting background textures and handling resizing events.
+   *
+   * @param {Object} config - Configuration object for the scene.
+   * @param {number} [config.BG_COLOR=0x000000] - The background color.
+   * @param {number} [config.FOG_NEAR=1] - The near distance of the fog.
+   * @param {number} [config.FOG_FAR=100] - The far distance of the fog.
+   * @param {boolean} [config.enableFog=false] - Whether to enable fog.
+   * @param {HTMLElement} [config.container=null] - The container element for the renderer.
+   * @param {CameraManager} cameraManager - Instance of the camera manager.
+   * @param {RendererManager} rendererManager - Instance of the renderer manager.
+   */
+  constructor(config = {}, cameraManager, rendererManager) {
+    this.config = { ...SceneManager.defaultConfig(), ...config };
+    this.validateConfig();
+
     this.scene = new THREE.Scene();
     this.environment = null;
+    this.container = this.config.container;
+
+    this.cameraManager = cameraManager;
+    this.rendererManager = rendererManager;
+
+    this.debugMode = DEBUG_MODE;
+    this.log = this.debugMode ? console.log.bind(console, "[SceneManager]") : () => {};
+
+    this.configureScene();
+    this.log("Scene initialized", this.config);
+  }
+
+  /**
+   * Returns the default configuration for the scene.
+   * @returns {Object} The default configuration object.
+   */
+  static defaultConfig() {
+    return {
+      BG_COLOR: 0x000000,
+      FOG_NEAR: 1,
+      FOG_FAR: 100,
+      enableFog: false,
+      container: null,
+    };
+  }
+
+  /**
+   * Validates the configuration object.
+   * @throws Will throw an error if any configuration value is invalid.
+   */
+  validateConfig() {
+    if (typeof this.config.BG_COLOR !== "number") {
+      throw new Error("BG_COLOR must be a valid hexadecimal number");
+    }
+    if (!Number.isFinite(this.config.FOG_NEAR) || !Number.isFinite(this.config.FOG_FAR)) {
+      throw new Error("FOG_NEAR and FOG_FAR must be valid numbers");
+    }
   }
 
   /**
@@ -15,12 +69,16 @@ export class SceneManager {
   }
 
   /**
-   * Configure the scene (e.g., fog, background color).
-   * @param {Object} config - Configuration for the scene.
+   * Configures the scene settings, such as background color and fog.
    */
-  configureScene(config) {
-    this.scene.fog = new THREE.Fog(config.BG_COLOR, config.FOG_NEAR, config.FOG_FAR);
-    this.scene.background = new THREE.Color(config.BG_COLOR);
+  configureScene() {
+    const { BG_COLOR, FOG_NEAR, FOG_FAR, enableFog } = this.config;
+
+    this.scene.background = new THREE.Color(BG_COLOR);
+    if (enableFog) {
+      this.scene.fog = new THREE.Fog(BG_COLOR, FOG_NEAR, FOG_FAR);
+    }
+    this.log("Scene configured with", this.config);
   }
 
   /**
@@ -34,6 +92,7 @@ export class SceneManager {
     if (background instanceof THREE.Texture || Array.isArray(background)) {
       this.setEnvironment(background);
     }
+    this.log("Scene background updated");
   }
 
   /**
@@ -43,10 +102,11 @@ export class SceneManager {
   setEnvironment(envMap) {
     this.environment = envMap;
     this.scene.environment = envMap;
+    this.log("Environment map set");
   }
 
   /**
-   * Dispose of scene-related resources (e.g., textures).
+   * Cleans up scene-related resources (e.g., textures).
    */
   dispose() {
     if (this.environment) {
@@ -56,5 +116,8 @@ export class SceneManager {
     if (this.scene.background instanceof THREE.Texture) {
       this.scene.background.dispose();
     }
+
+    this.scene = null;
+    this.log("Scene disposed");
   }
 }
