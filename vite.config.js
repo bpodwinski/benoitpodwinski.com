@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   root: ".",
   server: {
-    host: true,
-    port: 5173,
+    host: "0.0.0.0",
+    allowedHosts: true,
+    port: 3000,
   },
   build: {
     outDir: "build",
@@ -16,8 +17,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'node_modules/three/examples/jsm/libs/basis/*',
-          dest: 'assets/libs/basis',
+          src: "node_modules/three/examples/jsm/libs/basis/*",
+          dest: "assets/libs/basis",
         },
       ],
     }),

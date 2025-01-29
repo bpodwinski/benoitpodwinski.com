@@ -27,7 +27,9 @@ export class SceneManager {
     this.rendererManager = rendererManager;
 
     this.debugMode = DEBUG_MODE;
-    this.log = this.debugMode ? console.log.bind(console, "[SceneManager]") : () => {};
+    this.log = this.debugMode
+      ? console.log.bind(console, "[SceneManager]")
+      : () => {};
 
     this.configureScene();
     this.log("Scene initialized", this.config);
@@ -55,7 +57,10 @@ export class SceneManager {
     if (typeof this.config.BG_COLOR !== "number") {
       throw new Error("BG_COLOR must be a valid hexadecimal number");
     }
-    if (!Number.isFinite(this.config.FOG_NEAR) || !Number.isFinite(this.config.FOG_FAR)) {
+    if (
+      !Number.isFinite(this.config.FOG_NEAR) ||
+      !Number.isFinite(this.config.FOG_FAR)
+    ) {
       throw new Error("FOG_NEAR and FOG_FAR must be valid numbers");
     }
   }

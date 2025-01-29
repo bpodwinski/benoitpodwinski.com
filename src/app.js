@@ -1,5 +1,5 @@
 import { EventEmitter } from "./lib/EventEmitter";
-import { isWebGLSupported, displayWebGLError } from "./lib/webGLUtils";
+import { WebGLUtils } from "./lib/WebGLUtils";
 import { MainScene } from "./scenes/MainScene";
 import * as THREE from "three";
 
@@ -10,31 +10,37 @@ const App = {
   loadingManager: null,
 
   init() {
-    if (!isWebGLSupported()) {
-      displayWebGLError();
-      return;
+    if (WebGLUtils.isWebGLSupported()) {
+      console.log("WebGL is supported!");
+    } else {
+      console.log("WebGL is NOT supported!");
     }
 
+    if (WebGLUtils.isWebGL2Supported()) {
+      console.log("WebGL 2.0 is supported!");
+    } else {
+      console.log("WebGL 2.0 is NOT supported!");
+    }
 
     // Initialiser le LoadingManager
     this.loadingManager = new THREE.LoadingManager(
-        // Callback quand tout est chargé
-        () => {
-          console.log("All assets loaded");
-          this.start();
-        },
+      // Callback quand tout est chargé
+      () => {
+        console.log("All assets loaded");
+        this.start();
+      },
 
-        // Callback pour la progression
-        (url, itemsLoaded, itemsTotal) => {
-          const progress = Math.round((itemsLoaded / itemsTotal) * 100);
-          console.log(`Loading ${url} (${progress}%)`);
-          this.updateLoadingScreen(progress);
-        },
+      // Callback pour la progression
+      (url, itemsLoaded, itemsTotal) => {
+        const progress = Math.round((itemsLoaded / itemsTotal) * 100);
+        console.log(`Loading ${url} (${progress}%)`);
+        this.updateLoadingScreen(progress);
+      },
 
-        // Callback en cas d'erreur
-        (url) => {
-          console.error(`Error loading ${url}`);
-        }
+      // Callback en cas d'erreur
+      (url) => {
+        console.error(`Error loading ${url}`);
+      }
     );
 
     // Afficher l'écran de chargement
