@@ -114,14 +114,15 @@ export class LightManager {
     }
 
     light.castShadow = true;
+    light.shadow.radius = shadowConfig.radius || 2;
     light.shadow.camera.near = shadowConfig.near || 0.1;
     light.shadow.camera.far = shadowConfig.far || 100;
-    light.shadow.camera.left = shadowConfig.left || -10;
-    light.shadow.camera.right = shadowConfig.right || 10;
-    light.shadow.camera.top = shadowConfig.top || 10;
-    light.shadow.camera.bottom = shadowConfig.bottom || -10;
-    light.shadow.mapSize.width = shadowConfig.mapSize || 2048;
-    light.shadow.mapSize.height = shadowConfig.mapSize || 2048;
+    light.shadow.camera.left = shadowConfig.left || -2;
+    light.shadow.camera.right = shadowConfig.right || 2;
+    light.shadow.camera.top = shadowConfig.top || 2;
+    light.shadow.camera.bottom = shadowConfig.bottom || -2;
+    light.shadow.mapSize.width = shadowConfig.mapSize || 1024;
+    light.shadow.mapSize.height = shadowConfig.mapSize || 1024;
 
     this.log("Shadows configured for light.");
   }

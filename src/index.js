@@ -11,6 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return;
   }
+  console.log("Is Mobile:", DeviceDetector.isMobile());
+  console.log("Has Touch:", DeviceDetector.isTouchDevice());
+  console.log("GPU Info:", DeviceDetector.getGPURendererInfo());
+  console.log("High Performance GPU:", DeviceDetector.hasHighPerformanceGPU());
 
   App.init();
 });

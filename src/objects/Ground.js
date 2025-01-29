@@ -17,7 +17,7 @@ export class Ground {
    */
   init(scene) {
     const groundSize = 2.5;
-    const scale = groundSize * 1.5;
+    const scale = groundSize;
 
     // Load texture
     const ktxLoader = new KTX2Loader();
@@ -49,12 +49,12 @@ export class Ground {
           clearcoat: 0,
           clearcoatRoughness: 1,
           metalness: 1,
-          roughness: 0.08,
+          roughness: 0.1,
           alphaMap: alphaMap,
           bumpMap: bumpMap,
           bumpScale: 0.1,
           normalMap: normalMap,
-          normalScale: new THREE.Vector2(0.08, 0.08),
+          normalScale: new THREE.Vector2(0.1, 0.1),
           displacementMap: displacementMap,
           displacementScale: 0.02,
           envMap: scene.environment,
@@ -63,7 +63,7 @@ export class Ground {
 
         // Créer et configurer le mesh du sol
         this.groundMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(groundSize, groundSize, 100, 100),
+          new THREE.PlaneGeometry(groundSize, groundSize, 50, 50),
           groundMaterial
         );
         this.groundMesh.rotation.x = -Math.PI / 2;

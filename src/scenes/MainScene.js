@@ -22,6 +22,11 @@ export class MainScene {
     this.fxManager = null;
     this.backgroundManager = null;
     this.stats = null;
+    this.running = true;
+    this.targetFPS = 20;
+    this.frameInterval = 1000 / this.targetFPS;
+    this.lastFrameTime = 0;
+    this.animationFrame = null;
 
     this.CONFIG = {
       BG_COLOR: 0x000000,
@@ -47,9 +52,14 @@ export class MainScene {
     this.setupLights();
     this.setupEffects();
     this.setupObjects();
+    this.setupObserver();
 
     events.on("update", this.update.bind(this));
     window.addEventListener("resize", this.onResize.bind(this));
+    document.addEventListener(
+      "visibilitychange",
+      this.handleVisibilityChange.bind(this)
+    );
 
     this.animate();
     gsap.delayedCall(0.1, this.updateShadow.bind(this));
@@ -114,7 +124,7 @@ export class MainScene {
       color: 0xffffff,
       intensity: 5,
       position: [5, 2, 0],
-      shadow: { mapSize: 4096 },
+      shadow: { mapSize: 1024 },
     });
 
     this.lightManager.addLight({
@@ -122,7 +132,7 @@ export class MainScene {
       color: 0xfff4e3,
       intensity: 5,
       position: [5, 3, 4.1],
-      shadow: { mapSize: 4096 },
+      shadow: { mapSize: 1024 },
     });
 
     this.lightManager.addLight({
@@ -135,19 +145,18 @@ export class MainScene {
 
   /** 🎞️ Configure les effets */
   setupEffects() {
-    this.fxManager = new FxManager(
-      this.scene,
-      this.rendererManager.getRenderer(),
-      this.cameraManager.getCamera(),
-      { bloom: { enabled: true, strength: 0.1, radius: 2, threshold: 1 } }
-    );
+    // this.fxManager = new FxManager(
+    //   this.scene,
+    //   this.rendererManager.getRenderer(),
+    //   this.cameraManager.getCamera(),
+    //   { bloom: { enabled: true, strength: 0.1, radius: 2, threshold: 1 } }
+    // );
   }
 
   /** 🎭 Ajoute les objets 3D */
   setupObjects() {
     const ground = new Ground(this.rendererManager.getRenderer());
     ground.init(this.scene);
-
     this.mecha = new Mecha(this.scene, this.cameraManager.getCamera(), ground);
   }
 
@@ -156,10 +165,48 @@ export class MainScene {
     this.rendererManager.getRenderer().shadowMap.needsUpdate = true;
   }
 
-  /** 🎬 Boucle d'animation */
+  /** 🎬 Boucle d'animation optimisée */
   animate() {
-    requestAnimationFrame(this.animate.bind(this));
-    events.emit("update");
+    if (!this.running) return; // Stop si pause
+    const now = performance.now();
+    const deltaTime = now - this.lastFrameTime;
+
+    if (deltaTime >= this.frameInterval) {
+      this.lastFrameTime = now - (deltaTime % this.frameInterval); // Évite le "drift"
+      events.emit("update"); // Mise à jour de la scène
+    }
+
+    this.animationFrame = requestAnimationFrame(this.animate.bind(this));
+  }
+
+  handleVisibilityChange() {
+    if (document.hidden) {
+      console.log("[MainScene] Pause de l'animation (onglet caché)");
+      this.running = false;
+      cancelAnimationFrame(this.animationFrame);
+    } else {
+      console.log("[MainScene] Reprise de l'animation (onglet visible)");
+      this.running = true;
+      this.lastFrameTime = performance.now(); // Évite un saut de temps
+      this.animate();
+    }
+  }
+
+  setupObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        this.running = entry.isIntersecting;
+        if (this.running) {
+          console.log("[MainScene] Canvas visible, reprise.");
+          this.animate();
+        } else {
+          console.log("[MainScene] Canvas caché, pause.");
+          cancelAnimationFrame(this.animationFrame);
+        }
+      });
+    });
+
+    observer.observe(this.rendererManager.getRenderer().domElement);
   }
 
   /** 🎥 Mise à jour de la scène */
