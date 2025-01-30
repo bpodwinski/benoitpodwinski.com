@@ -76,6 +76,7 @@ export class RendererManager {
     renderer.setClearColor(bgColor);
     renderer.shadowMap.enabled = shadowMap;
     renderer.shadowMap.autoUpdate = shadowMap;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
 
     return renderer;
   }

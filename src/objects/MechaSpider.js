@@ -23,6 +23,7 @@ export class Mecha {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.groupHolder = new THREE.Object3D();
+    this.groupHolder.matrixAutoUpdate = false;
     this.material = null;
     this.dae = null;
     this.bonesCount = 8;
@@ -71,13 +72,13 @@ export class Mecha {
       this.material = new THREE.MeshPhysicalMaterial({
         color: 0x66fff2,
         metalness: 0.6,
-        roughness: 0,
+        roughness: 0.1,
         flatShading: true,
         transmission: 1,
         clearcoat: 0.6,
         clearcoatRoughness: 0.4,
         envMap: this.scene.environment,
-        envMapIntensity: 10,
+        envMapIntensity: 0.5,
         side: THREE.DoubleSide,
       });
     }
@@ -105,6 +106,7 @@ export class Mecha {
       const bones = this.createBones(sizing);
       const mesh = this.createMesh(geometry, bones);
       mesh.scale.set(0.05, 0.05, 0.05);
+      mesh.updateMatrix();
 
       this.groupHolder.add(mesh);
       this.meshes.push(mesh);
@@ -159,6 +161,33 @@ export class Mecha {
     );
 
     return geometry;
+  }
+
+  createInstancedLegs(sizing) {
+    const geometry = new THREE.CylinderGeometry(
+      0,
+      3,
+      sizing.height,
+      8,
+      sizing.segmentCount * 3,
+      true
+    );
+    const instanceCount = this.bonesCount;
+    this.legs = new THREE.InstancedMesh(geometry, this.material, instanceCount);
+
+    const matrix = new THREE.Matrix4();
+    for (let i = 0; i < instanceCount; i++) {
+      matrix.setPosition(
+        Math.sin((i / instanceCount) * Math.PI * 2) * 3,
+        0,
+        Math.cos((i / instanceCount) * Math.PI * 2) * 3
+      );
+      this.legs.setMatrixAt(i, matrix);
+    }
+
+    this.legs.instanceMatrix.needsUpdate = true; // 🔹 Mise à jour unique
+    this.legs.matrixAutoUpdate = false; // 🔹 Optimisation ici
+    this.scene.add(this.legs);
   }
 
   /** Creates the skinned mesh */
@@ -248,6 +277,9 @@ export class Mecha {
         x: this.tempVec3.x,
         z: this.tempVec3.z,
         ease: "none",
+        onUpdate: () => {
+          this.groupHolder.matrixWorldNeedsUpdate = true;
+        },
       });
     }
 
@@ -336,8 +368,8 @@ export class Mecha {
     document.removeEventListener("mousedown", this.onMouseDownHandler);
     document.removeEventListener("touchstart", this.onTouchStartHandler);
     this.meshes.forEach((mesh) => {
-      mesh.geometry.dispose();
-      mesh.material.dispose();
+      mesh.castShadow = true;
+      mesh.receiveShadow = false;
     });
     this.meshes.length = 0;
     this.scene.remove(this.groupHolder);
