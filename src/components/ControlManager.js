@@ -67,8 +67,8 @@ export class ControlManager {
       rotateSpeed: 0.1,
       minDistance: 2,
       maxDistance: 4,
-      minAzimuthAngle: -2 - angleInRadians,
-      maxAzimuthAngle: -2 + angleInRadians,
+      minAzimuthAngle: -1.825 - angleInRadians,
+      maxAzimuthAngle: -1.825 + angleInRadians,
       minPolarAngle: 1,
       maxPolarAngle: Math.PI / 2,
       bounds: {

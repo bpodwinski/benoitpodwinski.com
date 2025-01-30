@@ -94,7 +94,16 @@ export class MainScene {
       "textures/pz.png",
       "textures/nz.png",
     ];
-    this.backgroundManager.setCubeMapBackground(cubeMapPaths);
+    //this.backgroundManager.setCubeMapBackground(cubeMapPaths);
+
+    this.backgroundManager.setPlaneBackground(
+      "textures/planete.png",
+      120,
+      120,
+      { x: 50, y: 0, z: 14.3 },
+      { x: 0, y: -100, z: 0 },
+      { x: 1.2, y: 1, z: 1 }
+    );
   }
 
   /** 🎥 Configure la caméra et les contrôles */

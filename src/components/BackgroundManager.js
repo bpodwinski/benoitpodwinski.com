@@ -141,6 +141,69 @@ export class BackgroundManager {
   }
 
   /**
+   * Sets a background using a textured plane.
+   * This method is useful for creating a simple sky or backdrop without using a CubeMap.
+   *
+   * @param {string} path - The path to the texture file.
+   * @param {number} [width=100] - The width of the plane.
+   * @param {number} [height=100] - The height of the plane.
+   * @param {Object} [position={ x: 0, y: 0, z: 0 }] - The position of the plane in the scene.
+   * @param {number} position.x - The x-coordinate of the plane.
+   * @param {number} position.y - The y-coordinate of the plane.
+   * @param {number} position.z - The z-coordinate of the plane.
+   * @param {Object} [rotation={ x: 0, y: 0, z: 0 }] - The rotation of the plane in radians.
+   * @param {number} rotation.x - The rotation around the x-axis in radians.
+   * @param {number} rotation.y - The rotation around the y-axis in radians.
+   * @param {number} rotation.z - The rotation around the z-axis in radians.
+   * @param {Object} [scale={ x: 1, y: 1, z: 1 }] - The scale of the plane.
+   * @param {number} scale.x - The scale factor along the x-axis.
+   * @param {number} scale.y - The scale factor along the y-axis.
+   * @param {number} scale.z - The scale factor along the z-axis.
+   */
+  setPlaneBackground(
+    path,
+    width = 100,
+    height = 100,
+    position = { x: 0, y: 0, z: 0 },
+    rotation = { x: 0, y: 0, z: 0 },
+    scale = { x: 1, y: 1, z: 1 }
+  ) {
+    const toRadians = (degrees) => degrees * (Math.PI / 180);
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(path);
+
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+
+    const geometry = new THREE.PlaneGeometry(width, height);
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+    });
+
+    this.planeBackground = new THREE.Mesh(geometry, material);
+    this.planeBackground.position.set(position.x, position.y, position.z);
+    this.planeBackground.rotation.set(
+      toRadians(rotation.x),
+      toRadians(rotation.y),
+      toRadians(rotation.z)
+    );
+    this.planeBackground.scale.set(scale.x, scale.y, scale.z);
+
+    this.envMap = texture;
+    this.envMap.colorSpace = THREE.SRGBColorSpace;
+    this.scene.environment = this.envMap;
+    this.scene.background = this.envMap;
+    this.backgroundType = "plane";
+
+    this.scene.add(this.planeBackground);
+
+    this.log("Plane background set successfully");
+  }
+
+  /**
    * Gets the current environment map.
    * @returns {THREE.Texture|null} The current envMap or null if none is set.
    */
