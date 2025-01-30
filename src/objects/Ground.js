@@ -16,8 +16,8 @@ export class Ground {
    * @param {THREE.Scene} scene - The Three.js scene to which the ground will be added.
    */
   init(scene) {
-    const groundSize = 2.5;
-    const scale = groundSize;
+    const groundSize = 8;
+    const scale = groundSize * 0.75;
 
     // Load texture
     const ktxLoader = new KTX2Loader();
@@ -25,14 +25,13 @@ export class Ground {
     ktxLoader.detectSupport(this.renderer);
 
     // Variables pour stocker les textures chargées
-    let alphaMap, bumpMap, normalMap, displacementMap;
+    let alphaMap, aoMap, normalMap, displacementMap;
 
     // Fonction de vérification et création du matériau
     const createGroundMaterial = () => {
-      if (alphaMap && bumpMap && normalMap && displacementMap) {
-        // Configurer les textures
-        bumpMap.wrapS = bumpMap.wrapT = THREE.RepeatWrapping;
-        bumpMap.repeat.set(scale, scale);
+      if (alphaMap && aoMap && normalMap && displacementMap) {
+        aoMap.wrapS = aoMap.wrapT = THREE.RepeatWrapping;
+        aoMap.repeat.set(scale, scale);
 
         normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
         normalMap.repeat.set(scale, scale);
@@ -51,22 +50,24 @@ export class Ground {
           metalness: 1,
           roughness: 0.1,
           alphaMap: alphaMap,
-          bumpMap: bumpMap,
-          bumpScale: 0.1,
+          aoMap: aoMap,
+          aoMapIntensity: 1,
           normalMap: normalMap,
           normalScale: new THREE.Vector2(0.1, 0.1),
           displacementMap: displacementMap,
-          displacementScale: 0.02,
+          displacementScale: 0.01,
           envMap: scene.environment,
           envMapIntensity: 100,
+          opacity: 0.6,
         });
 
         // Créer et configurer le mesh du sol
         this.groundMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(groundSize, groundSize, 50, 50),
+          new THREE.PlaneGeometry(groundSize, groundSize, 250, 250),
           groundMaterial
         );
         this.groundMesh.rotation.x = -Math.PI / 2;
+        this.groundMesh.rotation.z = Math.PI / 2.2;
         this.groundMesh.position.y = -0.26;
         this.groundMesh.castShadow = false;
         this.groundMesh.receiveShadow = true;
@@ -82,8 +83,8 @@ export class Ground {
       createGroundMaterial();
     });
 
-    ktxLoader.load("textures/ground/ground_bump.ktx2", (texture) => {
-      bumpMap = texture;
+    ktxLoader.load("textures/ground/ground_ao.ktx2", (texture) => {
+      aoMap = texture;
       createGroundMaterial();
     });
 

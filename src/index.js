@@ -27,10 +27,12 @@ window.addEventListener("load", () => {
 
   if (preloader) {
     preloader.style.opacity = "0";
-    preloader.style.transition = "opacity 1s";
+    preloader.style.transition = "opacity 1s ease";
 
-    preloader.addEventListener("transitionend", () => {
-      preloader.style.display = "none";
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 1000);
     });
   }
 });

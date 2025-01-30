@@ -87,24 +87,27 @@ export class MainScene {
       this.scene,
       this.rendererManager.getRenderer()
     );
-    const cubeMapPaths = [
-      "textures/px.png",
-      "textures/nx.png",
-      "textures/py.png",
-      "textures/ny.png",
-      "textures/pz.png",
-      "textures/nz.png",
-    ];
-    //this.backgroundManager.setCubeMapBackground(cubeMapPaths);
 
-    this.backgroundManager.setPlaneBackground(
-      "textures/planete.ktx2",
-      120,
-      120,
-      { x: 50, y: 0, z: 14.3 },
-      { x: 0, y: -100, z: 0 },
-      { x: 1.2, y: 1, z: 1 }
-    );
+    if (SettingsState.currentDetailLevel === "high") {
+      const cubeMapPaths = [
+        "textures/px.png",
+        "textures/nx.png",
+        "textures/py.png",
+        "textures/ny.png",
+        "textures/pz.png",
+        "textures/nz.png",
+      ];
+      this.backgroundManager.setCubeMapBackground(cubeMapPaths);
+    } else {
+      this.backgroundManager.setPlaneBackground(
+        "textures/planete.ktx2",
+        130,
+        130,
+        { x: 50, y: 0, z: 14.3 },
+        { x: 0, y: 80, z: -180 },
+        { x: 1.1, y: 1, z: 1 }
+      );
+    }
   }
 
   /** 🎥 Configure la caméra et les contrôles */
@@ -113,7 +116,7 @@ export class MainScene {
       width: this.CONFIG.WIDTH,
       height: this.CONFIG.HEIGHT,
       fov: 35,
-      position: [-1.5, 0, -0.4],
+      position: [-1.7, 0, -0.5],
       scene: this.scene,
     });
   }

@@ -78,7 +78,7 @@ export class Mecha {
         clearcoat: 0.6,
         clearcoatRoughness: 0.4,
         envMap: this.scene.environment,
-        envMapIntensity: 0.5,
+        envMapIntensity: 100,
         side: THREE.DoubleSide,
       });
     }

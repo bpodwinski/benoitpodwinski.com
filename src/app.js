@@ -98,10 +98,15 @@ const App = {
   },
 
   hideLoadingScreen() {
-    // Supprimer l'écran de chargement une fois le chargement terminé
     const loadingElement = document.getElementById("loading-screen");
+
     if (loadingElement) {
-      loadingElement.style.display = "none";
+      loadingElement.style.transition = "opacity 1s ease";
+      loadingElement.style.opacity = "0";
+
+      setTimeout(() => {
+        loadingElement.style.display = "none";
+      }, 1000);
     }
   },
 
@@ -112,8 +117,8 @@ const App = {
     mainScene = new MainScene();
     mainScene.init();
 
-    this.createStats();
-    this.createStatsPanel();
+    //this.createStats();
+    //this.createStatsPanel();
 
     this.onResize();
     this.update();
