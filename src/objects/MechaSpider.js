@@ -20,7 +20,8 @@ export class Mecha {
     this.scene = scene;
     this.camera = camera;
     this.ground = ground;
-
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
     this.groupHolder = new THREE.Object3D();
     this.material = null;
     this.dae = null;
@@ -32,9 +33,12 @@ export class Mecha {
     this.mouseControl = false;
     this.meshes = [];
     this.groundMesh = null;
+    this.clock = new THREE.Clock();
+    this.tempVec3 = new THREE.Vector3();
 
     this.scene.add(this.groupHolder);
 
+    this.update = this.update.bind(this);
     this.setupEvents();
     this.setupGround();
     this.reload();
@@ -42,11 +46,12 @@ export class Mecha {
 
   /** Sets up event listeners for updates and interactions */
   setupEvents() {
-    events.on("update", this.update.bind(this));
-    document.addEventListener("touchstart", (event) =>
-      this.onTouchStart(event)
-    );
-    document.addEventListener("mousedown", (event) => this.onMouseDown(event));
+    this.onMouseDownHandler = this.onMouseDown.bind(this);
+    this.onTouchStartHandler = this.onTouchStart.bind(this);
+
+    events.on("update", this.update);
+    document.addEventListener("mousedown", this.onMouseDownHandler);
+    document.addEventListener("touchstart", this.onTouchStartHandler);
   }
 
   /** Initializes ground and listens for its readiness */
@@ -55,32 +60,32 @@ export class Mecha {
       this.ground.init(this.scene);
       events.on("groundReady", (mesh) => {
         this.groundMesh = mesh;
-        console.log("Ground mesh is ready:", this.groundMesh);
       });
     }
   }
 
   /** Reloads Spider, reinitializing materials and bones */
   reload() {
+    if (!this.material) {
+      this.material = new THREE.MeshPhysicalMaterial({
+        color: 0x66fff2,
+        metalness: 0.6,
+        roughness: 0,
+        flatShading: true,
+        transmission: 1,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.4,
+        envMap: this.scene.environment,
+        envMapIntensity: 10,
+        side: THREE.DoubleSide,
+      });
+    }
+
     if (this.dae) {
       this.groupHolder.remove(this.dae);
       this.dae.geometry.dispose();
       this.dae = null;
     }
-
-    this.material = new THREE.MeshPhysicalMaterial({
-      color: 0x66fff2,
-      metalness: 0.6,
-      roughness: 0,
-      flatShading: true,
-      transparent: false,
-      transmission: 1,
-      clearcoat: 0.6,
-      clearcoatRoughness: 0.4,
-      envMap: this.scene.environment,
-      envMapIntensity: 10,
-      side: THREE.DoubleSide,
-    });
 
     this.initBones();
   }
@@ -203,56 +208,51 @@ export class Mecha {
   processInteraction(x, y) {
     if (!this.groundMesh) return;
 
-    const mouse = new THREE.Vector2(
+    this.mouse.set(
       (x / window.innerWidth) * 2 - 1,
       -(y / window.innerHeight) * 2 + 1
     );
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, this.camera);
-    const intersects = raycaster.intersectObject(this.groundMesh, true);
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const intersects = this.raycaster.intersectObject(this.groundMesh, true);
 
-    if (intersects[0]) {
+    if (intersects.length > 0) {
       this.mouseControl = true;
-      const p = intersects[0].point.multiplyScalar(1 / 0.05);
+      const target = intersects[0].point;
+
       gsap.to(this.center, {
-        duration: this.center.distanceTo(p) * 0.1,
-        x: p.x * 0.6,
-        z: p.z * 0.6,
+        duration: this.center.distanceTo(target) * 0.1,
+        x: target.x * 0.6,
+        z: target.z * 0.6,
         ease: "linear",
-        onComplete: () => {
-          this.mouseControl = false;
-        },
+        onComplete: () => (this.mouseControl = false),
       });
     }
   }
 
   /** Updates Spider movement and animations */
   update() {
-    const time = Date.now() * 0.0001;
-    const i = 0;
-
+    const time = this.clock.getElapsedTime() * 0.1;
     const spd = 0.2;
+
     if (!this.mouseControl) {
-      const des = new THREE.Vector3(
-        (window.innerWidth / window.innerHeight) *
-          10 *
-          Math.sin(i + 2 * time) *
-          Math.sin(i + 3.5 * time),
+      const offsetX = (window.innerWidth / window.innerHeight) * 10;
+      this.tempVec3.set(
+        offsetX * Math.sin(time * 2) * Math.sin(time * 3.5),
         0,
-        15 * Math.sin(i + time) * Math.sin(i + 4.5 * time)
+        15 * Math.sin(time) * Math.sin(time * 4.5)
       );
 
       gsap.to(this.center, {
-        duration: this.center.distanceTo(des) * 0.2,
-        x: des.x,
-        z: des.z,
+        duration: this.center.distanceTo(this.tempVec3) * 0.1,
+        x: this.tempVec3.x,
+        z: this.tempVec3.z,
         ease: "none",
       });
     }
 
     gsap.to(this.center, {
       duration: 0,
-      y: 2 * Math.sin(i + time * 10),
+      y: 2 * Math.sin(time * 10),
       ease: "none",
     });
 
@@ -266,37 +266,38 @@ export class Mecha {
 
     for (let j = 0; j < this.bonesCount; j++) {
       const mesh = this.meshes[j];
+      const bonePos = this.bonesPositions[j];
+      const bonePosTween = this.bonesPositionsTween[j];
 
       if (
-        this.bonesPositions[j].x === 0 ||
+        bonePos.x === 0 ||
         Math.random() < 0.003 ||
-        (this.bonesPositions[j].distanceTo(this.center) > 13 &&
-          !gsap.isTweening(this.bonesPositionsTween[j]))
+        (bonePos.distanceTo(this.center) > 13 && !gsap.isTweening(bonePosTween))
       ) {
         const r = 2 * Math.PI * (j / this.bonesCount + Math.random() / 10);
 
-        this.bonesPositions[j].x = this.center.x + Math.sin(r) * 10;
-        this.bonesPositions[j].y = 0;
-        this.bonesPositions[j].z = this.center.z + Math.cos(r) * 10;
-        this.bonesPositions[j].oldCenter.copy(this.center);
+        bonePos.x = this.center.x + Math.sin(r) * 10;
+        bonePos.y = 0;
+        bonePos.z = this.center.z + Math.cos(r) * 10;
+        bonePos.oldCenter.copy(this.center);
 
-        gsap.killTweensOf(this.bonesPositionsTween[j]);
+        gsap.killTweensOf(bonePosTween);
 
-        gsap.to(this.bonesPositionsTween[j], {
+        gsap.to(bonePosTween, {
           duration: spd * 2,
-          x: this.bonesPositions[j].x,
-          z: this.bonesPositions[j].z,
+          x: bonePos.x,
+          z: bonePos.z,
         });
 
-        gsap.to(this.bonesPositionsTween[j], {
+        gsap.to(bonePosTween, {
           duration: spd,
           y: 5,
         });
 
-        gsap.to(this.bonesPositionsTween[j], {
+        gsap.to(bonePosTween, {
           duration: spd,
           delay: spd,
-          y: this.bonesPositions[j].y,
+          y: bonePos.y,
         });
       }
 
@@ -308,9 +309,9 @@ export class Mecha {
 
       // Bones 2
       mesh.skeleton.bones[1].position.set(
-        this.bonesPositionsTween[j].x / 2,
-        5 + this.bonesPositionsTween[j].y / 2,
-        this.bonesPositionsTween[j].z / 2
+        bonePosTween.x / 2,
+        5 + bonePosTween.y / 2,
+        bonePosTween.z / 2
       );
       mesh.skeleton.bones[1].position.sub(
         this.centerTween.clone().multiplyScalar(0.5)
@@ -318,9 +319,9 @@ export class Mecha {
 
       // Bones 3
       mesh.skeleton.bones[2].position.set(
-        this.bonesPositionsTween[j].x,
-        -10 + this.bonesPositionsTween[j].y,
-        this.bonesPositionsTween[j].z
+        bonePosTween.x,
+        -10 + bonePosTween.y,
+        bonePosTween.z
       );
       mesh.skeleton.bones[2].position.sub(
         this.centerTween.clone().multiplyScalar(1)
@@ -331,8 +332,8 @@ export class Mecha {
   /** Cleans up event listeners and removes Spider */
   dispose() {
     events.off("update", this.update);
-    document.removeEventListener("mousedown", this.onMouseDown);
-    document.removeEventListener("touchstart", this.onTouchStart);
+    document.removeEventListener("mousedown", this.onMouseDownHandler);
+    document.removeEventListener("touchstart", this.onTouchStartHandler);
     this.scene.remove(this.groupHolder);
   }
 }
