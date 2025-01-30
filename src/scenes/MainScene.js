@@ -85,7 +85,7 @@ export class MainScene {
   setupBackground() {
     this.backgroundManager = new BackgroundManager(
       this.scene,
-      this.rendererManager
+      this.rendererManager.getRenderer()
     );
     const cubeMapPaths = [
       "textures/px.png",
@@ -98,7 +98,7 @@ export class MainScene {
     //this.backgroundManager.setCubeMapBackground(cubeMapPaths);
 
     this.backgroundManager.setPlaneBackground(
-      "textures/planete.png",
+      "textures/planete.ktx2",
       120,
       120,
       { x: 50, y: 0, z: 14.3 },

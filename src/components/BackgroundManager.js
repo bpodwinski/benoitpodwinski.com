@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { PMREMGenerator } from "three";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
 import * as Settings from "../config/Settings";
 
 export class BackgroundManager {
@@ -21,7 +22,7 @@ export class BackgroundManager {
     this.scene = scene;
     this.renderer = renderer;
     this.envMap = null;
-    this.backgroundType = "color"; // Default type: color background
+    this.backgroundType = "color";
     this.debugMode = Settings.DEBUG_MODE;
 
     this.log = this.debugMode
@@ -169,39 +170,43 @@ export class BackgroundManager {
     scale = { x: 1, y: 1, z: 1 }
   ) {
     const toRadians = (degrees) => degrees * (Math.PI / 180);
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load(path);
 
-    texture.anisotropy = Settings.SettingsState.currentSettings.anisotropy;
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
+    const ktxLoader = new KTX2Loader();
+    ktxLoader.setTranscoderPath("assets/libs/basis/");
+    ktxLoader.detectSupport(this.renderer);
 
-    const geometry = new THREE.PlaneGeometry(width, height);
-    const material = new THREE.MeshBasicMaterial({
-      map: texture,
-      side: THREE.DoubleSide,
+    ktxLoader.load(path, (texture) => {
+      texture.anisotropy = Settings.SettingsState.currentSettings.anisotropy;
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+
+      const geometry = new THREE.PlaneGeometry(width, height);
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+      });
+
+      this.planeBackground = new THREE.Mesh(geometry, material);
+      this.planeBackground.position.set(position.x, position.y, position.z);
+      this.planeBackground.rotation.set(
+        toRadians(rotation.x),
+        toRadians(rotation.y),
+        toRadians(rotation.z)
+      );
+      this.planeBackground.scale.set(scale.x, scale.y, scale.z);
+
+      this.envMap = texture;
+      this.envMap.colorSpace = THREE.SRGBColorSpace;
+      this.scene.environment = this.envMap;
+      this.scene.background = this.envMap;
+      this.backgroundType = "plane";
+
+      this.scene.add(this.planeBackground);
+
+      this.log("Plane background set successfully");
     });
-
-    this.planeBackground = new THREE.Mesh(geometry, material);
-    this.planeBackground.position.set(position.x, position.y, position.z);
-    this.planeBackground.rotation.set(
-      toRadians(rotation.x),
-      toRadians(rotation.y),
-      toRadians(rotation.z)
-    );
-    this.planeBackground.scale.set(scale.x, scale.y, scale.z);
-
-    this.envMap = texture;
-    this.envMap.colorSpace = THREE.SRGBColorSpace;
-    this.scene.environment = this.envMap;
-    this.scene.background = this.envMap;
-    this.backgroundType = "plane";
-
-    this.scene.add(this.planeBackground);
-
-    this.log("Plane background set successfully");
   }
 
   /**
