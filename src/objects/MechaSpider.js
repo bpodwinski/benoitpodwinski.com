@@ -35,6 +35,7 @@ export class Mecha {
     this.groundMesh = null;
     this.clock = new THREE.Clock();
     this.tempVec3 = new THREE.Vector3();
+    this.targetVec3 = new THREE.Vector3();
 
     this.scene.add(this.groupHolder);
 
@@ -217,12 +218,12 @@ export class Mecha {
 
     if (intersects.length > 0) {
       this.mouseControl = true;
-      const target = intersects[0].point;
+      this.targetVec3.copy(intersects[0].point);
 
       gsap.to(this.center, {
-        duration: this.center.distanceTo(target) * 0.1,
-        x: target.x * 0.6,
-        z: target.z * 0.6,
+        duration: this.center.distanceTo(this.targetVec3) * 0.1,
+        x: this.targetVec3.x * 0.6,
+        z: this.targetVec3.z * 0.6,
         ease: "linear",
         onComplete: () => (this.mouseControl = false),
       });
@@ -334,6 +335,11 @@ export class Mecha {
     events.off("update", this.update);
     document.removeEventListener("mousedown", this.onMouseDownHandler);
     document.removeEventListener("touchstart", this.onTouchStartHandler);
+    this.meshes.forEach((mesh) => {
+      mesh.geometry.dispose();
+      mesh.material.dispose();
+    });
+    this.meshes.length = 0;
     this.scene.remove(this.groupHolder);
   }
 }
