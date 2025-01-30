@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { PMREMGenerator } from "three";
-import { DEBUG_MODE } from "../config/settings";
+import * as Settings from "../config/Settings";
 
 export class BackgroundManager {
   /**
@@ -22,7 +22,7 @@ export class BackgroundManager {
     this.renderer = renderer;
     this.envMap = null;
     this.backgroundType = "color"; // Default type: color background
-    this.debugMode = DEBUG_MODE;
+    this.debugMode = Settings.DEBUG_MODE;
 
     this.log = this.debugMode
       ? console.log.bind(console, "[BackgroundManager]")
@@ -172,6 +172,7 @@ export class BackgroundManager {
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load(path);
 
+    texture.anisotropy = Settings.SettingsState.currentSettings.anisotropy;
     texture.wrapS = THREE.ClampToEdgeWrapping;
     texture.wrapT = THREE.ClampToEdgeWrapping;
     texture.minFilter = THREE.LinearFilter;

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DEBUG_MODE } from "../config/settings";
+import Settings from "../config/Settings.js";
 
 export class CameraManager {
   /**
@@ -25,7 +25,7 @@ export class CameraManager {
     const { scene } = this.config;
     this.camera = this.createCamera();
     this.scene = scene;
-    this.debugMode = DEBUG_MODE;
+    this.debugMode = Settings.DEBUG_MODE;
     this.cameraHelper = null;
 
     this.log = this.debugMode

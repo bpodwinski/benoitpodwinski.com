@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { DEBUG_MODE } from "../config/settings";
+import Settings from "../config/Settings.js";
 
 export class ControlManager {
   /**
@@ -37,7 +37,7 @@ export class ControlManager {
     this.controls = new OrbitControls(camera, domElement);
     this.config = { ...ControlManager.defaultConfig(), ...options };
 
-    this.debugMode = DEBUG_MODE;
+    this.debugMode = Settings.DEBUG_MODE;
     this.log = this.debugMode
       ? console.log.bind(console, "[ControlManager]")
       : () => {};

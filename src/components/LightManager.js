@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DEBUG_MODE } from "../config/settings";
+import Settings from "../config/Settings.js";
 
 export class LightManager {
   /**
@@ -16,7 +16,7 @@ export class LightManager {
     this.scene = scene;
     this.lights = [];
     this.helpers = [];
-    this.debugMode = DEBUG_MODE;
+    this.debugMode = Settings.DEBUG_MODE;
 
     this.log = this.debugMode
       ? console.log.bind(console, "[LightManager]")

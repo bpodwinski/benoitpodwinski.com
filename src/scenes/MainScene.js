@@ -9,6 +9,7 @@ import { RendererManager } from "../components/RendererManager";
 import { FxManager } from "../components/FxManager";
 import { BackgroundManager } from "../components/BackgroundManager";
 import { SceneManager } from "../components/SceneManager";
+import { SettingsState } from "../config/Settings";
 
 export class MainScene {
   constructor() {
@@ -23,7 +24,7 @@ export class MainScene {
     this.backgroundManager = null;
     this.stats = null;
     this.running = true;
-    this.targetFPS = 20;
+    this.targetFPS = SettingsState.currentSettings.frameRate;
     this.frameInterval = 1000 / this.targetFPS;
     this.lastFrameTime = 0;
     this.animationFrame = null;
@@ -133,7 +134,7 @@ export class MainScene {
       color: 0xffffff,
       intensity: 5,
       position: [5, 2, 0],
-      shadow: { mapSize: 1024 },
+      shadow: { mapSize: SettingsState.currentSettings.shadowResolution },
     });
 
     this.lightManager.addLight({
@@ -141,7 +142,7 @@ export class MainScene {
       color: 0xfff4e3,
       intensity: 5,
       position: [5, 3, 4.1],
-      shadow: { mapSize: 1024 },
+      shadow: { mapSize: SettingsState.currentSettings.shadowResolution },
     });
 
     this.lightManager.addLight({
@@ -176,13 +177,13 @@ export class MainScene {
 
   /** 🎬 Boucle d'animation optimisée */
   animate() {
-    if (!this.running) return; // Stop si pause
+    if (!this.running) return;
     const now = performance.now();
     const deltaTime = now - this.lastFrameTime;
 
     if (deltaTime >= this.frameInterval) {
-      this.lastFrameTime = now - (deltaTime % this.frameInterval); // Évite le "drift"
-      events.emit("update"); // Mise à jour de la scène
+      this.lastFrameTime = now - (deltaTime % this.frameInterval);
+      events.emit("update");
     }
 
     this.animationFrame = requestAnimationFrame(this.animate.bind(this));

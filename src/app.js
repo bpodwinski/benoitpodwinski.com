@@ -1,3 +1,4 @@
+import { SettingsState, updateSettings } from "./config/Settings.js";
 import { Benchmark } from "./lib/Benchmark.js";
 import { EventEmitter } from "./lib/EventEmitter";
 import { WebGLUtils } from "./lib/WebGLUtils";
@@ -6,14 +7,14 @@ import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 
 const events = new EventEmitter();
-const mainScene = new MainScene();
+let mainScene = null;
 
 const App = {
   loadingManager: null,
   statsElement: null,
   stats: null,
 
-  init() {
+  async init() {
     if (WebGLUtils.isWebGLSupported()) {
       console.log("WebGL is supported!");
     } else {
@@ -27,7 +28,7 @@ const App = {
     }
 
     const benchmark = new Benchmark();
-    //benchmark.start();
+    await benchmark.run();
 
     // Initialiser le LoadingManager
     this.loadingManager = new THREE.LoadingManager(
@@ -40,7 +41,7 @@ const App = {
       // Callback pour la progression
       (url, itemsLoaded, itemsTotal) => {
         const progress = Math.round((itemsLoaded / itemsTotal) * 100);
-        console.log(`Loading ${url} (${progress}%)`);
+        //console.log(`Loading ${url} (${progress}%)`);
         this.updateLoadingScreen(progress);
       },
 
@@ -108,6 +109,7 @@ const App = {
     // Initialiser la scène après le chargement
     window.addEventListener("resize", this.onResize.bind(this), false);
 
+    mainScene = new MainScene();
     mainScene.init();
 
     this.createStats();

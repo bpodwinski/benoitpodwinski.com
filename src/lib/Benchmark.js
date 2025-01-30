@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { updateSettings, SettingsState } from "../config/Settings";
 
 /**
  * Benchmark class: Runs a WebGL performance test using Three.js by counting total frames rendered.
@@ -8,7 +9,7 @@ export class Benchmark {
    * Initializes the benchmark with a given duration.
    * @param {number} duration - The duration of the benchmark in seconds.
    */
-  constructor(duration = 3, width = 100, height = 100) {
+  constructor(duration = 1, width = 100, height = 100) {
     this.duration = duration * 1000;
     this.width = width;
     this.height = height;
@@ -18,7 +19,37 @@ export class Benchmark {
     this.renderer = null;
     this.camera = null;
     this.overlay = null;
+    this.running = false;
+  }
+
+  /**
+   * Runs the benchmark and returns a promise that resolves with the recommended detail level.
+   * @returns {Promise<string>} Resolves when the benchmark is complete.
+   */
+  run() {
+    if (this.running) {
+      console.warn("[Benchmark] Already running, skipping...");
+      return Promise.resolve(SettingsState.currentDetailLevel);
+    }
+
+    console.log("[Benchmark] Running benchmark...");
     this.running = true;
+
+    return new Promise((resolve) => {
+      this.start();
+
+      setTimeout(() => {
+        if (!this.running) {
+          console.warn(
+            "[Benchmark] setTimeout triggered, but benchmark already stopped."
+          );
+          return;
+        }
+
+        this.stop();
+        resolve(this.determineDetailLevel(this.frameCount));
+      }, this.duration);
+    });
   }
 
   /**
@@ -30,13 +61,8 @@ export class Benchmark {
     );
 
     this.setupScene();
-    this.setupOverlay();
 
     requestAnimationFrame(this.update.bind(this));
-
-    setTimeout(() => {
-      this.stop();
-    }, this.duration);
   }
 
   /**
@@ -64,6 +90,8 @@ export class Benchmark {
     this.renderer.domElement.style.top = "50%";
     this.renderer.domElement.style.transform = "translate(-50%, -50%)";
 
+    this.renderer.domElement.id = "benchmark";
+    this.renderer.domElement.style.display = "none";
     document.body.appendChild(this.renderer.domElement);
 
     this.createGround();
@@ -77,12 +105,12 @@ export class Benchmark {
   createGround() {
     const groundGeometry = new THREE.PlaneGeometry(100, 100);
     const groundMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff, // Teinte légèrement bleutée pour un effet verre
-      roughness: 1, // Surface lisse, presque miroir
-      metalness: 0, // Pas de métal, car c'est du verre
-      clearcoat: 0.5, // Couche de vernis pour un effet ultra-brillant
-      clearcoatRoughness: 0, // Légère rugosité du vernis
-      transmission: 1, // Transparence quasi complète
+      color: 0xffffff,
+      roughness: 1,
+      metalness: 0,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0,
+      transmission: 1,
     });
 
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
@@ -101,7 +129,7 @@ export class Benchmark {
 
     this.meshes = [];
 
-    const icosahedronGeometry = new THREE.IcosahedronGeometry(1.5, 32);
+    const icosahedronGeometry = new THREE.IcosahedronGeometry(1.5, 64);
     const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
 
     const material = new THREE.MeshPhysicalMaterial({
@@ -155,25 +183,6 @@ export class Benchmark {
   }
 
   /**
-   * Creates an overlay to display benchmark results.
-   */
-  setupOverlay() {
-    this.overlay = document.createElement("div");
-    this.overlay.id = "benchmark-overlay";
-    this.overlay.style.position = "absolute";
-    this.overlay.style.top = "10px";
-    this.overlay.style.left = "10px";
-    this.overlay.style.color = "#fff";
-    this.overlay.style.backgroundColor = "rgba(0,0,0,0.8)";
-    this.overlay.style.padding = "10px";
-    this.overlay.style.fontFamily = "monospace";
-    this.overlay.style.fontSize = "14px";
-    this.overlay.style.borderRadius = "5px";
-    this.overlay.innerHTML = "Benchmark running...";
-    document.body.appendChild(this.overlay);
-  }
-
-  /**
    * Updates the benchmark on each frame.
    */
   update() {
@@ -181,10 +190,8 @@ export class Benchmark {
 
     requestAnimationFrame(this.update.bind(this));
 
-    // Incrémenter le nombre de frames
     this.frameCount++;
 
-    // Appliquer une animation aux objets pour simuler un rendu plus complexe
     const time = performance.now() * 0.001;
     this.meshes.forEach((mesh, index) => {
       mesh.rotation.x = time + index * 0.1;
@@ -198,31 +205,54 @@ export class Benchmark {
    * Stops the benchmark and calculates performance results.
    */
   stop() {
+    if (!this.running) {
+      console.warn(
+        "[Benchmark] Stop called, but benchmark is already stopped."
+      );
+      return;
+    }
+
     this.running = false;
+
+    if (!this.renderer) {
+      console.warn("[Benchmark] Renderer is already disposed.");
+      return;
+    }
 
     const totalFrames = this.frameCount;
     const info = this.renderer.info;
     const triangleCount = info.render.triangles;
 
-    // Calcul d'un score basé sur le nombre de frames rendues et le nombre de triangles
     const score = Math.round(totalFrames * (triangleCount / 100000));
+    const recommendedDetail = this.determineDetailLevel(score);
 
-    console.log("[Benchmark] Test finished.");
     console.log(`[Benchmark] Total Frames Rendered: ${totalFrames}`);
     console.log(`[Benchmark] Rendered Triangles: ${triangleCount}`);
     console.log(`[Benchmark] Performance Score: ${score}`);
+    console.log(`[Benchmark] Recommended Detail Level: ${recommendedDetail}`);
 
-    this.overlay.innerHTML = `
-      <strong>Benchmark Results:</strong><br/>
-      Frames Rendered: ${totalFrames}<br/>
-      Triangles: ${triangleCount}<br/>
-      Score: ${score}
-    `;
+    updateSettings(recommendedDetail);
 
-    // Nettoyer la scène après test
-    setTimeout(() => {
-      this.dispose();
-    }, 0);
+    this.dispose();
+  }
+
+  /**
+   * Determines the optimal detail level based on benchmark score and updates settings.
+   * @param {number} score - The performance score calculated.
+   * @returns {string} The recommended detail level.
+   */
+  determineDetailLevel(score) {
+    let level;
+
+    if (score < 1500) {
+      level = "low";
+    } else if (score <= 2500) {
+      level = "medium";
+    } else {
+      level = "high";
+    }
+
+    return level;
   }
 
   /**
@@ -230,15 +260,12 @@ export class Benchmark {
    */
   dispose() {
     if (this.renderer) {
-      document.body.removeChild(this.renderer.domElement);
-    }
-    if (this.overlay) {
-      document.body.removeChild(this.overlay);
+      this.renderer.domElement.remove();
     }
     this.scene = null;
     this.renderer = null;
     this.camera = null;
     this.meshes = null;
-    console.log("[Benchmark] Cleanup complete.");
+    console.log("[Benchmark] Cleanup complete");
   }
 }

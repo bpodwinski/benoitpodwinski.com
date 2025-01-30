@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DEBUG_MODE } from "../config/settings";
+import Settings from "../config/Settings.js";
 
 export class SceneManager {
   /**
@@ -26,7 +26,7 @@ export class SceneManager {
     this.cameraManager = cameraManager;
     this.rendererManager = rendererManager;
 
-    this.debugMode = DEBUG_MODE;
+    this.debugMode = Settings.DEBUG_MODE;
     this.log = this.debugMode
       ? console.log.bind(console, "[SceneManager]")
       : () => {};

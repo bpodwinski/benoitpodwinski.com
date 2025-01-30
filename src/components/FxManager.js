@@ -5,7 +5,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { events } from "../lib/EventEmitter";
-import { DEBUG_MODE } from "../config/settings";
+import Settings from "../config/Settings.js";
 
 export class FxManager {
   /**
@@ -31,7 +31,7 @@ export class FxManager {
     this.composer = null;
     this.passes = {};
 
-    this.debugMode = DEBUG_MODE;
+    this.debugMode = Settings.DEBUG_MODE;
     this.log = this.debugMode
       ? console.log.bind(console, "[FxManager]")
       : () => {};
