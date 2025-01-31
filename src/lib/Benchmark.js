@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import App from "../app";
+import App from "../components/AppManager";
 import { updateSettings, SettingsState } from "../config/Settings";
 
 /**

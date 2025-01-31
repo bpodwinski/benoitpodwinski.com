@@ -25,9 +25,9 @@ export class CameraManager {
     const { scene } = this.config;
     this.camera = this.createCamera();
     this.scene = scene;
-    this.debugMode = Settings.DEBUG_MODE;
     this.cameraHelper = null;
 
+    this.debugMode = Settings.DEBUG_MODE;
     this.log = this.debugMode
       ? console.log.bind(console, "[CameraManager]")
       : () => {};

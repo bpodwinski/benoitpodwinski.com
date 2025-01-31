@@ -1,36 +1,44 @@
-import App from "./app";
+import App from "./components/AppManager";
+import Settings from "./config/Settings";
 import { DeviceDetector } from "./lib/DeviceDetector";
 import { WebGLUtils } from "./lib/WebGLUtils";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const sceneContainer = document.getElementById("scene-container");
-
-  if (DeviceDetector.isMobile() || !WebGLUtils.isWebGLSupported()) {
-    if (sceneContainer) {
-      noWebGlVersion(sceneContainer);
-    }
-    return;
+class Index {
+  constructor() {
+    this.sceneContainer = document.getElementById("scene-container");
+    this.debugMode = Settings.DEBUG_MODE;
+    this.log = this.debugMode
+      ? console.log.bind(console, "[WebGLUtils]")
+      : () => {};
   }
 
-  console.log("Is Mobile:", DeviceDetector.isMobile());
-  console.log("Has Touch:", DeviceDetector.isTouchDevice());
-  console.log("GPU Info:", DeviceDetector.getGPURendererInfo());
-  console.log("High Performance GPU:", DeviceDetector.hasHighPerformanceGPU());
+  /**
+   * Initializes the application when the DOM is fully loaded.
+   */
+  static init() {
+    document.addEventListener("DOMContentLoaded", () => {
+      const isWebGLSupported = WebGLUtils.isWebGLSupported();
+      const isMobile = DeviceDetector.isMobile();
 
-  App.init();
-});
+      if (!isWebGLSupported || isMobile) {
+        this.displayNoWebGLWarning(isMobile, isWebGLSupported);
+        return;
+      }
 
-/**
- * Displays a warning message when the application is accessed from a mobile device.
- * Instead of running the app, it appends a fullscreen div to the given container.
- *
- * @param {HTMLElement} container - The container where the warning will be displayed.
- */
-function noWebGlVersion(container) {
-  console.log("⚠️ Please use a computer to access all features");
+      App.init();
+    });
+  }
 
-  const warning = document.createElement("div");
-  warning.id = "mobile-version";
+  /**
+   * Displays a warning message when the application is accessed from a mobile device.
+   */
+  static displayNoWebGLWarning() {
+    if (!this.sceneContainer) return;
 
-  container.appendChild(warning);
+    const warning = document.createElement("div");
+    warning.id = "mobile-version";
+    this.sceneContainer.appendChild(warning);
+  }
 }
+
+Index.init();

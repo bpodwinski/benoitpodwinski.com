@@ -1,34 +1,31 @@
-import { Benchmark } from "./lib/Benchmark.js";
-import { EventEmitter } from "./lib/EventEmitter";
-import { WebGLUtils } from "./lib/WebGLUtils";
-import { MainScene } from "./scenes/MainScene";
-import { RendererManager } from "./components/RendererManager";
 import * as THREE from "three";
-import Stats from "three/examples/jsm/libs/stats.module.js";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
+import { Benchmark } from "../lib/Benchmark";
+import { EventEmitter } from "../lib/EventEmitter";
+import { WebGLUtils } from "../lib/WebGLUtils";
+import { MainScene } from "../scenes/MainScene";
+import { RendererManager } from "./RendererManager";
+import Stats from "three/examples/jsm/libs/stats.module";
+import Settings from "../config/Settings";
 
-const events = new EventEmitter();
-let mainScene = null;
+class AppManager {
+  constructor() {
+    this.events = new EventEmitter();
+    this.mainScene = null;
+    this.rendererManager = null;
+    this.loadingManager = null;
+    this.statsElement = null;
+    this.stats = null;
+    this.textures = {};
+    this.debugMode = Settings.DEBUG_MODE;
+    this.webGLUtils = new WebGLUtils();
+  }
 
-const App = {
-  rendererManager: null,
-  loadingManager: null,
-  statsElement: null,
-  stats: null,
-  textures: {},
-
+  /**
+   * Initializes the application.
+   */
   async init() {
-    if (WebGLUtils.isWebGLSupported()) {
-      console.log("WebGL is supported!");
-    } else {
-      console.log("WebGL is NOT supported!");
-    }
-
-    if (WebGLUtils.isWebGL2Supported()) {
-      console.log("WebGL 2.0 is supported!");
-    } else {
-      console.log("WebGL 2.0 is NOT supported!");
-    }
+    this.log("Initializing application...");
 
     this.updateLoadingScreen(0);
 
@@ -40,42 +37,41 @@ const App = {
     this.rendererManager = new RendererManager();
     this.rendererManager.init();
 
-    // Initialiser le LoadingManager
-    this.loadingManager = new THREE.LoadingManager(
-      // Callback quand tout est chargé
-      () => {
-        this.start();
-      },
+    this.setupLoadingManager();
+    this.loadAssets();
+  }
 
-      // Callback pour la progression
+  /**
+   * Sets up the Three.js loading manager to track asset loading.
+   */
+  setupLoadingManager() {
+    this.loadingManager = new THREE.LoadingManager(
+      () => this.start(),
       (url, itemsLoaded, itemsTotal) => {
         const progress = Math.round((itemsLoaded / itemsTotal) * 100);
-        //console.log(`Loading ${url} (${progress}%)`);
         this.updateLoadingScreen(progress);
       },
-
-      // Callback en cas d'erreur
       (url) => {
-        console.error(`Error loading ${url}`);
+        this.log(`Error loading ${url}`);
       }
     );
+  }
 
-    this.loadAssets();
-  },
-
+  /**
+   * Loads required assets using KTX2Loader.
+   */
   loadAssets() {
-    // Initialiser le KTX2Loader
     const ktxLoader = new KTX2Loader(this.loadingManager);
     ktxLoader.setTranscoderPath("assets/libs/basis/");
+
     if (!this.rendererManager || !this.rendererManager.getRenderer()) {
-      console.error("RendererManager is not initialized.");
+      this.log("RendererManager is not initialized.");
       return;
     }
+
     ktxLoader.detectSupport(this.rendererManager.getRenderer());
 
-    // Créer un objet pour stocker les textures
     this.textures = {};
-
     const texturesToLoad = {
       alphaMap: "textures/ground/ground_alpha.ktx2",
       aoMap: "textures/ground/ground_ao.ktx2",
@@ -88,8 +84,12 @@ const App = {
         this.textures[key] = texture;
       });
     });
-  },
+  }
 
+  /**
+   * Updates the loading screen based on the progress.
+   * @param {number} progress - Loading progress percentage.
+   */
   updateLoadingScreen(progress) {
     const loadingElement = document.getElementById("loading");
 
@@ -103,16 +103,17 @@ const App = {
     if (progress >= 100) {
       this.hideLoadingScreen();
     }
-  },
+  }
 
+  /**
+   * Hides the loading screen and reveals the scene.
+   */
   async hideLoadingScreen() {
     const loading = document.getElementById("loading");
     if (loading) {
       loading.style.visibility = "hidden";
       loading.style.opacity = "0";
-      await setTimeout(() => {
-        loading.remove();
-      }, 1500);
+      await setTimeout(() => loading.remove(), 1500);
     }
 
     const sceneContainer = document.getElementById("scene-container");
@@ -122,12 +123,14 @@ const App = {
         sceneContainer.style.opacity = "1";
       }, 3500);
     }
-  },
+  }
 
+  /**
+   * Starts the main scene after all assets are loaded.
+   */
   start() {
     window.addEventListener("resize", this.onResize.bind(this), false);
 
-    // Vérifier si toutes les textures sont chargées avant d'initialiser MainScene
     const checkTexturesLoaded = () => {
       const keys = ["alphaMap", "aoMap", "normalMap", "displacementMap"];
       return keys.every((key) => this.textures[key] !== undefined);
@@ -135,45 +138,58 @@ const App = {
 
     const waitForTextures = () => {
       if (checkTexturesLoaded()) {
-        console.log("All textures loaded, initializing MainScene.");
-        mainScene = new MainScene();
-        mainScene.init();
+        this.log("All textures loaded, initializing MainScene.");
+        this.mainScene = new MainScene();
+        this.mainScene.init();
         this.onResize();
         this.update();
       } else {
-        console.log("Waiting for textures to load...");
+        this.log("Waiting for textures to load...");
         setTimeout(waitForTextures, 100);
       }
     };
 
     waitForTextures();
-  },
+  }
 
+  /**
+   * Creates performance monitoring statistics.
+   */
   createStats() {
     this.stats = new Stats();
     this.stats.dom.style.position = "absolute";
     this.stats.dom.style.top = "0px";
     this.stats.dom.style.left = "0px";
     document.body.appendChild(this.stats.dom);
-  },
+  }
 
+  /**
+   * Creates a panel to display rendering statistics.
+   */
   createStatsPanel() {
     this.statsElement = document.createElement("div");
     this.statsElement.id = "stats-container";
-    this.statsElement.style.position = "absolute";
-    this.statsElement.style.top = "50px";
-    this.statsElement.style.left = "0px";
-    this.statsElement.style.color = "#fff";
-    this.statsElement.style.backgroundColor = "rgba(0,0,0,0.5)";
-    this.statsElement.style.padding = "10px";
-    this.statsElement.style.fontFamily = "monospace";
-    this.statsElement.style.fontSize = "12px";
-    this.statsElement.style.borderRadius = "5px";
+    Object.assign(this.statsElement.style, {
+      position: "absolute",
+      top: "50px",
+      left: "0px",
+      color: "#fff",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      padding: "10px",
+      fontFamily: "monospace",
+      fontSize: "12px",
+      borderRadius: "5px",
+    });
     document.body.appendChild(this.statsElement);
-  },
+  }
 
+  /**
+   * Updates rendering statistics.
+   */
   updateStats() {
-    const renderer = mainScene.rendererManager.getRenderer();
+    if (!this.mainScene) return;
+
+    const renderer = this.mainScene.rendererManager.getRenderer();
     const info = renderer.info;
 
     this.statsElement.innerHTML = `
@@ -182,11 +198,14 @@ const App = {
       Points: ${info.render.points}<br/>
       Textures: ${info.memory.textures}
     `;
-  },
+  }
 
+  /**
+   * Updates the rendering loop.
+   */
   update() {
     requestAnimationFrame(this.update.bind(this));
-    events.emit("update");
+    this.events.emit("update");
 
     if (this.stats) {
       this.stats.update();
@@ -195,11 +214,28 @@ const App = {
     if (this.statsElement) {
       this.updateStats();
     }
-  },
+  }
 
+  /**
+   * Handles window resize events.
+   */
   onResize() {
-    mainScene.onResize();
-  },
-};
+    if (this.mainScene) {
+      this.mainScene.onResize();
+    }
+  }
 
-export default App;
+  /**
+   * Logs messages to the console only if DEBUG_MODE is enabled.
+   * @param {...any} args - The messages or objects to log.
+   */
+  log(...args) {
+    if (this.debugMode) {
+      console.log("[AppManager]", ...args);
+    }
+  }
+}
+
+// Export an instance of AppManager
+const appManager = new AppManager();
+export default appManager;

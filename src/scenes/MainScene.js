@@ -1,4 +1,4 @@
-import App from "../app";
+import App from "../components/AppManager";
 import { events } from "../lib/EventEmitter";
 import { Ground } from "../objects/Ground";
 import { Mecha } from "../objects/MechaSpider";
