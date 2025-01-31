@@ -2,6 +2,7 @@ import App from "./components/AppManager";
 import Settings from "./config/Settings";
 import { DeviceDetector } from "./lib/DeviceDetector";
 import { WebGLUtils } from "./lib/WebGLUtils";
+import { WebGPUUtils } from "./lib/WebGPUUtils";
 
 class Index {
   constructor() {
@@ -19,6 +20,10 @@ class Index {
     document.addEventListener("DOMContentLoaded", () => {
       const isWebGLSupported = WebGLUtils.isWebGLSupported();
       const isMobile = DeviceDetector.isMobile();
+
+      (async () => {
+        const isWebGPUSupported = await WebGPUUtils.isWebGPUSupported();
+      })();
 
       if (!isWebGLSupported || isMobile) {
         this.displayNoWebGLWarning(isMobile, isWebGLSupported);

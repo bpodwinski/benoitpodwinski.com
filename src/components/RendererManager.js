@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import Settings, { SettingsState } from "../config/Settings.js";
+import Settings, { SettingsState } from "../config/Settings";
 
 export class RendererManager {
   /**
