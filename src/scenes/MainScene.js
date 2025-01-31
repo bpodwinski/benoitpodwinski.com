@@ -29,15 +29,6 @@ export class MainScene {
     this.frameInterval = 1000 / this.targetFPS;
     this.lastFrameTime = 0;
     this.animationFrame = null;
-
-    this.CONFIG = {
-      BG_COLOR: 0x000000,
-      WIDTH: window.innerWidth,
-      HEIGHT: window.innerHeight,
-      FOG_NEAR: 99,
-      FOG_FAR: 100,
-    };
-
     this.objects = [];
   }
 
@@ -69,11 +60,12 @@ export class MainScene {
 
   /** 🎨 Configure le rendu */
   setupRenderer(container) {
-    this.rendererManager = new RendererManager(
-      this.CONFIG.WIDTH,
-      this.CONFIG.HEIGHT,
-      this.CONFIG.BG_COLOR
-    );
+    this.rendererManager = new RendererManager({
+      width: window.innerWidth,
+      height: window.innerHeight,
+      bgColor: 0x000000,
+      vrEnabled: true,
+    });
     this.rendererManager.appendToContainer(container);
   }
 
@@ -114,8 +106,8 @@ export class MainScene {
   /** 🎥 Configure la caméra et les contrôles */
   setupCamera() {
     this.cameraManager = new CameraManager({
-      width: this.CONFIG.WIDTH,
-      height: this.CONFIG.HEIGHT,
+      width: window.innerWidth,
+      height: window.innerHeight,
       fov: 35,
       position: [-1.7, 0, -0.5],
       scene: this.scene,
@@ -211,10 +203,8 @@ export class MainScene {
       entries.forEach((entry) => {
         this.running = entry.isIntersecting;
         if (this.running) {
-          console.log("[MainScene] Canvas visible, reprise.");
           this.animate();
         } else {
-          console.log("[MainScene] Canvas caché, pause.");
           cancelAnimationFrame(this.animationFrame);
         }
       });
@@ -232,10 +222,8 @@ export class MainScene {
 
   /** 📏 Gestion du redimensionnement */
   onResize() {
-    this.CONFIG.WIDTH = window.innerWidth;
-    this.CONFIG.HEIGHT = window.innerHeight;
-    this.cameraManager.updateSize(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
-    this.rendererManager.updateSize(this.CONFIG.WIDTH, this.CONFIG.HEIGHT);
+    this.cameraManager.updateSize(window.innerWidth, window.innerHeight);
+    this.rendererManager.updateSize(window.innerWidth, window.innerHeight);
   }
 
   /** 🗑️ Libère les ressources */

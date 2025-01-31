@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import App from "../components/AppManager";
-import { updateSettings, SettingsState } from "../config/Settings";
+import Settings, { updateSettings, SettingsState } from "../config/Settings";
 
 /**
  * Benchmark class: Runs a WebGL performance test using Three.js by counting total frames rendered.
@@ -21,6 +21,11 @@ export class Benchmark {
     this.camera = null;
     this.overlay = null;
     this.running = false;
+
+    this.debugMode = Settings.DEBUG_MODE;
+    this.log = this.debugMode
+      ? console.log.bind(console, "[Benchmark]")
+      : () => {};
   }
 
   /**
@@ -29,11 +34,8 @@ export class Benchmark {
    */
   run() {
     if (this.running) {
-      console.warn("[Benchmark] Already running, skipping...");
       return Promise.resolve(SettingsState.currentDetailLevel);
     }
-
-    console.log("[Benchmark] Running benchmark...");
     this.running = true;
 
     return new Promise((resolve) => {
@@ -58,9 +60,7 @@ export class Benchmark {
    * Starts the benchmark by initializing Three.js and running the test.
    */
   start() {
-    console.log(
-      `[Benchmark] Starting WebGL benchmark at ${this.width}x${this.height}...`
-    );
+    this.log(`[Benchmark] Starting benchmark at ${this.width}x${this.height}`);
 
     this.setupScene();
 
@@ -228,10 +228,10 @@ export class Benchmark {
     const score = Math.round(totalFrames * (triangleCount / 100000));
     const recommendedDetail = this.determineDetailLevel(score);
 
-    console.log(`[Benchmark] Total Frames Rendered: ${totalFrames}`);
-    console.log(`[Benchmark] Rendered Triangles: ${triangleCount}`);
-    console.log(`[Benchmark] Performance Score: ${score}`);
-    console.log(`[Benchmark] Recommended Detail Level: ${recommendedDetail}`);
+    this.log(`[Benchmark] Total Frames Rendered: ${totalFrames}`);
+    this.log(`[Benchmark] Rendered Triangles: ${triangleCount}`);
+    this.log(`[Benchmark] Performance Score: ${score}`);
+    this.log(`[Benchmark] Recommended Detail Level: ${recommendedDetail}`);
 
     updateSettings(recommendedDetail);
 
@@ -268,6 +268,6 @@ export class Benchmark {
     this.renderer = null;
     this.camera = null;
     this.meshes = null;
-    console.log("[Benchmark] Cleanup complete");
+    this.log("[Benchmark] Cleanup complete");
   }
 }

@@ -1,0 +1,24 @@
+DirectoryIndex index.html.br index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Si le navigateur supporte Brotli, servir .br au lieu de .js ou .css
+    RewriteCond %{HTTP_ACCEPT_ENCODING} br
+    RewriteCond %{REQUEST_FILENAME}.br -f
+    RewriteRule ^(.*)\.js$ $1.js.br [L]
+    RewriteRule ^(.*)\.css$ $1.css.br [L]
+
+    # Forcer les bons en-têtes HTTP pour Brotli
+    <FilesMatch "\.br$">
+        Header set Content-Encoding br
+        Header set Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml
+    AddOutputFilterByType BROTLI_COMPRESS text/css text/javascript application/javascript
+    AddOutputFilterByType BROTLI_COMPRESS application/json application/xml
+    AddOutputFilterByType BROTLI_COMPRESS font/woff font/woff2 image/svg+xml
+</IfModule>

@@ -1,4 +1,9 @@
-import * as THREE from "three";
+import {
+  PerspectiveCamera,
+  OrthographicCamera,
+  Vector3,
+  CameraHelper,
+} from "three";
 import Settings from "../config/Settings.js";
 
 export class CameraManager {
@@ -81,7 +86,7 @@ export class CameraManager {
     if (orthographic) {
       const aspect = width / height;
       const frustumSize = 10;
-      camera = new THREE.OrthographicCamera(
+      camera = new OrthographicCamera(
         -frustumSize * aspect,
         frustumSize * aspect,
         frustumSize,
@@ -90,7 +95,7 @@ export class CameraManager {
         far
       );
     } else {
-      camera = new THREE.PerspectiveCamera(fov, width / height, near, far);
+      camera = new PerspectiveCamera(fov, width / height, near, far);
     }
 
     if (Array.isArray(position) && position.length === 3) {
@@ -172,9 +177,9 @@ export class CameraManager {
       throw new Error("Position must be an array of three numbers: [x, y, z]");
     }
 
-    const start = new THREE.Vector3().copy(this.camera.getWorldPosition);
-    const end = new THREE.Vector3().fromArray(position);
-    const tempVec = new THREE.Vector3();
+    const start = new Vector3().copy(this.camera.getWorldPosition);
+    const end = new Vector3().fromArray(position);
+    const tempVec = new Vector3();
     const startTime = performance.now();
 
     const animate = (time) => {
@@ -199,7 +204,7 @@ export class CameraManager {
     if (!this.scene) return;
 
     if (this.debugMode && !this.cameraHelper) {
-      this.cameraHelper = new THREE.CameraHelper(this.camera);
+      this.cameraHelper = new CameraHelper(this.camera);
       this.scene.add(this.cameraHelper);
       this.log("Camera helper enabled");
       return;

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export const DEBUG_MODE = true;
+export const DEBUG_MODE = false;
 
 /**
  * Configuration for different benchmark detail levels.

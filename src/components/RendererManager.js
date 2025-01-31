@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { VRButton } from "three/examples/jsm/webxr/VRButton";
 import Settings, { SettingsState } from "../config/Settings";
 
 export class RendererManager {
@@ -14,20 +15,22 @@ export class RendererManager {
    * @param {boolean} [config.antialias=true] - Whether to enable antialiasing.
    * @param {boolean} [config.alpha=true] - Whether the background should be transparent.
    * @param {boolean} [config.shadowMap=true] - Whether shadows should be enabled.
+   * @param {boolean} [config.vrEnabled=false] - Whether to enable WebXR (VR).
    * @param {HTMLElement} [config.container=null] - The DOM element where the canvas will be appended.
    */
   constructor(config) {
     this.config = { ...RendererManager.defaultConfig(), ...config };
     this.validateConfig();
 
+    this.debugMode = Settings.DEBUG_MODE;
     this.log = this.debugMode
       ? console.log.bind(console, "[RendererManager]")
       : () => {};
 
     this.scale = SettingsState.currentSettings.resolutionScale;
     this.renderer = null;
+    this.vrEnabled = this.config.vrEnabled;
     this.container = this.config.container;
-    this.debugMode = Settings.DEBUG_MODE;
   }
 
   /**
@@ -36,11 +39,16 @@ export class RendererManager {
    */
   init() {
     if (this.renderer) {
-      this.log("Renderer is already initialized.");
+      this.log("Renderer is already initialized");
       return;
     }
 
     this.renderer = this.createRenderer();
+    this.renderer.xr.enabled = this.vrEnabled;
+    if (this.vrEnabled) {
+      document.body.appendChild(VRButton.createButton(this.renderer));
+      this.log("VR mode enabled");
+    }
 
     if (this.container) this.appendToContainer(this.container);
 
@@ -59,6 +67,7 @@ export class RendererManager {
       antialias: SettingsState.currentSettings.antialias,
       alpha: true,
       shadowMap: true,
+      vrEnabled: false,
       container: null,
     };
   }

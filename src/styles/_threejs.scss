@@ -3,3 +3,10 @@
     visibility: hidden;
     opacity: 0;
 }
+
+#VRButton {
+    top: 20px !important;
+    left: 20px !important;
+    height: 40px !important;
+    z-index: 1000 !important;
+}

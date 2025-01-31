@@ -1,4 +1,15 @@
-import * as THREE from "three";
+import {
+  LinearFilter,
+  LinearMipmapLinearFilter,
+  ClampToEdgeWrapping,
+  DoubleSide,
+  MeshBasicMaterial,
+  PlaneGeometry,
+  Mesh,
+  Color,
+  CubeTextureLoader,
+  SRGBColorSpace,
+} from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { PMREMGenerator } from "three";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
@@ -78,7 +89,7 @@ export class BackgroundManager {
    * @param {number} color - Hexadecimal color value.
    */
   setColorBackground(color = 0x000000) {
-    this.scene.background = new THREE.Color(color);
+    this.scene.background = new Color(color);
     this.scene.environment = null;
     this.envMap = null;
     this.backgroundType = "color";
@@ -129,10 +140,10 @@ export class BackgroundManager {
       throw new Error("CubeMap requires exactly 6 texture paths");
     }
 
-    const cubeTextureLoader = new THREE.CubeTextureLoader();
+    const cubeTextureLoader = new CubeTextureLoader();
     this.envMap = cubeTextureLoader.load(paths);
 
-    this.envMap.colorSpace = THREE.SRGBColorSpace;
+    this.envMap.colorSpace = SRGBColorSpace;
 
     this.scene.environment = this.envMap;
     this.scene.background = this.envMap;
@@ -177,18 +188,18 @@ export class BackgroundManager {
 
     ktxLoader.load(path, (texture) => {
       texture.anisotropy = Settings.SettingsState.currentSettings.anisotropy;
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      texture.minFilter = THREE.LinearMipmapLinearFilter;
-      texture.magFilter = THREE.LinearFilter;
+      texture.wrapS = ClampToEdgeWrapping;
+      texture.wrapT = ClampToEdgeWrapping;
+      texture.minFilter = LinearMipmapLinearFilter;
+      texture.magFilter = LinearFilter;
 
-      const geometry = new THREE.PlaneGeometry(width, height);
-      const material = new THREE.MeshBasicMaterial({
+      const geometry = new PlaneGeometry(width, height);
+      const material = new MeshBasicMaterial({
         map: texture,
-        side: THREE.DoubleSide,
+        side: DoubleSide,
       });
 
-      this.planeBackground = new THREE.Mesh(geometry, material);
+      this.planeBackground = new Mesh(geometry, material);
       this.planeBackground.position.set(position.x, position.y, position.z);
       this.planeBackground.rotation.set(
         toRadians(rotation.x),
@@ -198,7 +209,7 @@ export class BackgroundManager {
       this.planeBackground.scale.set(scale.x, scale.y, scale.z);
 
       this.envMap = texture;
-      this.envMap.colorSpace = THREE.SRGBColorSpace;
+      this.envMap.colorSpace = SRGBColorSpace;
       this.scene.environment = this.envMap;
       this.scene.background = this.envMap;
       this.backgroundType = "plane";

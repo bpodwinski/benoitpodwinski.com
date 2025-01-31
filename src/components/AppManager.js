@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import { LoadingManager } from "three";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
 import { Benchmark } from "../lib/Benchmark";
 import { EventEmitter } from "../lib/EventEmitter";
@@ -45,7 +45,7 @@ class AppManager {
    * Sets up the Three.js loading manager to track asset loading.
    */
   setupLoadingManager() {
-    this.loadingManager = new THREE.LoadingManager(
+    this.loadingManager = new LoadingManager(
       () => this.start(),
       (url, itemsLoaded, itemsTotal) => {
         const progress = Math.round((itemsLoaded / itemsTotal) * 100);
