@@ -1,18 +1,21 @@
-import { SettingsState, updateSettings } from "./config/Settings.js";
 import { Benchmark } from "./lib/Benchmark.js";
 import { EventEmitter } from "./lib/EventEmitter";
 import { WebGLUtils } from "./lib/WebGLUtils";
 import { MainScene } from "./scenes/MainScene";
+import { RendererManager } from "./components/RendererManager";
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
 
 const events = new EventEmitter();
 let mainScene = null;
 
 const App = {
+  rendererManager: null,
   loadingManager: null,
   statsElement: null,
   stats: null,
+  textures: {},
 
   async init() {
     if (WebGLUtils.isWebGLSupported()) {
@@ -27,14 +30,20 @@ const App = {
       console.log("WebGL 2.0 is NOT supported!");
     }
 
-    const benchmark = new Benchmark();
-    await benchmark.run();
+    this.updateLoadingScreen(0);
+
+    const benchmarkPromise = new Benchmark().run(
+      this.updateLoadingScreen.bind(this)
+    );
+    await Promise.all([benchmarkPromise]);
+
+    this.rendererManager = new RendererManager();
+    this.rendererManager.init();
 
     // Initialiser le LoadingManager
     this.loadingManager = new THREE.LoadingManager(
       // Callback quand tout est chargé
       () => {
-        console.log("All assets loaded");
         this.start();
       },
 
@@ -51,77 +60,93 @@ const App = {
       }
     );
 
-    // Afficher l'écran de chargement
-    this.showLoadingScreen();
-
-    // Charger les assets
     this.loadAssets();
   },
 
   loadAssets() {
-    // Exemple de chargement d'une texture
-    const textureLoader = new THREE.TextureLoader(this.loadingManager);
-    textureLoader.load("textures/ground/ground_alpha.png");
+    // Initialiser le KTX2Loader
+    const ktxLoader = new KTX2Loader(this.loadingManager);
+    ktxLoader.setTranscoderPath("assets/libs/basis/");
+    if (!this.rendererManager || !this.rendererManager.getRenderer()) {
+      console.error("RendererManager is not initialized.");
+      return;
+    }
+    ktxLoader.detectSupport(this.rendererManager.getRenderer());
 
-    // Tu peux ajouter d'autres loaders ici si besoin
-  },
+    // Créer un objet pour stocker les textures
+    this.textures = {};
 
-  showLoadingScreen() {
-    // Créer un élément HTML pour l'écran de chargement
-    const loadingElement = document.createElement("div");
-    loadingElement.id = "loading-screen";
-    loadingElement.style.position = "fixed";
-    loadingElement.style.top = "0";
-    loadingElement.style.left = "0";
-    loadingElement.style.width = "100%";
-    loadingElement.style.height = "100%";
-    loadingElement.style.backgroundColor = "#000";
-    loadingElement.style.color = "#fff";
-    loadingElement.style.display = "flex";
-    loadingElement.style.alignItems = "center";
-    loadingElement.style.justifyContent = "center";
-    loadingElement.style.zIndex = "1000";
-    //loadingElement.innerHTML = '<p id="loading-progress">Loading... 0%</p>';
-    document.body.appendChild(loadingElement);
+    const texturesToLoad = {
+      alphaMap: "textures/ground/ground_alpha.ktx2",
+      aoMap: "textures/ground/ground_ao.ktx2",
+      normalMap: "textures/ground/ground_normal.ktx2",
+      displacementMap: "textures/ground/ground_displacement.ktx2",
+    };
+
+    Object.keys(texturesToLoad).forEach((key) => {
+      ktxLoader.load(texturesToLoad[key], (texture) => {
+        this.textures[key] = texture;
+      });
+    });
   },
 
   updateLoadingScreen(progress) {
-    // Mettre à jour le pourcentage dans l'écran de chargement
-    const progressElement = document.getElementById("loading-progress");
-    if (progressElement) {
-      progressElement.textContent = `Loading... ${progress}%`;
+    const loadingElement = document.getElementById("loading");
+
+    loadingElement.setAttribute("aria-valuenow", progress);
+    const progressBar = loadingElement?.querySelector(".progress-bar");
+    if (progressBar) {
+      progressBar.style.width = `${progress}%`;
+      progressBar.textContent = `${progress}%`;
     }
 
-    if (progress === 100) {
+    if (progress >= 100) {
       this.hideLoadingScreen();
     }
   },
 
-  hideLoadingScreen() {
-    const loadingElement = document.getElementById("loading-screen");
+  async hideLoadingScreen() {
+    const loading = document.getElementById("loading");
+    if (loading) {
+      loading.style.visibility = "hidden";
+      loading.style.opacity = "0";
+      await setTimeout(() => {
+        loading.remove();
+      }, 1500);
+    }
 
-    if (loadingElement) {
-      loadingElement.style.transition = "opacity 1s ease";
-      loadingElement.style.opacity = "0";
-
-      setTimeout(() => {
-        loadingElement.style.display = "none";
-      }, 1000);
+    const sceneContainer = document.getElementById("scene-container");
+    if (sceneContainer) {
+      await setTimeout(() => {
+        sceneContainer.style.visibility = "visible";
+        sceneContainer.style.opacity = "1";
+      }, 3500);
     }
   },
 
   start() {
-    // Initialiser la scène après le chargement
     window.addEventListener("resize", this.onResize.bind(this), false);
 
-    mainScene = new MainScene();
-    mainScene.init();
+    // Vérifier si toutes les textures sont chargées avant d'initialiser MainScene
+    const checkTexturesLoaded = () => {
+      const keys = ["alphaMap", "aoMap", "normalMap", "displacementMap"];
+      return keys.every((key) => this.textures[key] !== undefined);
+    };
 
-    //this.createStats();
-    //this.createStatsPanel();
+    const waitForTextures = () => {
+      if (checkTexturesLoaded()) {
+        console.log("All textures loaded, initializing MainScene.");
+        mainScene = new MainScene();
+        mainScene.init();
+        this.onResize();
+        this.update();
+      } else {
+        console.log("Waiting for textures to load...");
+        setTimeout(waitForTextures, 100);
+      }
+    };
 
-    this.onResize();
-    this.update();
+    waitForTextures();
   },
 
   createStats() {

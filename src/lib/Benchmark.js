@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import App from "../app";
 import { updateSettings, SettingsState } from "../config/Settings";
 
 /**
@@ -9,7 +10,7 @@ export class Benchmark {
    * Initializes the benchmark with a given duration.
    * @param {number} duration - The duration of the benchmark in seconds.
    */
-  constructor(duration = 1, width = 100, height = 100) {
+  constructor(duration = 3, width = 100, height = 100) {
     this.duration = duration * 1000;
     this.width = width;
     this.height = height;
@@ -38,14 +39,15 @@ export class Benchmark {
     return new Promise((resolve) => {
       this.start();
 
-      setTimeout(() => {
-        if (!this.running) {
-          console.warn(
-            "[Benchmark] setTimeout triggered, but benchmark already stopped."
-          );
-          return;
-        }
+      let elapsedTime = 0;
+      const interval = setInterval(() => {
+        elapsedTime += 100;
+        const progress = Math.round((elapsedTime / this.duration) * 50);
+        App.updateLoadingScreen(progress);
+      }, 100);
 
+      setTimeout(() => {
+        clearInterval(interval);
         this.stop();
         resolve(this.determineDetailLevel(this.frameCount));
       }, this.duration);
@@ -244,9 +246,9 @@ export class Benchmark {
   determineDetailLevel(score) {
     let level;
 
-    if (score < 1500) {
+    if (score < 1500 * (this.duration / 1000)) {
       level = "low";
-    } else if (score <= 2500) {
+    } else if (score <= 2500 * (this.duration / 1000)) {
       level = "medium";
     } else {
       level = "high";

@@ -1,3 +1,4 @@
+import App from "../app";
 import { events } from "../lib/EventEmitter";
 import { Ground } from "../objects/Ground";
 import { Mecha } from "../objects/MechaSpider";
@@ -16,7 +17,7 @@ export class MainScene {
     this.sceneManager = new SceneManager();
     this.scene = this.sceneManager.getScene();
 
-    this.rendererManager = null;
+    this.rendererManager = App.rendererManager;
     this.cameraManager = null;
     this.controlManager = null;
     this.lightManager = null;
@@ -168,7 +169,7 @@ export class MainScene {
 
   /** 🎭 Ajoute les objets 3D */
   setupObjects() {
-    const ground = new Ground(this.rendererManager.getRenderer());
+    const ground = new Ground(this.rendererManager.getRenderer(), App.textures);
     ground.init(this.scene);
     this.mecha = new Mecha(this.scene, this.cameraManager.getCamera(), ground);
   }
