@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import App from "./components/AppManager";
 import Settings from "./config/Settings";
 import { DeviceDetector } from "./lib/DeviceDetector";
@@ -48,32 +47,3 @@ class Index {
 }
 
 Index.init();
-=======
-import App from "./app";
-
-document.addEventListener("DOMContentLoaded", () => {
-  App.init();
-});
-
-window.addEventListener("load", () => {
-  const status = document.getElementById("status");
-  const preloader = document.getElementById("preloader");
-
-  if (status) status.style.display = "none";
-  if (preloader) {
-    preloader.style.opacity = "0";
-    preloader.style.transition = "opacity 1s";
-    setTimeout(() => {
-      preloader.style.display = "none";
-    }, 1000);
-  }
-});
-
-/*document.addEventListener("click", (event) => {
-  if (event.target.id === "toggleRotate") {
-    import("./components/controls.js").then(({ controls }) => {
-      controls.fxParams.autoRotate = !controls.fxParams.autoRotate;
-    });
-  }
-});*/
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094

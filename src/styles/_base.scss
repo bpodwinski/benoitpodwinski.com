@@ -1,23 +1,8 @@
-<<<<<<< HEAD
 @use "variables" as *;
 
 body {
   background-image: url("/public/images/bg.webp");
   background-size: cover;
-=======
-#preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: $primary-color;
-  z-index: 999;
-}
-
-body {
-  background-color: $primary-color;
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   font-family: "DIN Pro", sans-serif;
   font-weight: normal;
   font-size: 1.2rem;
@@ -29,13 +14,8 @@ body {
 }
 
 #controls {
-<<<<<<< HEAD
   position: fixed;
 
-=======
-
-  position: fixed;
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   #toggleRotate {
     display: none;
   }
@@ -69,10 +49,7 @@ body {
 }
 
 .content-title {
-<<<<<<< HEAD
   z-index: 1000;
-=======
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   position: absolute;
   right: 0;
   left: 0;
@@ -100,10 +77,7 @@ body {
 }
 
 .content-informations {
-<<<<<<< HEAD
   z-index: 1000;
-=======
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   position: absolute;
   right: 0;
   left: 0;
@@ -132,10 +106,7 @@ body {
 
 @media only screen and (min-width: 980px) {
   .content-title {
-<<<<<<< HEAD
     z-index: 1000;
-=======
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
     position: absolute;
     right: 20px;
     bottom: 20px;
@@ -150,21 +121,13 @@ body {
 
     h2 {
       font-size: 2rem;
-<<<<<<< HEAD
       letter-spacing: 0.45rem;
       margin: 0 8px 0 0;
-=======
-      letter-spacing: 0.5rem;
-      margin: 0 0.5rem 0 0;
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
     }
   }
 
   .content-informations {
-<<<<<<< HEAD
     z-index: 1000;
-=======
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
     position: absolute;
     right: 20px;
     top: 20px;
@@ -173,7 +136,6 @@ body {
   }
 }
 
-<<<<<<< HEAD
 .overlay:before {
   z-index: 998;
   content: "";
@@ -197,29 +159,3 @@ body {
   opacity: 1;
   pointer-events: none;
 }
-=======
- .overlay:before {
-   content: "";
-   display: block;
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   background-image: url("/textures/lcd.png");
-   opacity: 0;
-   pointer-events: none;
- }
-
- .overlay:after {
-   content: "";
-   display: block;
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   background: radial-gradient(circle,
-       rgba(0, 0, 0, 0) 0%,
-       rgba(0, 0, 0, 0.8) 90%,
-       rgba(0, 0, 0, 1) 110%);
-   opacity: 0.5;
-   pointer-events: none;
- }
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094

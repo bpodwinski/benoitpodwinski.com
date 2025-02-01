@@ -1,14 +1,10 @@
 import { defineConfig } from "vite";
-<<<<<<< HEAD
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import compression from "vite-plugin-compression2";
-=======
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
 
 export default defineConfig({
   root: ".",
   server: {
-<<<<<<< HEAD
     host: "0.0.0.0",
     allowedHosts: true,
     port: 3000,
@@ -53,14 +49,4 @@ export default defineConfig({
       ],
     }),
   ],
-=======
-    host: true,
-    port: 5173,
-  },
-  build: {
-    outDir: "build",
-    assetsDir: "assets",
-    sourcemap: true,
-  },
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
 });

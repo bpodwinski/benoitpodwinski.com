@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import * as THREE from "three";
 
 export const DEBUG_MODE = false;
@@ -70,6 +69,3 @@ export default {
   SettingsState,
   updateSettings,
 };
-=======
-export const DEBUG_MODE = false;
->>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
