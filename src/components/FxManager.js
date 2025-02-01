@@ -5,6 +5,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { events } from "../lib/EventEmitter";
+<<<<<<< HEAD
 import Settings from "../config/Settings.js";
 
 export class FxManager {
@@ -74,6 +75,31 @@ export class FxManager {
 
   /**
    * Initializes the post-processing effects.
+=======
+
+export class FxManager {
+  /**
+   * Initializes the FxManager with the provided sceneManager, renderer, and camera.
+   * @param {THREE.Scene} scene - The sceneManager instance.
+   * @param {THREE.WebGLRenderer} renderer - The renderer instance.
+   * @param {THREE.Camera} camera - The camera instance.
+   */
+  constructor(scene, renderer, camera) {
+    this.scene = scene;
+    this.renderer = renderer;
+    this.camera = camera;
+    this.composer = null;
+
+    // Initialize event listeners
+    events.on("update", this.update.bind(this));
+    window.addEventListener("resize", this.onResize.bind(this));
+
+    this.init();
+  }
+
+  /**
+   * Initializes the post-processing effects and other visual components.
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
    */
   init() {
     this.setupComposer();
@@ -81,6 +107,7 @@ export class FxManager {
   }
 
   /**
+<<<<<<< HEAD
    * Sets up the EffectComposer and its passes based on the configuration.
    */
   setupComposer() {
@@ -156,12 +183,44 @@ export class FxManager {
     }
 
     this.log(`Effect "${effectName}" ${enabled ? "enabled" : "disabled"}`);
+=======
+   * Sets up the EffectComposer and its passes.
+   */
+  setupComposer() {
+    if (!this.composer) {
+      const renderPass = new RenderPass(this.scene, this.camera);
+
+      // Glitch pass
+      const glitchPass = new GlitchPass();
+      glitchPass.goWild = false;
+
+      // Bloom pass
+      const bloomPass = new UnrealBloomPass(
+          new THREE.Vector2(window.innerWidth, window.innerHeight),
+          0.1,
+          0.6,
+          0.9
+      );
+
+      // Bokeh pass
+      const bokehPass = new BokehPass(this.scene, this.camera, {
+        aperture: 0.000003
+      });
+
+      this.composer = new EffectComposer(this.renderer);
+      this.composer.addPass(renderPass);
+      //this.composer.addPass(bokehPass);
+      this.composer.addPass(bloomPass);
+      //this.composer.addPass(glitchPass);
+    }
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   }
 
   /**
    * Handles window resizing to adjust the composer size.
    */
   onResize() {
+<<<<<<< HEAD
     const pixelRatio = this.renderer.getPixelRatio();
     const width = Math.max(1, Math.floor(window.innerWidth / pixelRatio));
     const height = Math.max(1, Math.floor(window.innerHeight / pixelRatio));
@@ -171,6 +230,25 @@ export class FxManager {
     }
 
     this.log(`Resized effects: ${width}x${height}`);
+=======
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const pixelRatio = this.renderer.getPixelRatio();
+
+    const newWidth = Math.floor(width / pixelRatio) || 1;
+    const newHeight = Math.floor(height / pixelRatio) || 1;
+
+    if (this.composer) {
+      this.composer.setSize(newWidth, newHeight);
+    }
+  }
+
+  /**
+   * Toggles the effects setup (can be extended for more functionality).
+   */
+  toggle() {
+    this.setupComposer();
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   }
 
   /**
@@ -183,6 +261,7 @@ export class FxManager {
       this.renderer.render(this.scene, this.camera);
     }
   }
+<<<<<<< HEAD
 
   /**
    * Disposes of the composer and removes event listeners.
@@ -198,4 +277,6 @@ export class FxManager {
 
     this.log("FxManager disposed");
   }
+=======
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
 }

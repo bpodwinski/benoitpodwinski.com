@@ -1,4 +1,5 @@
 import * as THREE from "three";
+<<<<<<< HEAD
 import Settings from "../config/Settings.js";
 
 export class SceneManager {
@@ -63,6 +64,13 @@ export class SceneManager {
     ) {
       throw new Error("FOG_NEAR and FOG_FAR must be valid numbers");
     }
+=======
+
+export class SceneManager {
+  constructor() {
+    this.scene = new THREE.Scene();
+    this.environment = null;
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   }
 
   /**
@@ -74,6 +82,7 @@ export class SceneManager {
   }
 
   /**
+<<<<<<< HEAD
    * Configures the scene settings, such as background color and fog.
    */
   configureScene() {
@@ -84,6 +93,14 @@ export class SceneManager {
       this.scene.fog = new THREE.Fog(BG_COLOR, FOG_NEAR, FOG_FAR);
     }
     this.log("Scene configured with", this.config);
+=======
+   * Configure the scene (e.g., fog, background color).
+   * @param {Object} config - Configuration for the scene.
+   */
+  configureScene(config) {
+    this.scene.fog = new THREE.Fog(config.BG_COLOR, config.FOG_NEAR, config.FOG_FAR);
+    this.scene.background = new THREE.Color(config.BG_COLOR);
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   }
 
   /**
@@ -97,7 +114,10 @@ export class SceneManager {
     if (background instanceof THREE.Texture || Array.isArray(background)) {
       this.setEnvironment(background);
     }
+<<<<<<< HEAD
     this.log("Scene background updated");
+=======
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   }
 
   /**
@@ -107,11 +127,18 @@ export class SceneManager {
   setEnvironment(envMap) {
     this.environment = envMap;
     this.scene.environment = envMap;
+<<<<<<< HEAD
     this.log("Environment map set");
   }
 
   /**
    * Cleans up scene-related resources (e.g., textures).
+=======
+  }
+
+  /**
+   * Dispose of scene-related resources (e.g., textures).
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
    */
   dispose() {
     if (this.environment) {
@@ -121,8 +148,11 @@ export class SceneManager {
     if (this.scene.background instanceof THREE.Texture) {
       this.scene.background.dispose();
     }
+<<<<<<< HEAD
 
     this.scene = null;
     this.log("Scene disposed");
+=======
+>>>>>>> 73cf912ee5fc08b0ff02aaf0783f6d2c027e7094
   }
 }
