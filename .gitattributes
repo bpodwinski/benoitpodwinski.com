@@ -11,3 +11,6 @@ assets/sass/ export-ignore
 assets/js/src/ export-ignore
 config/ export-ignore
 log/ export-ignore
+public/textures/ground/*.png filter=lfs diff=lfs merge=lfs -text
+build/textures/ringed_gas_giant_planet.hdr filter=lfs diff=lfs merge=lfs -text
+build/textures/ground/ground_textures.psd filter=lfs diff=lfs merge=lfs -text
