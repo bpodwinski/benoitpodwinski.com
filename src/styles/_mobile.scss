@@ -4,9 +4,14 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url("/public/images/bg.webp");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     z-index: -1;
+}
+
+@media only screen and (max-width: 980px) {
+    body {
+        background-image: url("/public/images/bg-mobile.webp");
+        background-size: initial;
+        background-position: 65% 20%;
+        background-repeat: no-repeat;
+    }
 }
