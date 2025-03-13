@@ -1,6 +1,7 @@
 @use "variables" as *;
 
 body {
+  background-color: $primary-color;
   background-image: url("/public/images/bg.webp");
   background-size: cover;
   font-family: "DIN Pro", sans-serif;
