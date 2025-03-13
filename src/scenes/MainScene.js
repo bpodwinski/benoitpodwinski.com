@@ -58,7 +58,6 @@ export class MainScene {
     gsap.delayedCall(0.1, this.updateShadow.bind(this));
   }
 
-  /** 🎨 Configure le rendu */
   setupRenderer(container) {
     this.rendererManager = new RendererManager({
       width: window.innerWidth,
@@ -69,12 +68,10 @@ export class MainScene {
     this.rendererManager.appendToContainer(container);
   }
 
-  /** 🎬 Configure la scène */
   setupScene() {
     this.sceneManager.configureScene(this.CONFIG);
   }
 
-  /** 🌅 Configure le fond (HDRI ou CubeMap) */
   setupBackground() {
     this.backgroundManager = new BackgroundManager(
       this.scene,
@@ -103,7 +100,6 @@ export class MainScene {
     }
   }
 
-  /** 🎥 Configure la caméra et les contrôles */
   setupCamera() {
     this.cameraManager = new CameraManager({
       width: window.innerWidth,
@@ -121,7 +117,6 @@ export class MainScene {
     );
   }
 
-  /** 💡 Configure les lumières */
   setupLights() {
     this.lightManager = new LightManager(this.scene);
 
@@ -149,7 +144,6 @@ export class MainScene {
     });
   }
 
-  /** 🎞️ Configure les effets */
   setupEffects() {
     // this.fxManager = new FxManager(
     //   this.scene,
@@ -159,19 +153,16 @@ export class MainScene {
     // );
   }
 
-  /** 🎭 Ajoute les objets 3D */
   setupObjects() {
     const ground = new Ground(this.rendererManager.getRenderer(), App.textures);
     ground.init(this.scene);
     this.mecha = new Mecha(this.scene, this.cameraManager.getCamera(), ground);
   }
 
-  /** 🔄 Met à jour les ombres */
   updateShadow() {
     this.rendererManager.getRenderer().shadowMap.needsUpdate = true;
   }
 
-  /** 🎬 Boucle d'animation optimisée */
   animate() {
     if (!this.running) return;
     const now = performance.now();
@@ -213,20 +204,17 @@ export class MainScene {
     observer.observe(this.rendererManager.getRenderer().domElement);
   }
 
-  /** 🎥 Mise à jour de la scène */
   update() {
     this.controlManager.update();
     this.stats?.update();
     this.rendererManager.render(this.scene, this.cameraManager.getCamera());
   }
 
-  /** 📏 Gestion du redimensionnement */
   onResize() {
     this.cameraManager.updateSize(window.innerWidth, window.innerHeight);
     this.rendererManager.updateSize(window.innerWidth, window.innerHeight);
   }
 
-  /** 🗑️ Libère les ressources */
   dispose() {
     this.rendererManager.dispose();
     this.cameraManager.dispose();
