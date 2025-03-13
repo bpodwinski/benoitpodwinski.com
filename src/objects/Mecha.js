@@ -1,5 +1,19 @@
-import * as THREE from "three";
+import {
+  MeshPhysicalMaterial,
+  Raycaster,
+  Vector2,
+  Vector3,
+  Object3D,
+  CylinderGeometry,
+  DoubleSide,
+  Bone,
+  Skeleton,
+  SkinnedMesh,
+  Uint16BufferAttribute,
+  Float16BufferAttribute,
+} from "three";
 import { gsap } from "gsap";
+
 import { events } from "../lib/EventEmitter";
 
 let groupHolder;
@@ -8,8 +22,8 @@ let dae = null;
 const bonesCount = 8;
 const bonesPositions = [];
 const bonesPositionsTween = [];
-const center = new THREE.Vector3();
-const centerTween = new THREE.Vector3();
+const center = new Vector3();
+const centerTween = new Vector3();
 let mouseControl = false;
 let meshes = [];
 let groundMesh;
@@ -17,7 +31,7 @@ let groundMesh;
 function init(scene, camera, Ground) {
   events.on("update", () => update(camera));
 
-  groupHolder = new THREE.Object3D();
+  groupHolder = new Object3D();
   scene.add(groupHolder);
 
   Ground.init(scene);
@@ -25,13 +39,17 @@ function init(scene, camera, Ground) {
 
   reload(scene);
 
-  document.addEventListener("touchstart", (event) => onDocumentTouchStart(event, camera));
-  document.addEventListener("mousedown", (event) => onDocumentMouseDown(event, camera));
+  document.addEventListener("touchstart", (event) =>
+    onDocumentTouchStart(event, camera)
+  );
+  document.addEventListener("mousedown", (event) =>
+    onDocumentMouseDown(event, camera)
+  );
 }
 
 function onDocumentTouchStart(event, camera) {
   if (event.touches.length === 1) {
-    const mouse = new THREE.Vector2();
+    const mouse = new Vector2();
     mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1;
     boom(mouse, camera);
@@ -39,14 +57,14 @@ function onDocumentTouchStart(event, camera) {
 }
 
 function onDocumentMouseDown(event, camera) {
-  const mouse = new THREE.Vector2();
+  const mouse = new Vector2();
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   boom(mouse, camera);
 }
 
 function boom(mouse, camera) {
-  const raycaster = new THREE.Raycaster(undefined, undefined, 0, undefined);
+  const raycaster = new Raycaster(undefined, undefined, 0, undefined);
   raycaster.setFromCamera(mouse, camera);
 
   const intersects = raycaster.intersectObject(groundMesh, true);
@@ -74,7 +92,7 @@ function reload(scene) {
     dae = null;
   }
 
-  material = new THREE.MeshPhysicalMaterial({
+  material = new MeshPhysicalMaterial({
     color: 0x90fcd5,
     metalness: 0.5,
     roughness: 0,
@@ -85,7 +103,7 @@ function reload(scene) {
     clearcoatRoughness: 0.4,
     envMap: scene.environment,
     envMapIntensity: 2,
-    side: THREE.DoubleSide,
+    side: DoubleSide,
   });
 
   initBones();
@@ -113,8 +131,8 @@ function initBones() {
     groupHolder.add(mesh);
     meshes.push(mesh);
 
-    const pos = new THREE.Vector3();
-    pos.oldCenter = new THREE.Vector3();
+    const pos = new Vector3();
+    pos.oldCenter = new Vector3();
     bonesPositions.push(pos);
     bonesPositionsTween.push(pos.clone());
   }
@@ -122,13 +140,13 @@ function initBones() {
 
 function createGeometry(sizing) {
   // Crée une géométrie de cylindre
-  const geometry = new THREE.CylinderGeometry(
-      0, // radiusTop
-      3, // radiusBottom
-      sizing.height, // height
-      7, // radiusSegments
-      sizing.segmentCount * 3, // heightSegments
-      true // openEnded
+  const geometry = new CylinderGeometry(
+    0, // radiusTop
+    3, // radiusBottom
+    sizing.height, // height
+    7, // radiusSegments
+    sizing.segmentCount * 3, // heightSegments
+    true // openEnded
   );
 
   // Récupère les attributs des positions
@@ -141,10 +159,10 @@ function createGeometry(sizing) {
 
   for (let i = 0; i < vertexCount; i++) {
     // Récupère les coordonnées du vertex
-    const vertex = new THREE.Vector3(
-        positionAttribute.getX(i),
-        positionAttribute.getY(i),
-        positionAttribute.getZ(i)
+    const vertex = new Vector3(
+      positionAttribute.getX(i),
+      positionAttribute.getY(i),
+      positionAttribute.getZ(i)
     );
 
     const y = vertex.y + sizing.halfHeight;
@@ -171,13 +189,10 @@ function createGeometry(sizing) {
   }
 
   // Ajoute les nouveaux attributs de la géométrie
+  geometry.setAttribute("skinIndex", new Uint16BufferAttribute(skinIndices, 4));
   geometry.setAttribute(
-      "skinIndex",
-      new THREE.Uint16BufferAttribute(skinIndices, 4)
-  );
-  geometry.setAttribute(
-      "skinWeight",
-      new THREE.Float32BufferAttribute(skinWeights, 4)
+    "skinWeight",
+    new Float16BufferAttribute(skinWeights, 4)
   );
 
   return geometry;
@@ -185,13 +200,13 @@ function createGeometry(sizing) {
 
 function createBones(sizing) {
   const bones = [];
-  const rootBone = new THREE.Bone();
+  const rootBone = new Bone();
   rootBone.position.y = -sizing.halfHeight;
   bones.push(rootBone);
 
   let prevBone = rootBone;
   for (let i = 0; i < sizing.segmentCount; i++) {
-    const bone = new THREE.Bone();
+    const bone = new Bone();
     bone.position.y = sizing.segmentHeight;
     bones.push(bone);
     prevBone.add(bone);
@@ -202,8 +217,8 @@ function createBones(sizing) {
 }
 
 function createMesh(geometry, bones) {
-  const skeleton = new THREE.Skeleton(bones);
-  const skinnedMesh = new THREE.SkinnedMesh(geometry, material);
+  const skeleton = new Skeleton(bones);
+  const skinnedMesh = new SkinnedMesh(geometry, material);
 
   skinnedMesh.add(bones[0]);
   skinnedMesh.bind(skeleton);
@@ -219,7 +234,7 @@ function update() {
 
   const spd = 0.2;
   if (!mouseControl) {
-    const des = new THREE.Vector3(
+    const des = new Vector3(
       (window.innerWidth / window.innerHeight) *
         10 *
         Math.sin(i + 2 * time) *
