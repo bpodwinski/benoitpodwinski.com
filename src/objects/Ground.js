@@ -1,10 +1,19 @@
-import * as THREE from "three";
+import {
+  Mesh,
+  PlaneGeometry,
+  Vector2,
+  RepeatWrapping,
+  MeshPhysicalMaterial,
+} from "three";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader";
+
 import { events } from "../lib/EventEmitter";
 
 export class Ground {
   /**
-   * @param {THREE.WebGLRenderer} renderer
+   * Creates a new Ground instance
+   * @param {THREE.WebGLRenderer} renderer - The WebGL renderer
+   * @param {Object} textures - The textures to be used
    */
   constructor(renderer, textures) {
     this.groundMesh = null;
@@ -13,8 +22,8 @@ export class Ground {
   }
 
   /**
-   * Initializes the ground plane with the specified parameters.
-   * @param {THREE.Scene} scene - The Three.js scene to which the ground will be added.
+   * Initializes the ground plane with the specified parameters
+   * @param {THREE.Scene} scene - The Three.js scene to which the ground will be added
    */
   init(scene) {
     const groundSize = 8;
@@ -23,16 +32,16 @@ export class Ground {
     const { alphaMap, aoMap, normalMap, displacementMap } = this.textures;
 
     const createGroundMaterial = () => {
-      aoMap.wrapS = aoMap.wrapT = THREE.RepeatWrapping;
+      aoMap.wrapS = aoMap.wrapT = RepeatWrapping;
       aoMap.repeat.set(scale, scale);
 
-      normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+      normalMap.wrapS = normalMap.wrapT = RepeatWrapping;
       normalMap.repeat.set(scale, scale);
 
-      displacementMap.wrapS = displacementMap.wrapT = THREE.RepeatWrapping;
+      displacementMap.wrapS = displacementMap.wrapT = RepeatWrapping;
       displacementMap.repeat.set(scale, scale);
 
-      const groundMaterial = new THREE.MeshPhysicalMaterial({
+      const groundMaterial = new MeshPhysicalMaterial({
         color: 0x000000,
         flatShading: false,
         transparent: true,
@@ -45,7 +54,7 @@ export class Ground {
         aoMap: aoMap,
         aoMapIntensity: 1,
         normalMap: normalMap,
-        normalScale: new THREE.Vector2(0.1, 0.1),
+        normalScale: new Vector2(0.1, 0.1),
         displacementMap: displacementMap,
         displacementScale: 0.01,
         envMap: scene.environment,
@@ -53,8 +62,8 @@ export class Ground {
         opacity: 0.6,
       });
 
-      this.groundMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(groundSize, groundSize, 250, 250),
+      this.groundMesh = new Mesh(
+        new PlaneGeometry(groundSize, groundSize, 250, 250),
         groundMaterial
       );
 
@@ -72,8 +81,8 @@ export class Ground {
   }
 
   /**
-   * Returns the ground mesh for interactions (e.g., raycasting).
-   * @returns {THREE.Mesh} - The ground mesh.
+   * Returns the ground mesh for interactions
+   * @returns {THREE.Mesh} The ground mesh
    */
   getGroundMesh() {
     if (!this.groundMesh) {

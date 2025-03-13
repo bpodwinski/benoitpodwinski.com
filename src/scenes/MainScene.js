@@ -1,8 +1,9 @@
+import { gsap } from "gsap";
+
 import App from "../components/AppManager";
 import { events } from "../lib/EventEmitter";
 import { Ground } from "../objects/Ground";
 import { Mecha } from "../objects/MechaSpider";
-import { gsap } from "gsap";
 import { CameraManager } from "../components/CameraManager";
 import { ControlManager } from "../components/ControlManager";
 import { LightManager } from "../components/LightManager";
@@ -178,11 +179,9 @@ export class MainScene {
 
   handleVisibilityChange() {
     if (document.hidden) {
-      console.log("[MainScene] Pause de l'animation (onglet caché)");
       this.running = false;
       cancelAnimationFrame(this.animationFrame);
     } else {
-      console.log("[MainScene] Reprise de l'animation (onglet visible)");
       this.running = true;
       this.lastFrameTime = performance.now(); // Évite un saut de temps
       this.animate();

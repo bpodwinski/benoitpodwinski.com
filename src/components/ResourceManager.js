@@ -1,33 +1,37 @@
-import * as THREE from "three";
+import { TextureLoader, LoadingManager } from "three";
 
 export class ResourceManager {
+  /**
+   * Creates a new instance of ResourceManager
+   * @param {THREE.LoadingManager} [loadingManager] - Optional LoadingManager for handling resource loading
+   */
   constructor(loadingManager) {
-    this.loadingManager = loadingManager || new THREE.LoadingManager();
-    this.textureLoader = new THREE.TextureLoader(this.loadingManager);
+    this.loadingManager = loadingManager || new LoadingManager();
+    this.textureLoader = new TextureLoader(this.loadingManager);
     this.resources = {};
   }
 
   /**
-   * Charge une texture et l'ajoute aux ressources.
-   * @param {string} key - Clé pour identifier la ressource.
-   * @param {string} path - Chemin vers la texture.
+   * Loads a texture and adds it to the resources
+   * @param {string} key - The key to identify the resource
+   * @param {string} path - The path to the texture file
    */
   loadTexture(key, path) {
     this.resources[key] = this.textureLoader.load(path);
   }
 
   /**
-   * Récupère une ressource déjà chargée.
-   * @param {string} key - Clé de la ressource.
-   * @returns {*} - La ressource chargée (ex: texture).
+   * Retrieves a previously loaded resource
+   * @param {string} key - The key of the resource
+   * @returns {*} The loaded resource (e.g., texture)
    */
   getResource(key) {
     return this.resources[key];
   }
 
   /**
-   * Retourne le LoadingManager pour configurer les callbacks.
-   * @returns {THREE.LoadingManager}
+   * Returns the LoadingManager instance to configure callbacks
+   * @returns {THREE.LoadingManager} The LoadingManager instance
    */
   getLoadingManager() {
     return this.loadingManager;

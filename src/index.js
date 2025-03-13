@@ -14,7 +14,7 @@ class Index {
   }
 
   /**
-   * Initializes the application when the DOM is fully loaded.
+   * Initializes the application when the DOM is fully loaded
    */
   static init() {
     document.addEventListener("DOMContentLoaded", () => {
@@ -35,7 +35,7 @@ class Index {
   }
 
   /**
-   * Displays a warning message when the application is accessed from a mobile device.
+   * Displays a warning message when the application is accessed from a mobile device
    */
   static displayNoWebGLWarning() {
     if (!this.sceneContainer) return;

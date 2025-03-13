@@ -1,25 +1,25 @@
-import * as THREE from "three";
+import { Texture, Fog, Color, Scene } from "three";
 import Settings from "../config/Settings.js";
 
 export class SceneManager {
   /**
-   * Manages the Three.js scene setup, including fog, background, and environment settings.
-   * It provides utilities for setting background textures and handling resizing events.
+   * Manages the Three.js scene setup including fog, background, and environment settings
+   * It provides utilities for setting background textures and handling resizing events
    *
-   * @param {Object} config - Configuration object for the scene.
-   * @param {number} [config.BG_COLOR=0x000000] - The background color.
-   * @param {number} [config.FOG_NEAR=1] - The near distance of the fog.
-   * @param {number} [config.FOG_FAR=100] - The far distance of the fog.
-   * @param {boolean} [config.enableFog=false] - Whether to enable fog.
-   * @param {HTMLElement} [config.container=null] - The container element for the renderer.
-   * @param {CameraManager} cameraManager - Instance of the camera manager.
-   * @param {RendererManager} rendererManager - Instance of the renderer manager.
+   * @param {Object} config - Configuration object for the scene
+   * @param {number} [config.BG_COLOR=0x000000] - The background color
+   * @param {number} [config.FOG_NEAR=1] - The near distance of the fog
+   * @param {number} [config.FOG_FAR=100] - The far distance of the fog
+   * @param {boolean} [config.enableFog=false] - Whether to enable fog
+   * @param {HTMLElement} [config.container=null] - The container element for the renderer
+   * @param {CameraManager} cameraManager - Instance of the camera manager
+   * @param {RendererManager} rendererManager - Instance of the renderer manager
    */
   constructor(config = {}, cameraManager, rendererManager) {
     this.config = { ...SceneManager.defaultConfig(), ...config };
     this.validateConfig();
 
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
     this.environment = null;
     this.container = this.config.container;
 
@@ -36,8 +36,8 @@ export class SceneManager {
   }
 
   /**
-   * Returns the default configuration for the scene.
-   * @returns {Object} The default configuration object.
+   * Returns the default configuration for the scene
+   * @returns {Object} The default configuration object
    */
   static defaultConfig() {
     return {
@@ -50,8 +50,8 @@ export class SceneManager {
   }
 
   /**
-   * Validates the configuration object.
-   * @throws Will throw an error if any configuration value is invalid.
+   * Validates the configuration object
+   * @throws Will throw an error if any configuration value is invalid
    */
   validateConfig() {
     if (typeof this.config.BG_COLOR !== "number") {
@@ -66,43 +66,43 @@ export class SceneManager {
   }
 
   /**
-   * Get the current scene instance.
-   * @returns {THREE.Scene} The current scene.
+   * Gets the current scene instance
+   * @returns {THREE.Scene} The current scene
    */
   getScene() {
     return this.scene;
   }
 
   /**
-   * Configures the scene settings, such as background color and fog.
+   * Configures the scene settings such as background color and fog
    */
   configureScene() {
     const { BG_COLOR, FOG_NEAR, FOG_FAR, enableFog } = this.config;
 
-    this.scene.background = new THREE.Color(BG_COLOR);
+    this.scene.background = new Color(BG_COLOR);
     if (enableFog) {
-      this.scene.fog = new THREE.Fog(BG_COLOR, FOG_NEAR, FOG_FAR);
+      this.scene.fog = new Fog(BG_COLOR, FOG_NEAR, FOG_FAR);
     }
     this.log("Scene configured with", this.config);
   }
 
   /**
-   * Set a custom scene background (e.g., HDRI, CubeMap, or Color).
-   * @param {THREE.Texture | THREE.Color | Array} background - The scene background.
+   * Sets a custom scene background (e.g., HDRI, CubeMap, or Color)
+   * @param {THREE.Texture | THREE.Color | Array} background - The scene background
    */
   setBackground(background) {
     this.scene.background = background;
 
     // If the background is an environment map, apply it to the scene environment
-    if (background instanceof THREE.Texture || Array.isArray(background)) {
+    if (background instanceof Texture || Array.isArray(background)) {
       this.setEnvironment(background);
     }
     this.log("Scene background updated");
   }
 
   /**
-   * Set an environment map for the scene (affects reflections and lighting).
-   * @param {THREE.Texture} envMap - The environment map texture.
+   * Sets an environment map for the scene (affects reflections and lighting)
+   * @param {THREE.Texture} envMap - The environment map texture
    */
   setEnvironment(envMap) {
     this.environment = envMap;
@@ -111,14 +111,14 @@ export class SceneManager {
   }
 
   /**
-   * Cleans up scene-related resources (e.g., textures).
+   * Cleans up scene-related resources (e.g., textures)
    */
   dispose() {
     if (this.environment) {
       this.environment.dispose();
     }
 
-    if (this.scene.background instanceof THREE.Texture) {
+    if (this.scene.background instanceof Texture) {
       this.scene.background.dispose();
     }
 

@@ -1,7 +1,8 @@
+import { LoadingManager, TextureLoader } from "three";
+
 import { EventEmitter } from "./lib/EventEmitter";
 import { isWebGLSupported, displayWebGLError } from "./lib/webGLUtils";
 import { MainScene } from "./scenes/MainScene";
-import * as THREE from "three";
 
 const events = new EventEmitter();
 const mainScene = new MainScene();
@@ -9,51 +10,57 @@ const mainScene = new MainScene();
 const App = {
   loadingManager: null,
 
+  /**
+   * Initializes the app and starts loading assets if WebGL is supported
+   */
   init() {
     if (!isWebGLSupported()) {
       displayWebGLError();
       return;
     }
 
+    // Initialize the LoadingManager
+    this.loadingManager = new LoadingManager(
+      () => {
+        console.log("All assets loaded");
+        this.start();
+      },
 
-    // Initialiser le LoadingManager
-    this.loadingManager = new THREE.LoadingManager(
-        // Callback quand tout est chargé
-        () => {
-          console.log("All assets loaded");
-          this.start();
-        },
+      // Callback for progress updates
+      (url, itemsLoaded, itemsTotal) => {
+        const progress = Math.round((itemsLoaded / itemsTotal) * 100);
+        console.log(`Loading ${url} (${progress}%)`);
+        this.updateLoadingScreen(progress);
+      },
 
-        // Callback pour la progression
-        (url, itemsLoaded, itemsTotal) => {
-          const progress = Math.round((itemsLoaded / itemsTotal) * 100);
-          console.log(`Loading ${url} (${progress}%)`);
-          this.updateLoadingScreen(progress);
-        },
-
-        // Callback en cas d'erreur
-        (url) => {
-          console.error(`Error loading ${url}`);
-        }
+      // Callback for errors during loading
+      (url) => {
+        console.error(`Error loading ${url}`);
+      }
     );
 
-    // Afficher l'écran de chargement
+    // Show the loading screen
     this.showLoadingScreen();
 
-    // Charger les assets
+    // Load assets
     this.loadAssets();
   },
 
+  /**
+   * Loads the required assets
+   */
   loadAssets() {
-    // Exemple de chargement d'une texture
-    const textureLoader = new THREE.TextureLoader(this.loadingManager);
+    // Example of loading a texture
+    const textureLoader = new TextureLoader(this.loadingManager);
     textureLoader.load("textures/ground_alpha.png");
 
-    // Tu peux ajouter d'autres loaders ici si besoin
+    // You can add other loaders here as needed
   },
 
+  /**
+   * Displays the loading screen by creating an HTML element
+   */
   showLoadingScreen() {
-    // Créer un élément HTML pour l'écran de chargement
     const loadingElement = document.createElement("div");
     loadingElement.id = "loading-screen";
     loadingElement.style.position = "fixed";
@@ -71,8 +78,11 @@ const App = {
     document.body.appendChild(loadingElement);
   },
 
+  /**
+   * Updates the loading screen progress percentage
+   * @param {number} progress - The current progress percentage
+   */
   updateLoadingScreen(progress) {
-    // Mettre à jour le pourcentage dans l'écran de chargement
     const progressElement = document.getElementById("loading-progress");
     if (progressElement) {
       progressElement.textContent = `Loading... ${progress}%`;
@@ -83,16 +93,20 @@ const App = {
     }
   },
 
+  /**
+   * Hides the loading screen once loading is complete
+   */
   hideLoadingScreen() {
-    // Supprimer l'écran de chargement une fois le chargement terminé
     const loadingElement = document.getElementById("loading-screen");
     if (loadingElement) {
       loadingElement.style.display = "none";
     }
   },
 
+  /**
+   * Starts the main scene and sets up event listeners for window resizing
+   */
   start() {
-    // Initialiser la scène après le chargement
     window.addEventListener("resize", this.onResize.bind(this), false);
 
     mainScene.init();
@@ -101,11 +115,17 @@ const App = {
     this.update();
   },
 
+  /**
+   * Updates the app by emitting update events in the animation frame loop
+   */
   update() {
     requestAnimationFrame(this.update.bind(this));
     events.emit("update");
   },
 
+  /**
+   * Handles window resize events by updating the main scene
+   */
   onResize() {
     mainScene.onResize();
   },

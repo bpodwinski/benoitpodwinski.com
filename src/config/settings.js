@@ -1,9 +1,9 @@
-import * as THREE from "three";
+import { BasicShadowMap, PCFShadowMap, PCFSoftShadowMap } from "three";
 
 export const DEBUG_MODE = false;
 
 /**
- * Configuration for different benchmark detail levels.
+ * Configuration detail levels
  */
 const detailLevels = {
   low: {
@@ -11,7 +11,7 @@ const detailLevels = {
     frameRate: 18,
     textureResolution: 512,
     anisotropy: 8,
-    shadowQuality: THREE.BasicShadowMap,
+    shadowQuality: BasicShadowMap,
     shadowResolution: 512,
     antialias: false,
   },
@@ -20,7 +20,7 @@ const detailLevels = {
     frameRate: 24,
     textureResolution: 1024,
     anisotropy: 8,
-    shadowQuality: THREE.PCFShadowMap,
+    shadowQuality: PCFShadowMap,
     shadowResolution: 1024,
     antialias: true,
   },
@@ -29,7 +29,7 @@ const detailLevels = {
     frameRate: 60,
     textureResolution: 2048,
     anisotropy: 16,
-    shadowQuality: THREE.PCFSoftShadowMap,
+    shadowQuality: PCFSoftShadowMap,
     shadowResolution: 2048,
     antialias: true,
   },
@@ -60,9 +60,6 @@ export function updateSettings(level) {
   SettingsState.currentSettings = detailLevels[level];
 }
 
-/**
- * Default export with dynamic settings
- */
 export default {
   DEBUG_MODE,
   detailLevels,

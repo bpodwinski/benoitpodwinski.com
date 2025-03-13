@@ -1,13 +1,21 @@
-import * as THREE from "three";
+import { Texture, ImageLoader, RGBFormat } from "three";
 
-// Variables locales
+// Local variables
 let textureCube;
 const cubeMaps = [];
 
-// Initialisation
-function init() {}
+/**
+ * Initialization function
+ */
+function init() {
+  // Function intentionally left empty
+}
 
-// Détruire un objet (et éventuellement ses textures)
+/**
+ * Destroys an object and optionally its textures
+ * @param {Object} object - The object to destroy
+ * @param {boolean} textureToo - Whether to destroy the textures as well
+ */
 function destroy(object, textureToo) {
   if (object.children.length > 0) {
     const objects = [object.children[1], object.children[0]];
@@ -22,33 +30,37 @@ function destroy(object, textureToo) {
   }
 }
 
-// Récupérer ou générer une cube map
+/**
+ * Retrieves or generates a cube map
+ * @param {number} [i=0] - The index of the cube map
+ * @returns {THREE.Texture} The cube map texture
+ */
 function getCubeMap(i = 0) {
-  // Vérifie si la cube map pour cet index existe déjà
+  // Check if the cube map for this index already exists
   if (cubeMaps[i]) {
     return cubeMaps[i];
   }
 
-  // Crée une nouvelle texture cube
-  const cubeMap = new THREE.Texture([]);
-  cubeMap.format = THREE.RGBFormat;
+  // Create a new cube texture
+  const cubeMap = new Texture([]);
+  cubeMap.format = RGBFormat;
   cubeMap.flipY = false;
 
-  // Définition des textures disponibles
+  // Definition of available textures
   const envMaps = [{ file: "textures/skin.jpg", size: 1024, glow: 0.2 }];
 
-  // Vérifie si l'index est valide
+  // Check if the index is valid
   if (i < 0 || i >= envMaps.length) {
     console.error(
-      `Index ${i} invalide pour envMaps. Retourne une texture cube vide.`
+      `Index ${i} is invalid for envMaps so returning an empty cube texture`
     );
-    return cubeMap; // Retourne une texture vide par défaut
+    return cubeMap; // Return an empty texture by default
   }
 
   const { file, size } = envMaps[i];
 
-  // Chargeur d'images pour créer les faces du cube
-  const loader = new THREE.ImageLoader();
+  // Image loader to create the cube faces
+  const loader = new ImageLoader();
   loader.load(
     file,
     (image) => {
@@ -72,16 +84,20 @@ function getCubeMap(i = 0) {
       cubeMap.needsUpdate = true;
     },
     (error) => {
-      console.error("Error loading texture:", file, error);
+      console.error("Error loading texture", file, error);
     }
   );
 
-  // Stocke la cube map dans le cache
+  // Store the cube map in the cache
   cubeMaps[i] = cubeMap;
   return cubeMap;
 }
 
-// Détruire un mesh (et éventuellement ses textures)
+/**
+ * Destroys a mesh and optionally its textures
+ * @param {THREE.Mesh} mesh - The mesh to destroy
+ * @param {boolean} textureToo - Whether to destroy the textures as well
+ */
 function destroyMesh(mesh, textureToo) {
   if (mesh.geometry) mesh.geometry.dispose();
 
@@ -109,6 +125,10 @@ function destroyMesh(mesh, textureToo) {
   tex = null;
 }
 
+/**
+ * Retrieves the current texture cube
+ * @returns {THREE.Texture} The texture cube
+ */
 function getTextureCube() {
   return textureCube;
 }
