@@ -3,6 +3,7 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 import compression from "vite-plugin-compression2";
 
 export default defineConfig({
+  base: "/threejs",
   root: ".",
   server: {
     host: "0.0.0.0",
@@ -17,12 +18,19 @@ export default defineConfig({
     target: "esnext",
     minify: "esbuild",
     sourcemap: false,
-    outDir: "build",
+    outDir: "./content/themes/source/assets/threejs/",
     assetsDir: "assets",
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
+    lib: {
+      entry: "threejs/index.js",
+      name: "ThreeJSApp",
+      fileName: "index",
+      formats: ["es"],
+    },
     rollupOptions: {
       output: {
+        entryFileNames: "index.js",
         manualChunks(id) {
           if (id.includes("node_modules")) {
             if (id.includes("three")) return "three";
@@ -43,8 +51,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "node_modules/three/examples/jsm/libs/basis/*",
-          dest: "assets/libs/basis",
+          src: "node_modules/three/examples/jsm/libs/basis/basis_transcoder.*",
+          dest: ".",
         },
       ],
     }),

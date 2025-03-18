@@ -1,0 +1,26 @@
+{
+  "url": "http://localhost:2368/",
+  "server": {
+    "port": 2368,
+    "host": "127.0.0.1"
+  },
+  "database": {
+    "client": "mysql",
+    "connection": {
+      "host": "127.0.0.1",
+      "user": "root",
+      "password": "password",
+      "database": "db"
+    }
+  },
+  "mail": {
+    "transport": "Direct"
+  },
+  "logging": {
+    "transports": ["file", "stdout"]
+  },
+  "process": "local",
+  "paths": {
+    "contentPath": "D:\\Dev\\content"
+  }
+}

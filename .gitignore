@@ -1,5 +1,5 @@
 package-lock.json
 npm-shrinkwrap.json
+config.production.json
+
 node_modules/
-build/
-TexturesSource/
