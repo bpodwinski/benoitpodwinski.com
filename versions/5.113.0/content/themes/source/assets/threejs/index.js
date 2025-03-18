@@ -1304,9 +1304,9 @@ class Le {
     this.sceneManager = new D(), this.scene = this.sceneManager.getScene(), this.rendererManager = y.rendererManager, this.cameraManager = null, this.controlManager = null, this.lightManager = null, this.fxManager = null, this.backgroundManager = null, this.stats = null, this.running = !0, this.targetFPS = u.currentSettings.frameRate, this.frameInterval = 1e3 / this.targetFPS, this.lastFrameTime = 0, this.animationFrame = null, this.objects = [];
   }
   init() {
-    const e = document.getElementById("scene-container");
+    const e = document.getElementById("threejs-container");
     if (!e)
-      throw new Error("Container with ID 'scene-container' not found");
+      throw new Error("Container with ID 'threejs-container' not found");
     this.setupRenderer(e), this.setupScene(), this.setupBackground(), this.setupCamera(), this.setupControls(), this.setupLights(), this.setupEffects(), this.setupObjects(), this.setupObserver(), f.on("update", this.update.bind(this)), window.addEventListener("resize", this.onResize.bind(this)), document.addEventListener(
       "visibilitychange",
       this.handleVisibilityChange.bind(this)
@@ -1329,17 +1329,17 @@ class Le {
       this.rendererManager.getRenderer()
     ), u.currentDetailLevel === "high") {
       const e = [
-        "textures/px.png",
-        "textures/nx.png",
-        "textures/py.png",
-        "textures/ny.png",
-        "textures/pz.png",
-        "textures/nz.png"
+        "/assets/textures/px.png",
+        "/assets/textures/nx.png",
+        "/assets/textures/py.png",
+        "/assets/textures/ny.png",
+        "/assets/textures/pz.png",
+        "/assets/textures/nz.png"
       ];
       this.backgroundManager.setCubeMapBackground(e);
     } else
       this.backgroundManager.setPlaneBackground(
-        "textures/planete.ktx2",
+        "/assets/textures/planete.ktx2",
         130,
         130,
         { x: 50, y: 0, z: 14.3 },
@@ -1450,16 +1450,16 @@ class Pe {
    */
   loadAssets() {
     const e = new _(this.loadingManager);
-    if (e.setTranscoderPath("assets/libs/basis/"), !this.rendererManager || !this.rendererManager.getRenderer()) {
+    if (e.setTranscoderPath("assets/threejs/"), !this.rendererManager || !this.rendererManager.getRenderer()) {
       this.log("RendererManager is not initialized.");
       return;
     }
     e.detectSupport(this.rendererManager.getRenderer()), this.textures = {};
     const t = {
-      alphaMap: "textures/ground/ground_alpha.ktx2",
-      aoMap: "textures/ground/ground_ao.ktx2",
-      normalMap: "textures/ground/ground_normal.ktx2",
-      displacementMap: "textures/ground/ground_displacement.ktx2"
+      alphaMap: "/assets/textures/ground_alpha.ktx2",
+      aoMap: "/assets/textures/ground_ao.ktx2",
+      normalMap: "/assets/textures/ground_normal.ktx2",
+      displacementMap: "/assets/textures/ground_displacement.ktx2"
     };
     Object.keys(t).forEach((s) => {
       e.load(t[s], (n) => {
@@ -1483,7 +1483,7 @@ class Pe {
   async hideLoadingScreen() {
     const e = document.getElementById("loading");
     e && (e.style.visibility = "hidden", e.style.opacity = "0", await setTimeout(() => e.remove(), 1500));
-    const t = document.getElementById("scene-container");
+    const t = document.getElementById("threejs-container");
     t && await setTimeout(() => {
       t.style.visibility = "visible", t.style.opacity = "1";
     }, 3500);
@@ -1620,7 +1620,7 @@ class Ge {
 }
 class Ae {
   constructor() {
-    this.sceneContainer = document.getElementById("scene-container"), this.debugMode = g.DEBUG_MODE, this.log = this.debugMode ? console.log.bind(console, "[WebGLUtils]") : () => {
+    this.sceneContainer = document.getElementById("threejs-container"), this.debugMode = g.DEBUG_MODE, this.log = this.debugMode ? console.log.bind(console, "[WebGLUtils]") : () => {
     };
   }
   /**

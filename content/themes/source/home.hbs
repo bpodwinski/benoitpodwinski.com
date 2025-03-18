@@ -7,6 +7,14 @@
     {{> "components/featured" showFeatured=@custom.show_featured_posts limit=4}}
 {{/match}}
 
+<div id="loading" class="progress">
+    <div class="progress-bar" style="width: 0%">0%</div>
+</div>
+
+<div id="threejs-container">test</div>
+
+<script type="module" src="{{asset "threejs/index.js"}}"></script>
+
 {{> "components/cta"}}
 
 {{> "components/post-list" feed="home" postFeedStyle=@custom.post_feed_style showTitle=true showSidebar=@custom.show_publication_info_sidebar}}

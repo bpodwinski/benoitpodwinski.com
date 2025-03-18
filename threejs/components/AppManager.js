@@ -62,7 +62,7 @@ class AppManager {
    */
   loadAssets() {
     const ktxLoader = new KTX2Loader(this.loadingManager);
-    ktxLoader.setTranscoderPath("assets/libs/basis/");
+    ktxLoader.setTranscoderPath("assets/threejs/");
 
     if (!this.rendererManager || !this.rendererManager.getRenderer()) {
       this.log("RendererManager is not initialized.");
@@ -73,10 +73,10 @@ class AppManager {
 
     this.textures = {};
     const texturesToLoad = {
-      alphaMap: "textures/ground/ground_alpha.ktx2",
-      aoMap: "textures/ground/ground_ao.ktx2",
-      normalMap: "textures/ground/ground_normal.ktx2",
-      displacementMap: "textures/ground/ground_displacement.ktx2",
+      alphaMap: "/assets/textures/ground_alpha.ktx2",
+      aoMap: "/assets/textures/ground_ao.ktx2",
+      normalMap: "/assets/textures/ground_normal.ktx2",
+      displacementMap: "/assets/textures/ground_displacement.ktx2",
     };
 
     Object.keys(texturesToLoad).forEach((key) => {
@@ -116,7 +116,7 @@ class AppManager {
       await setTimeout(() => loading.remove(), 1500);
     }
 
-    const sceneContainer = document.getElementById("scene-container");
+    const sceneContainer = document.getElementById("threejs-container");
     if (sceneContainer) {
       await setTimeout(() => {
         sceneContainer.style.visibility = "visible";

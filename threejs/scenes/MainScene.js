@@ -34,9 +34,9 @@ export class MainScene {
   }
 
   init() {
-    const container = document.getElementById("scene-container");
+    const container = document.getElementById("threejs-container");
     if (!container)
-      throw new Error("Container with ID 'scene-container' not found");
+      throw new Error("Container with ID 'threejs-container' not found");
 
     this.setupRenderer(container);
     this.setupScene();
@@ -81,17 +81,17 @@ export class MainScene {
 
     if (SettingsState.currentDetailLevel === "high") {
       const cubeMapPaths = [
-        "textures/px.png",
-        "textures/nx.png",
-        "textures/py.png",
-        "textures/ny.png",
-        "textures/pz.png",
-        "textures/nz.png",
+        "/assets/textures/px.png",
+        "/assets/textures/nx.png",
+        "/assets/textures/py.png",
+        "/assets/textures/ny.png",
+        "/assets/textures/pz.png",
+        "/assets/textures/nz.png",
       ];
       this.backgroundManager.setCubeMapBackground(cubeMapPaths);
     } else {
       this.backgroundManager.setPlaneBackground(
-        "textures/planete.ktx2",
+        "/assets/textures/planete.ktx2",
         130,
         130,
         { x: 50, y: 0, z: 14.3 },

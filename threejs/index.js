@@ -6,7 +6,7 @@ import { WebGPUUtils } from "./lib/WebGPUUtils";
 
 class Index {
   constructor() {
-    this.sceneContainer = document.getElementById("scene-container");
+    this.sceneContainer = document.getElementById("threejs-container");
     this.debugMode = Settings.DEBUG_MODE;
     this.log = this.debugMode
       ? console.log.bind(console, "[WebGLUtils]")
