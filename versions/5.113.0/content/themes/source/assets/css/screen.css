@@ -52,6 +52,7 @@ production stylesheet in assets/built/screen.css
 /* ---------------------------------------------------------- */
 
 :root {
+  --ghost-accent-color: #a2d8c9 !important;
   --color-white: #fff;
   --color-lighter-gray: rgb(0 0 0 / 0.05);
   --color-light-gray: #e6e6e6;
@@ -59,7 +60,7 @@ production stylesheet in assets/built/screen.css
   --color-dark-gray: #444;
   --color-darker-gray: #15171a;
   --color-black: #000;
-  --color-primary-text: var(--color-white);
+  --color-primary-text: #ebe0d4;
   --color-secondary-text: rgb(0 0 0 / 0.55);
   --color-border: rgb(0 0 0 / 0.08);
   --color-dark-border: rgb(0 0 0 / 0.55);
@@ -150,6 +151,8 @@ h4,
 h5,
 h6 {
   line-height: 1.2;
+  color: var(--color-primary-text);
+  filter: brightness(1.15);
 }
 
 /* 4. Globals
@@ -3526,25 +3529,6 @@ figcaption a {
 /* 23. Custom
 /* ---------------------------------------------------------- */
 
-/* Header Home */
-.home-template header#gh-navigation,
-.home-template header .gh-navigation-actions {
-  background-color: transparent;
-}
-
-.home-template header#gh-navigation {
-  z-index: 999;
-  position: absolute;
-  left: 0;
-  right: 0;
-  color: var(--color-white);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
-}
-
-.home-template .gh-navigation-inner {
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
-}
-
 /* Threejs canvas */
 #threejs:after {
   content: "";
@@ -3569,7 +3553,6 @@ figcaption a {
 
 #threejs-container {
   width: 100%;
-  /* height: 100%; */
   transition: all 1.5s ease-in-out;
   visibility: hidden;
   opacity: 0;
@@ -3632,12 +3615,54 @@ figcaption a {
 }
 
 /* Theme */
+@media (min-width: 768px) {
+  header#gh-navigation,
+  header .gh-navigation-actions {
+    background-color: transparent;
+  }
+}
+
+@media (max-width: 767px) {
+  header#gh-navigation.is-open .gh-navigation-actions {
+    display: none;
+  }
+
+  header#gh-navigation {
+    background-color: transparent;
+  }
+
+  header#gh-navigation.is-open {
+    background-color: color-mix(
+      in srgb,
+      var(--background-color) 80%,
+      transparent
+    );
+    backdrop-filter: blur(40px);
+  }
+}
+
+.home-template header#gh-navigation {
+  z-index: 999;
+  position: absolute;
+  left: 0;
+  right: 0;
+  color: var(--color-white);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.home-template .gh-navigation-inner {
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+}
+
 .home-template .gh-container {
   position: relative;
 }
 
+body.author-template:before,
+body.tag-template:before,
+body.post-template:before,
 .home-template .gh-container:before {
-  animation: animateGlow 15s linear infinite;
+  animation: animateGlowLeft 15s linear infinite;
   background: linear-gradient(
     270deg,
     #a5692f,
@@ -3651,7 +3676,7 @@ figcaption a {
   transform: translateY(-120%);
   content: "";
   filter: blur(150px);
-  height: 100px;
+  height: 200px;
   position: absolute;
   top: 0;
   left: 0;
@@ -3660,7 +3685,42 @@ figcaption a {
   z-index: -1;
 }
 
-@keyframes animateGlow {
+body.author-template footer.gh-footer:before,
+body.tag-template footer.gh-footer:before,
+body.post-template footer.gh-footer:before {
+  animation: animateGlowRight 15s linear infinite;
+  background: linear-gradient(
+    270deg,
+    #a5692f,
+    #c47f2c,
+    #e1a462,
+    #46948a,
+    #2f7c69,
+    #1c5a50
+  );
+  background-size: 200% 200%;
+  content: "";
+  filter: blur(100px);
+  height: 150px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: -1;
+  opacity: 0.25;
+}
+
+@keyframes animateGlowRight {
+  0% {
+    background-position: 200% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes animateGlowLeft {
   0% {
     background-position: 0% 50%;
   }
