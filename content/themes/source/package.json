@@ -95,7 +95,7 @@
             },
             "site_background_color": {
                 "type": "color",
-                "default": "#ffffff"
+                "default": "#15171a"
             },
             "header_and_footer_color": {
                 "type": "select",
