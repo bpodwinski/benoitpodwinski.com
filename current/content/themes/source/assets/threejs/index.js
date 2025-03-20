@@ -1329,17 +1329,17 @@ class Le {
       this.rendererManager.getRenderer()
     ), u.currentDetailLevel === "high") {
       const e = [
-        "/assets/textures/px.png",
-        "/assets/textures/nx.png",
-        "/assets/textures/py.png",
-        "/assets/textures/ny.png",
-        "/assets/textures/pz.png",
-        "/assets/textures/nz.png"
+        "/fr/assets/textures/px.png",
+        "/fr/assets/textures/nx.png",
+        "/fr/assets/textures/py.png",
+        "/fr/assets/textures/ny.png",
+        "/fr/assets/textures/pz.png",
+        "/fr/assets/textures/nz.png"
       ];
       this.backgroundManager.setCubeMapBackground(e);
     } else
       this.backgroundManager.setPlaneBackground(
-        "/assets/textures/planete.ktx2",
+        "/fr/assets/textures/planete.ktx2",
         130,
         130,
         { x: 50, y: 0, z: 14.3 },
@@ -1456,10 +1456,10 @@ class Pe {
     }
     e.detectSupport(this.rendererManager.getRenderer()), this.textures = {};
     const t = {
-      alphaMap: "/assets/textures/ground_alpha.ktx2",
-      aoMap: "/assets/textures/ground_ao.ktx2",
-      normalMap: "/assets/textures/ground_normal.ktx2",
-      displacementMap: "/assets/textures/ground_displacement.ktx2"
+      alphaMap: "/fr/assets/textures/ground_alpha.ktx2",
+      aoMap: "/fr/assets/textures/ground_ao.ktx2",
+      normalMap: "/fr/assets/textures/ground_normal.ktx2",
+      displacementMap: "/fr/assets/textures/ground_displacement.ktx2"
     };
     Object.keys(t).forEach((s) => {
       e.load(t[s], (n) => {

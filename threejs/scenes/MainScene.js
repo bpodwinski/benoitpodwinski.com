@@ -81,17 +81,17 @@ export class MainScene {
 
     if (SettingsState.currentDetailLevel === "high") {
       const cubeMapPaths = [
-        "/assets/textures/px.png",
-        "/assets/textures/nx.png",
-        "/assets/textures/py.png",
-        "/assets/textures/ny.png",
-        "/assets/textures/pz.png",
-        "/assets/textures/nz.png",
+        "/fr/assets/textures/px.png",
+        "/fr/assets/textures/nx.png",
+        "/fr/assets/textures/py.png",
+        "/fr/assets/textures/ny.png",
+        "/fr/assets/textures/pz.png",
+        "/fr/assets/textures/nz.png",
       ];
       this.backgroundManager.setCubeMapBackground(cubeMapPaths);
     } else {
       this.backgroundManager.setPlaneBackground(
-        "/assets/textures/planete.ktx2",
+        "/fr/assets/textures/planete.ktx2",
         130,
         130,
         { x: 50, y: 0, z: 14.3 },

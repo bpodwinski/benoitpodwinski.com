@@ -73,10 +73,10 @@ class AppManager {
 
     this.textures = {};
     const texturesToLoad = {
-      alphaMap: "/assets/textures/ground_alpha.ktx2",
-      aoMap: "/assets/textures/ground_ao.ktx2",
-      normalMap: "/assets/textures/ground_normal.ktx2",
-      displacementMap: "/assets/textures/ground_displacement.ktx2",
+      alphaMap: "/fr/assets/textures/ground_alpha.ktx2",
+      aoMap: "/fr/assets/textures/ground_ao.ktx2",
+      normalMap: "/fr/assets/textures/ground_normal.ktx2",
+      displacementMap: "/fr/assets/textures/ground_displacement.ktx2",
     };
 
     Object.keys(texturesToLoad).forEach((key) => {
